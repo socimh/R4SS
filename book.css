@@ -1,0 +1,88 @@
+@font-face {
+  font-family: "Source Serif 4";
+  src: url("fonts/SourceSerif4Variable-Roman.ttf.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Serif 4";
+  src: url("fonts/SourceSerif4Variable-Italic.ttf.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("fonts/SourceSans3VF-Upright.ttf.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("fonts/SourceSans3VF-Italic.ttf.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  src: url("fonts/SourceCodeVF-Upright.ttf.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  src: url("fonts/SourceCodeVF-Italic.ttf.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+body { font-optical-sizing: auto; }
+/* The prose uses serif type; interface text and exhibits use its sans companion. */
+.sidebar, .navbar, #TOC, .quarto-page-breadcrumbs, .nav-page,
+.quarto-title-meta, .quarto-title .subtitle, .quarto-figure figcaption,
+caption, table, .callout-title-container, .quarto-search-results {
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+}
+h1, h2, h3, h4, h5, h6 { font-weight: 600; line-height: 1.2; }
+.sidebar { font-size: 0.9rem; line-height: 1.4; }
+#TOC { line-height: 1.4; }
+.quarto-figure figcaption { font-size: 0.85rem; line-height: 1.45; }
+pre, code, kbd, samp { font-variant-ligatures: none; }
+pre.sourceCode, pre code { font-size: 0.84rem; line-height: 1.55; }
+
+/* Long inline filenames must not widen the page on phones. */
+:not(pre) > code { overflow-wrap: anywhere; white-space: normal; }
+
+/* Preserve readable columns inside the existing keyboard-accessible scroll region. */
+#tbl-data-structures table { min-width: 36rem; }
+
+/* Keep side-by-side labels readable on small screens. */
+.figure-scroll { overflow-x: auto; }
+.figure-scroll img { min-width: 630px; }
+
+/* Short two-column comparisons fit phones without reducing the book's text size. */
+#tbl-input-formats table, #tbl-disciplinary-data table, #tbl-output-choices table {
+  min-width: 0;
+  width: 100%;
+  table-layout: fixed;
+  line-height: 1.4;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+#tbl-input-formats th:first-child, #tbl-disciplinary-data th:first-child,
+#tbl-output-choices th:first-child { width: 40%; }
+#tbl-disciplinary-data table { table-layout: auto; }
+#tbl-disciplinary-data th:first-child, #tbl-disciplinary-data td:first-child {
+  overflow-wrap: normal;
+  hyphens: manual;
+}

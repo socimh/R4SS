@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="An introduction to R and the tidyverse for social-science research.">
+
+<title>2&nbsp; Objects, data structures, and workflows – R for Social Science</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./dplyr-stat.html" rel="next">
+<link href="./intro.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-684a58a98314b78713c09aa595376ac7.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d86a9a5236ec3aeeb637912bee877918.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-684a58a98314b78713c09aa595376ac7.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-4e8b6bb1c918ce48c6344a3599f12dee.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-6c46b2821aad66193e5af05cedf4b233.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-4e8b6bb1c918ce48c6344a3599f12dee.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="book.css">
+<meta property="og:title" content="2&nbsp; Objects, data structures, and workflows – R for Social Science">
+<meta property="og:description" content="An introduction to R and the tidyverse for social-science research.">
+<meta property="og:image" content="https://socimh.github.io/R4SS/fig/data-structures.svg">
+<meta property="og:site_name" content="R for Social Science">
+<meta property="og:image:alt" content="Two columns labeled Single type and Multiple types, with rows labeled 1D, 2D, and nD. The pairs are Atomic vector and List, Matrix and Data frame, and Array and Nested list. List elements, data-frame columns, and nested-list groups share a purple, blue, green order. Labels num, chr, and lgl identify the numeric, character, and logical example types without relying on color. The nested list uses overlapping groups to echo the array's layers; nesting represents a hierarchy rather than fixed array dimensions.">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Getting started</a></li><li class="breadcrumb-item"><a href="./data-workflow.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects, data structures, and workflows</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R for Social Science</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/socimh/R4SS/tree/main/en/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-workflow.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects, data structures, and workflows</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Working with data</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-stat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tabulation and summary statistics</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gss-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">The GSS data in this book</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#objects-and-types" id="toc-objects-and-types" class="nav-link active" data-scroll-target="#objects-and-types"><span class="header-section-number">2.1</span> Objects and types</a></li>
+  <li><a href="#data-and-functions" id="toc-data-and-functions" class="nav-link" data-scroll-target="#data-and-functions"><span class="header-section-number">2.2</span> Data and functions</a></li>
+  <li><a href="#dimensions-of-data" id="toc-dimensions-of-data" class="nav-link" data-scroll-target="#dimensions-of-data"><span class="header-section-number">2.3</span> Dimensions of data</a></li>
+  <li><a href="#a-workflow-in-r" id="toc-a-workflow-in-r" class="nav-link" data-scroll-target="#a-workflow-in-r"><span class="header-section-number">2.4</span> A workflow in R</a>
+  <ul class="collapse">
+  <li><a href="#sources-formats-and-r-objects" id="toc-sources-formats-and-r-objects" class="nav-link" data-scroll-target="#sources-formats-and-r-objects"><span class="header-section-number">2.4.1</span> Sources, formats, and R objects</a></li>
+  <li><a href="#recognizing-input-formats" id="toc-recognizing-input-formats" class="nav-link" data-scroll-target="#recognizing-input-formats"><span class="header-section-number">2.4.2</span> Recognizing input formats</a></li>
+  <li><a href="#data-across-social-science-disciplines" id="toc-data-across-social-science-disciplines" class="nav-link" data-scroll-target="#data-across-social-science-disciplines"><span class="header-section-number">2.4.3</span> Data across social-science disciplines</a></li>
+  <li><a href="#choosing-outputs-for-their-readers" id="toc-choosing-outputs-for-their-readers" class="nav-link" data-scroll-target="#choosing-outputs-for-their-readers"><span class="header-section-number">2.4.4</span> Choosing outputs for their readers</a></li>
+  </ul></li>
+  <li><a href="#sec-compatible-blocks" id="toc-sec-compatible-blocks" class="nav-link" data-scroll-target="#sec-compatible-blocks"><span class="header-section-number">2.5</span> Building with compatible blocks</a></li>
+  <li><a href="#sec-import-export" id="toc-sec-import-export" class="nav-link" data-scroll-target="#sec-import-export"><span class="header-section-number">2.6</span> Importing and exporting data</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Getting started</a></li><li class="breadcrumb-item"><a href="./data-workflow.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects, data structures, and workflows</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects, data structures, and workflows</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="objects-and-types" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="objects-and-types"><span class="header-section-number">2.1</span> Objects and types</h2>
+<p>The examples in <a href="intro.html#sec-first-code" class="quarto-xref"><span>Section 1.4</span></a> have already introduced several R objects. We can use <code>var_type()</code> from tidystata to identify an object’s type:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidystata)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A real number (double)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">var_type</span>(<span class="dv">25</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "double"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Text (character)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">var_type</span>(<span class="st">"Hello, R!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A function (function)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">var_type</span>(sqrt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "function"</code></pre>
+</div>
+</div>
+<p>Functions usually appear in the form <code>f()</code>, with parentheses.</p>
+</section>
+<section id="data-and-functions" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="data-and-functions"><span class="header-section-number">2.2</span> Data and functions</h2>
+<p>In just a few lines of code, we have encountered three types of objects: doubles, characters, and functions. Looking at it another way, those lines of code are largely made up of objects.</p>
+<p>We can broadly divide objects into data and functions. In a broad sense, data are like information: <code>25</code> and <code>"hello"</code> both contain information. This is a wider meaning than the one we often use in everyday conversation. I think of data as anything meaningful in our lives, including what we eat, wear, and do, and where we live and travel.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Any information can be data.</p>
+</div>
+</div>
+<p>Code that contains only data usually does very little. Think of data as nouns and functions as verbs. “Students, scores, average” is a list of words. “Calculate the average of the students’ scores” describes an action. In the same way, a function tells R what to do with data.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In R, data usually act like nouns, while functions usually act like verbs.</p>
+</div>
+</div>
+</section>
+<section id="dimensions-of-data" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="dimensions-of-data"><span class="header-section-number">2.3</span> Dimensions of data</h2>
+<p>Two questions help us understand a data structure: <strong>How are its values organized?</strong> And <strong>can it contain different types of values?</strong> A sequence, a table, and a collection of smaller collections organize information in different ways. <a href="#fig-data-structures" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> illustrates these common structures in R.</p>
+<p>A single value, such as the test score <code>85</code> or the state abbreviation <code>"CA"</code>, is our starting point. You can picture it as a point, or zero-dimensional (0D) information. In R, however, even one number or one piece of text is stored as a vector of length one.</p>
+<p>An <strong>atomic vector</strong> holds values of one type, such as a sequence of numeric scores. A <strong>list</strong> can hold different types together: a score, a state abbreviation, and a logical value such as <code>TRUE</code>. Its elements can also be larger objects, including other lists.</p>
+<p>A <strong>matrix</strong> arranges values in rows and columns. In its common atomic form, all entries have the same type. A <strong>data frame</strong> also has rows and columns, but each column can have its own type. For example, student names can be text, scores can be numeric, and pass status can be logical. Each column has the same number of rows. A <strong>tibble</strong> is a modern form of data frame used throughout the tidyverse.</p>
+<p>An <strong>array</strong> extends the row-and-column idea to additional dimensions. In a weather dataset, choosing a station, an hour, and a day identifies one temperature reading. A <strong>nested list</strong> instead contains other lists. It can represent classes containing student records, and different classes can contain different numbers of students. Nesting does not require the regular shape or fixed dimensions of an array.</p>
+<p><a href="#fig-data-structures" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> shows these relationships. Repeated colors indicate one type; different colors indicate elements or columns that can hold different types. The labels <code>num</code> (numeric), <code>chr</code> (character), and <code>lgl</code> (logical) identify the example types independently of color. The matrix and array panels show their common atomic forms, while the nested-list panel illustrates a hierarchy.</p>
+<div id="fig-data-structures" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two columns labeled Single type and Multiple types, with rows labeled 1D, 2D, and nD. The pairs are Atomic vector and List, Matrix and Data frame, and Array and Nested list. List elements, data-frame columns, and nested-list groups share a purple, blue, green order. Labels num, chr, and lgl identify the numeric, character, and logical example types without relying on color. The nested list uses overlapping groups to echo the array's layers; nesting represents a hierarchy rather than fixed array dimensions." data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-data-structures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="fig/data-structures.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Two columns labeled Single type and Multiple types, with rows labeled 1D, 2D, and nD. The pairs are Atomic vector and List, Matrix and Data frame, and Array and Nested list. List elements, data-frame columns, and nested-list groups share a purple, blue, green order. Labels num, chr, and lgl identify the numeric, character, and logical example types without relying on color. The nested list uses overlapping groups to echo the array's layers; nesting represents a hierarchy rather than fixed array dimensions." width="500">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-data-structures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1: Common R data structures, grouped by organization and the types they can hold.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="a-workflow-in-r" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="a-workflow-in-r"><span class="header-section-number">2.4</span> A workflow in R</h2>
+<p>For statistical analysis, we most often work with one-dimensional and two-dimensional data. Even within those dimensions, R offers many data types. Where should we start?</p>
+<p>My view is that learning to work comfortably with tibbles is enough to carry out most data analysis.</p>
+<div id="fig-tibble-workflow" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Workflow from input files in various formats to an initial tibble, then a processed tibble, and finally output in various formats. Processing the tibble happens within the R environment." data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tibble-workflow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="fig/tibble-workflow.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Workflow from input files in various formats to an initial tibble, then a processed tibble, and finally output in various formats. Processing the tibble happens within the R environment." width="400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tibble-workflow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.2: Using tibbles as a bridge between input and output formats.
+</figcaption>
+</figure>
+</div>
+<p>Files on disk and objects inside R are different things. For many tabular analyses, we can organize the work in three steps:</p>
+<ol type="1">
+<li>Import data from another format as a tibble.</li>
+<li>Process the tibble.</li>
+<li>Export the tibble to another format.</li>
+</ol>
+<section id="sources-formats-and-r-objects" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="sources-formats-and-r-objects"><span class="header-section-number">2.4.1</span> Sources, formats, and R objects</h3>
+<p>Imagine receiving a household survey from a research archive. The archive is the <strong>source</strong>. The downloaded Stata file is the <strong>format</strong> in which the information is stored. After importing it, you might work with a tibble, which is an <strong>R object</strong> in your current session. These are three descriptions of the same information at different stages of your work. Changing the format does not, by itself, change whom the survey represents or what its questions mean.</p>
+<p>A file format determines how information is recorded and what software can read it. Some formats store little more than rows of text. Others also store column types, variable descriptions, or labels explaining that a code such as <code>1</code> means “Employed.” A <strong>codebook</strong> describes the variables, their values, and important details of data collection. Keep it with the data: importing a file successfully does not tell you how to interpret its contents.</p>
+<p>For ordinary tables, the tibble workflow gives us a common starting point. More specialized data sometimes need a different structure. A map needs its geographic shapes as well as a table of attributes; an image needs its arrangement of pixels. We can often derive a table for part of an analysis without treating that table as a replacement for the complete source.</p>
+</section>
+<section id="recognizing-input-formats" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="recognizing-input-formats"><span class="header-section-number">2.4.2</span> Recognizing input formats</h3>
+<p>The same survey may be offered in several formats. Choose among those supplied by the producer before converting anything yourself. A labelled statistical file may carry information that a plain-text copy leaves to a separate codebook. <a href="#tbl-input-formats" class="quarto-xref">Table&nbsp;<span>2.1</span></a> summarizes several formats you are likely to encounter. Use it as a reference when you receive a file, rather than as a list to memorize.</p>
+<div class="table-responsive" role="region" aria-label="Common input formats" tabindex="0">
+<div id="tbl-input-formats" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-input-formats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.1: Common input formats.
+</figcaption>
+<div aria-describedby="tbl-input-formats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Format</th>
+<th style="text-align: left;">Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">CSV / TSV</td>
+<td style="text-align: left;">Rows and columns in plain text</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Excel</td>
+<td style="text-align: left;">Worksheets with tables and formatted cells</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Stata / SPSS / SAS</td>
+<td style="text-align: left;">Tables with variable and value labels</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RDS / RData</td>
+<td style="text-align: left;">R objects saved for later use</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Parquet / Feather</td>
+<td style="text-align: left;">Binary tables for efficient storage</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">JSON / XML / HTML</td>
+<td style="text-align: left;">Nested records or web-page content</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<p>CSV is useful because many programs can read it, but its simplicity has consequences. A column containing <code>00123</code> may be an identifier rather than the number 123. A date such as <code>03/04/2025</code> needs a convention before we can interpret it. Import tools can guess column types; the <a href="https://readr.tidyverse.org/reference/read_csv.html">readr documentation</a> explains why those guesses sometimes need to be specified explicitly. A small file is not necessarily a simple dataset.</p>
+<p>Excel files usually end in <code>.xlsx</code> or <code>.xls</code>. They are convenient when people enter or inspect information by hand. A worksheet designed to look attractive to a reader, however, may contain a title, merged cells, and several tables. R needs to know where the actual observations begin and end. The <a href="https://readxl.tidyverse.org/">readxl documentation</a> distinguishes reading a table from reproducing an entire workbook’s layout.</p>
+<p>Statistical files, such as Stata’s <code>.dta</code>, SPSS’s <code>.sav</code>, and SAS’s <code>.sas7bdat</code>, deserve a different kind of attention. A survey can distinguish “Refused” from “Not asked,” even when both should be excluded from a calculation. It can also associate numeric codes with category labels. SAS labels may depend on a separate catalog. The <a href="https://haven.tidyverse.org/articles/semantics.html">haven documentation</a> explains how these conventions differ across R, Stata, SPSS, and SAS. Check them before calculating means or fitting models.</p>
+<p>R data files include <code>.rds</code>, <code>.RData</code>, and <code>.rda</code>. They can contain objects other than tables and may depend on particular R or package versions. Parquet (<code>.parquet</code>) and Feather (<code>.feather</code>, sometimes <code>.ftr</code>) are useful for exchanging tables between compatible tools. With any conversion, check which column types, labels, and documentation are retained. JSON and XML can contain nested records; HTML describes web pages. Those structures may need rearranging before they become an analysis table.</p>
+<p>Not everything is a standalone table file. A <strong>database</strong> holds related tables that you request through queries. An <strong>application programming interface (API)</strong> is a way for software to request information from a service; it may return JSON or a table. These describe ways of obtaining data, rather than a single file format. Similarly, a ZIP archive is a container: open it to find the actual data files and documentation. A name ending in <code>.csv.gz</code> usually means a CSV table compressed with gzip. Extensions such as <code>.dat</code> and <code>.bin</code> are less informative; consult the producer’s instructions.</p>
+<p>Spatial files also need their accompanying information. A shapefile is usually a set of related files, rather than just the <code>.shp</code> file; GeoTIFF stores a geographically referenced image or grid. For geographic features, the <a href="https://r-spatial.github.io/sf/">sf package</a> keeps shapes alongside their attributes. Text, images, and recordings may require other tools before they yield the variables needed for a particular analysis.</p>
+<p>The following inventory retains the wider range of sources we may encounter:</p>
+<p>Input sources can be grouped by where the data come from and how they are stored:</p>
+<ul>
+<li><strong>Data already available in R</strong>
+<ul>
+<li>Saved R data, such as <code>.RData</code> and <code>.rds</code> files.</li>
+<li>Datasets included with R or R packages.</li>
+<li>Data entered manually in R code.</li>
+</ul></li>
+<li><strong>Tabular and statistical files</strong>
+<ul>
+<li>Spreadsheets, such as Excel files.</li>
+<li>Data from statistical software, such as Stata, SPSS, and SAS.</li>
+<li>Plain-text tables, such as <code>.csv</code>, <code>.tsv</code>, and <code>.txt</code> files.</li>
+<li>Binary table formats, such as <code>.ftr</code> and <code>.parquet</code> files.</li>
+</ul></li>
+<li><strong>Other structured data and media</strong>
+<ul>
+<li>Markup and structured formats, such as XML, HTML, and JSON.</li>
+<li>Geographic data, such as <code>.shp</code> and GeoTIFF files.</li>
+<li>Images.</li>
+<li>Other binary files, such as <code>.bin</code> and <code>.dat</code> files.</li>
+</ul></li>
+<li><strong>Databases and online sources</strong>
+<ul>
+<li>Remote databases and big data.</li>
+<li>Online datasets and website source code.</li>
+</ul></li>
+<li><strong>Folders and compressed files</strong>
+<ul>
+<li>Folders containing multiple data files.</li>
+<li>Archives and compressed files, such as <code>.zip</code>, <code>.gz</code>, <code>.bz2</code>, and <code>.xz</code>.</li>
+</ul></li>
+</ul>
+</section>
+<section id="data-across-social-science-disciplines" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="data-across-social-science-disciplines"><span class="header-section-number">2.4.3</span> Data across social-science disciplines</h3>
+<p>Your research question helps determine what counts as an observation. A sociologist might study people or organizations; an economist might study households, firms, or countries; a political scientist might study voters, elections, or legislative speeches. These boundaries overlap. A household survey can support questions about employment, family life, health, and political participation.</p>
+<p>The examples in <a href="#tbl-disciplinary-data" class="quarto-xref">Table&nbsp;<span>2.2</span></a> are starting points for thinking about research, not a ranking of what each discipline uses most. They also show why a subject label alone cannot tell us which file format to choose.</p>
+<div class="table-responsive" role="region" aria-label="Illustrative data across social-science fields" tabindex="0">
+<div id="tbl-disciplinary-data" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-disciplinary-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.2: Examples of data across social-science fields.
+</figcaption>
+<div aria-describedby="tbl-disciplinary-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 40%">
+<col style="width: 59%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Example data</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Sociology</td>
+<td style="text-align: left;">Survey responses, social ties, organizational records</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Demography</td>
+<td style="text-align: left;">Births, deaths, migration, and census records</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Economics</td>
+<td style="text-align: left;">Household income, employment, and firm records</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Public policy</td>
+<td style="text-align: left;">Program participation, benefits, and evaluation outcomes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Political science</td>
+<td style="text-align: left;">Election results and public-opinion surveys</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Psychology</td>
+<td style="text-align: left;">Experimental responses, behavior, and psychological scales</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Education</td>
+<td style="text-align: left;">Student assessments, school records, classroom observations</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Geography</td>
+<td style="text-align: left;">Geographic boundaries, environmental measures, travel patterns</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Urban studies</td>
+<td style="text-align: left;">Housing records, land use, neighborhood indicators</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Communication</td>
+<td style="text-align: left;">Audience surveys, interviews, and communication networks</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Media studies</td>
+<td style="text-align: left;">News articles, online posts, broadcast transcripts</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Anthropology</td>
+<td style="text-align: left;">Interview transcripts, field notes, documentary photographs</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Criminology</td>
+<td style="text-align: left;">Crime reports, court records, victimization surveys</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Social work</td>
+<td style="text-align: left;">Service records, client interviews, intervention outcomes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Public health</td>
+<td style="text-align: left;">Health surveys, disease surveillance, patient records</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<p><strong>Access follows the collection’s conditions, not the name of your discipline.</strong> Some files are openly downloadable; others require registration and an agreement. Some depend on a university subscription or a research partnership. More sensitive records may require a project application, training, and work inside a secure computing environment. “Free of charge” does not necessarily mean unrestricted reuse.</p>
+<p>The format depends on how the material was collected and distributed. A survey might arrive as a statistical file or CSV; election returns as a spreadsheet; and online posts as JSON or text. Maps need spatial files, while interviews may include transcripts and recordings. Detailed locations, school records, and linked administrative records can have tighter access conditions than published summaries. Platform terms and participant consent may also limit collection or reuse.</p>
+<p>Students can use many of the same archives as established researchers, although particular collections have their own eligibility rules. The <a href="https://ukdataservice.ac.uk/help/access-policy/frequently-asked-questions-faqs-about-how-to-get-data-and-our-access-policy/">UK Data Service</a> allows students and researchers from different disciplines and countries to register, while individual datasets can impose further conditions. Its <a href="https://ukdataservice.ac.uk/find-data/access-conditions/">access policy</a> distinguishes open, safeguarded, and controlled data. For another example, <a href="https://international.ipums.org/international-action/faq">IPUMS International</a> provides census microdata without charge after an access application, subject to conditions on use. These are examples of access arrangements, rather than promises that any particular file will be available to every reader.</p>
+<p>Restricted data often need more preparation. <a href="https://www.icpsr.umich.edu/sites/icpsr/posts/shared/restricted-data-mgmt-access">ICPSR</a> notes that students generally need a faculty sponsor for restricted-data applications. Qualitative material can also be sensitive: the <a href="https://qdr.syr.edu/policies/data-access">Qualitative Data Repository</a> distinguishes standard access from project-specific conditions. For a first project, choose a documented dataset that you can actually obtain within the time available, with a question its contents can answer.</p>
+</section>
+<section id="choosing-outputs-for-their-readers" class="level3" data-number="2.4.4">
+<h3 data-number="2.4.4" class="anchored" data-anchor-id="choosing-outputs-for-their-readers"><span class="header-section-number">2.4.4</span> Choosing outputs for their readers</h3>
+<p>R can write many of the formats above when the appropriate tools support them. The exported file may not retain every feature of the original. R can also produce results for different purposes:</p>
+<ul>
+<li><strong>Tables and console output</strong>
+<ul>
+<li>Text and tables in the console, which can be copied or captured in a screenshot.</li>
+<li>Tables in Excel, Markdown, LaTeX, and other formats.</li>
+</ul></li>
+<li><strong>Figures and charts</strong>
+<ul>
+<li>Images in various formats.</li>
+<li>Interactive charts.</li>
+</ul></li>
+<li><strong>Documents and reports</strong>
+<ul>
+<li>Word and PDF documents.</li>
+<li>HTML pages.</li>
+</ul></li>
+<li><strong>Quarto publications</strong>
+<ul>
+<li>Slides.</li>
+<li>Articles and books.</li>
+<li>Websites.</li>
+</ul></li>
+</ul>
+<p>The useful distinction is between <strong>data someone will analyze</strong> and <strong>results someone will read</strong>. A collaborator checking your analysis needs usable values and documentation. A reader of an article usually needs a clearly labelled table or figure. A screenshot of a table may be convenient for a conversation, but it is a poor substitute for the underlying values when someone needs to recalculate a result.</p>
+<p><a href="#tbl-output-choices" class="quarto-xref">Table&nbsp;<span>2.3</span></a> connects common purposes to possible outputs. More than one choice can be sensible. The best choice depends on the recipient’s tools and the information that must survive the handover. When exchanging data, check identifiers, dates, missing values, and labels after conversion. When presenting results, check readability, accessibility, and any release conditions.</p>
+<div class="table-responsive" role="region" aria-label="Output choices by purpose" tabindex="0">
+<div id="tbl-output-choices" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-output-choices-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.3: Output choices by purpose.
+</figcaption>
+<div aria-describedby="tbl-output-choices-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 40%">
+<col style="width: 59%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Purpose</th>
+<th style="text-align: left;">Possible output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Share an analysis table</td>
+<td style="text-align: left;">CSV / TSV with a variable codebook</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Inspect or edit values</td>
+<td style="text-align: left;">Excel workbook for manual review</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Use other statistical software</td>
+<td style="text-align: left;">Stata / SPSS / SAS files for analysis</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Resume work in R</td>
+<td style="text-align: left;">RDS file preserving one R object</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Exchange larger tables</td>
+<td style="text-align: left;">Parquet file with column-oriented storage</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Write a report</td>
+<td style="text-align: left;">Word / PDF / HTML with text and results</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Share a figure</td>
+<td style="text-align: left;">PNG image or SVG / PDF vector graphic</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<p>For repeated work within R, a saved R object can spare you from rebuilding an intermediate result. It is a working copy, not a universal exchange format: the <a href="https://search.r-project.org/R/refmans/base/html/readRDS.html">R documentation</a> describes how RDS saves a single object and cautions against treating it as a general interchange format. For larger tables, <a href="https://parquet.apache.org/">Parquet</a> uses column-oriented storage and compression; its advantages are most relevant when your tools and workflow can use them.</p>
+<p>For a figure, consider both size and destination. A PNG stores pixels, so its export dimensions affect how readable its labels will be. SVG and PDF can preserve vector lines and text when the graphics and destination support them. For a written report, Quarto can combine analysis with tables, figures, and prose. The output file serves the audience; retain the source code so that you can regenerate it.</p>
+<p>There is no need to learn every format now. Begin with the file your project supplies, understand what its rows and columns mean, and choose an output that the next person can use. A successful conversion preserves the meaning of the information, not just the number of rows.</p>
+<p>These lists are not exhaustive; R can work with many other sources and outputs.</p>
+<p>Learning to use tibbles as a bridge opens up a wide range of tasks.</p>
+</section>
+</section>
+<section id="sec-compatible-blocks" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="sec-compatible-blocks"><span class="header-section-number">2.5</span> Building with compatible blocks</h2>
+<p>Think of LEGO bricks. A small collection can make many different structures because the pieces use a common connector. You do not need a different adapter after every brick.</p>
+<p>Many dplyr functions work in a similar way: they take a tibble as input and return a tibble as output. One step can keep certain rows, the next can add a variable, and another can choose columns. Because the result is still a tibble, it is ready for the next step.</p>
+<p><a href="#fig-compatible-blocks" class="quarto-xref">Figure&nbsp;<span>2.3</span></a> compares two versions of the same model procedure. On the left, fitting a model, summarizing it, and extracting its coefficients produces a different object class at each step. On the right, <code>tidy()</code> returns the coefficients as a tibble, and <code>select()</code> keeps working with tibbles.</p>
+<p>On a narrow screen, scroll the figure sideways to compare both workflows.</p>
+<div class="figure-scroll" role="region" aria-label="Side-by-side workflow comparison" tabindex="0">
+<div id="fig-compatible-blocks" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two side-by-side versions of the same model procedure, each with three operations. Base R and stats: a data frame passes through lm() to an lm object, summary() to a summary.lm object, and extraction of the coefficients component to a matrix. With tibbles: a tibble passes through lm() to an lm object, tidy() to a tibble of coefficients, and select() to a tibble with fewer columns. Short action labels explain the operations." data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-compatible-blocks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="fig/pipeline-comparison.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Two side-by-side versions of the same model procedure, each with three operations. Base R and stats: a data frame passes through lm() to an lm object, summary() to a summary.lm object, and extraction of the coefficients component to a matrix. With tibbles: a tibble passes through lm() to an lm object, tidy() to a tibble of coefficients, and select() to a tibble with fewer columns. Short action labels explain the operations." width="630">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-compatible-blocks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.3: Object types along the same model procedure in base R and with tibbles.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>The code below follows the left-hand workflow, using six students’ weekly study hours and test scores invented for this example. <code>class()</code> shows what each step returns.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">study_hours =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">6</span>),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">test_score =</span> <span class="fu">c</span>(<span class="dv">71</span>, <span class="dv">83</span>, <span class="dv">70</span>, <span class="dv">85</span>, <span class="dv">64</span>, <span class="dv">88</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(test_score <span class="sc">~</span> study_hours, <span class="at">data =</span> scores)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>fit_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>coefs <span class="ot">&lt;-</span> fit_summary[[<span class="st">"coefficients"</span>]]</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(scores)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "data.frame"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "lm"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(fit_summary)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "summary.lm"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(coefs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "matrix" "array" </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>coefs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept) 59.733333  3.5174847 16.981832 7.050817e-05
+study_hours  4.885714  0.9032067  5.409298 5.657097e-03</code></pre>
+</div>
+</div>
+<p>Every step returns a different kind of object: a data frame, a model, a model summary, and a matrix. R reports the matrix as <code>"matrix" "array"</code> because a matrix is a two-dimensional array. Each new class has its own rules for what it contains and how to use it.</p>
+<p>The same model procedure can also end in a tibble. The broom package, installed with the tidyverse, turns a fitted model into a tibble with <code>tidy()</code>. The pipe <code>|&gt;</code> passes the result of one step to the next:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>scores_tbl <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(scores)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>coef_table <span class="ot">&lt;-</span> <span class="fu">lm</span>(test_score <span class="sc">~</span> study_hours, <span class="at">data =</span> scores_tbl) <span class="sc">|&gt;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>()</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>coef_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term        estimate std.error statistic   p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept)    59.7      3.52      17.0  0.0000705
+2 study_hours     4.89     0.903      5.41 0.00566  </code></pre>
+</div>
+</div>
+<p>The model in the middle is still an <code>lm</code> object, but the coefficients arrive as a tibble with one row per term. The numbers are the same as in the matrix above. Because the result is a tibble, dplyr functions work on it directly. For example, <code>select()</code> keeps only the columns we need:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>coef_table <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(term, estimate, p.value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  term        estimate   p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept)    59.7  0.0000705
+2 study_hours     4.89 0.00566  </code></pre>
+</div>
+</div>
+<p>A coefficient table can now be filtered, relabeled, combined with other results, or exported with <code>write_csv()</code>, like any other data in this book. This differs from Stata, where <code>regress</code> prints its coefficient table as output in the Results window. That table is not data you can edit directly. Its numbers are stored in matrices such as <code>r(table)</code>, and turning them into an editable table takes extra commands and conversions. In R, the coefficient table is simply another tibble.</p>
+<p>Once each stage returns a tibble, the same few functions handle raw data, summaries, and model results alike.</p>
+<p>This is why the book focuses on a common set of data structures. You can learn a few useful operations, connect them, and gradually build more complex analyses.</p>
+<p>I have three suggestions for people learning R:</p>
+<ol type="1">
+<li>Focus on tibbles first. Do not divide your attention among vectors, lists, matrices, data.table objects, and other structures.</li>
+<li>Do not try to memorize everything. Look up what you need; with use, it will become familiar.</li>
+<li>Let go of things you do not use.</li>
+</ol>
+<p>This is how I work myself. I have forgotten much of how to use data.table. When I need to work with a complicated list, I still look up some purrr functions. Once you understand the basics, though, you can usually learn a simple function in a minute or two.</p>
+</section>
+<section id="sec-import-export" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="sec-import-export"><span class="header-section-number">2.6</span> Importing and exporting data</h2>
+<p>In practice, importing and exporting are checks at the boundaries of an analysis. Before importing, read the documentation and identify the observations, variables, and special codes. After importing, inspect a few records, the number of rows and columns, and the types assigned to important variables. A file that opens without an error can still have the wrong sheet, a misread date, or an identifier that has lost its leading zeros.</p>
+<p>Keep the original download unchanged and perform cleaning in code. Save derived files under distinct names so that the analysis can be repeated. Before sharing an export, open it in the intended software when possible and check the values and metadata that matter. For restricted data, use only the export and release procedures permitted by the provider. Changing from a statistical file to CSV does not change the conditions governing its use.</p>
+<p>R reads and writes these formats with short commands. The examples below use two small files containing the same six survey respondents, one saved by Stata and one by SPSS: <a href="examples/survey.dta">survey.dta</a> and <a href="examples/survey.sav">survey.sav</a>. The haven package, installed with the tidyverse, reads both:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>survey <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"examples/survey.dta"</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>survey</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+     id   age degree      weekly_hours
+  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;
+1  1001    34 Bachelor's            40
+2  1002    52 High school           45
+3  1003    27 Graduate              38
+4  1004    61 High school           NA
+5  1005    45 Associate             40
+6  1006    39 Bachelor's            50</code></pre>
+</div>
+</div>
+<p>Reading the SPSS file gives the same tibble:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>survey <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">"examples/survey.sav"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>survey</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+     id   age degree      weekly_hours
+  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;
+1  1001    34 Bachelor's            40
+2  1002    52 High school           45
+3  1003    27 Graduate              38
+4  1004    61 High school           NA
+5  1005    45 Associate             40
+6  1006    39 Bachelor's            50</code></pre>
+</div>
+</div>
+<p>Each row is a respondent, and <code>NA</code> marks respondent 1004, who did not report weekly hours. Once the data are in R, the analysis no longer depends on which program produced the file.</p>
+<p>Exporting works the other way round. Each <code>write_</code> function saves a tibble in one format:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(survey, <span class="st">"survey_output.csv"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_dta</span>(survey, <span class="st">"survey_output.dta"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_parquet</span>(survey, <span class="st">"survey_output.parquet"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>These lines print nothing; they create three new files in your project folder: a plain-text CSV file that opens almost anywhere, a Stata file, and a compact Parquet file. The arrow package provides <code>write_parquet()</code>; install it once with <code>install.packages("arrow")</code> before loading it.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/socimh\.github\.io\/R4SS\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./intro.html" class="pagination-link" aria-label="Introduction to R">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./dplyr-stat.html" class="pagination-link" aria-label="Tabulation and summary statistics">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tabulation and summary statistics</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Minghong Shen · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

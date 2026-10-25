@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="An introduction to R and the tidyverse for social-science research.">
+
+<title>3&nbsp; Tabulation and summary statistics – R for Social Science</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./gss-data.html" rel="next">
+<link href="./data-workflow.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-684a58a98314b78713c09aa595376ac7.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d86a9a5236ec3aeeb637912bee877918.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-684a58a98314b78713c09aa595376ac7.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-4e8b6bb1c918ce48c6344a3599f12dee.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-6c46b2821aad66193e5af05cedf4b233.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-4e8b6bb1c918ce48c6344a3599f12dee.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="book.css">
+<meta property="og:title" content="3&nbsp; Tabulation and summary statistics – R for Social Science">
+<meta property="og:description" content="An introduction to R and the tidyverse for social-science research.">
+<meta property="og:site_name" content="R for Social Science">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dplyr-stat.html">Working with data</a></li><li class="breadcrumb-item"><a href="./dplyr-stat.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tabulation and summary statistics</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R for Social Science</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/socimh/R4SS/tree/main/en/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects, data structures, and workflows</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Working with data</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-stat.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tabulation and summary statistics</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gss-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">The GSS data in this book</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#count" id="toc-count" class="nav-link active" data-scroll-target="#count"><span class="header-section-number">3.1</span> <code>count()</code></a></li>
+  <li><a href="#tab-tab1-and-tab2" id="toc-tab-tab1-and-tab2" class="nav-link" data-scroll-target="#tab-tab1-and-tab2"><span class="header-section-number">3.2</span> <code>tab()</code>, <code>tab1()</code>, and <code>tab2()</code></a></li>
+  <li><a href="#summarise" id="toc-summarise" class="nav-link" data-scroll-target="#summarise"><span class="header-section-number">3.3</span> <code>summarise()</code></a></li>
+  <li><a href="#summ" id="toc-summ" class="nav-link" data-scroll-target="#summ"><span class="header-section-number">3.4</span> <code>summ()</code></a></li>
+  <li><a href="#sec-stat-gss" id="toc-sec-stat-gss" class="nav-link" data-scroll-target="#sec-stat-gss"><span class="header-section-number">3.5</span> Application: education and income in the 2024 GSS</a>
+  <ul class="collapse">
+  <li><a href="#who-has-which-degree" id="toc-who-has-which-degree" class="nav-link" data-scroll-target="#who-has-which-degree"><span class="header-section-number">3.5.1</span> Who has which degree?</a></li>
+  <li><a href="#comparing-groups-which-denominator" id="toc-comparing-groups-which-denominator" class="nav-link" data-scroll-target="#comparing-groups-which-denominator"><span class="header-section-number">3.5.2</span> Comparing groups: which denominator?</a></li>
+  <li><a href="#age-schooling-and-income" id="toc-age-schooling-and-income" class="nav-link" data-scroll-target="#age-schooling-and-income"><span class="header-section-number">3.5.3</span> Age, schooling, and income</a></li>
+  </ul></li>
+  <li><a href="#sec-stat-exercises" id="toc-sec-stat-exercises" class="nav-link" data-scroll-target="#sec-stat-exercises"><span class="header-section-number">3.6</span> Exercises</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dplyr-stat.html">Working with data</a></li><li class="breadcrumb-item"><a href="./dplyr-stat.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tabulation and summary statistics</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-statistics" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tabulation and summary statistics</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled" title="Draft chapter">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Draft chapter
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is a draft of Chapter 10 of the planned book. Until the intermediate chapters are revised, it appears directly after Chapter 2, so its chapter number will change.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="In this chapter">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>In this chapter
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Count categories with <code>count()</code>, and add percentages with <code>tab()</code>, <code>tab1()</code>, <code>tab2()</code>, and <code>fre()</code>.</li>
+<li>Compute a single statistic with <code>summarise()</code>, or many statistics at once with <code>summ()</code>.</li>
+<li>Distinguish percentages of all cases from percentages of valid answers.</li>
+<li>Describe education and income in the 2024 General Social Survey.</li>
+</ul>
+</div>
+</div>
+<p>This chapter introduces two families of tools:</p>
+<ul>
+<li>Categorical variables
+<ul>
+<li><code>count()</code> counts the number of cases in each category.</li>
+<li><code>tab()</code> adds <strong>percentages and cumulative percentages</strong>.</li>
+<li><code>tab1()</code> produces these statistics for <strong>several</strong> variables at once.</li>
+<li><code>tab2()</code> cross-tabulates <strong>two</strong> variables.</li>
+</ul></li>
+<li>Continuous variables
+<ul>
+<li><code>summarise()</code> computes <strong>individual</strong> statistics.</li>
+<li><code>summ()</code> quickly produces <strong>many</strong> statistics for <strong>many</strong> variables.</li>
+</ul></li>
+</ul>
+<p><code>count()</code> and <code>summarise()</code> come from dplyr. <code>tab()</code>, <code>tab1()</code>, <code>tab2()</code>, and <code>summ()</code> come from tidystata, a package I wrote that brings several of Stata’s summary commands into tidyverse workflows.</p>
+<p>The examples use two datasets:</p>
+<ul>
+<li><code>gss24</code> comes from the 2024 General Social Survey (GSS), which has interviewed adults in the United States since 1972 about their families, work, education, and attitudes. Our extract has 3,986 respondents and 25 variables. <a href="gss-data.html" class="quarto-xref"><span>Appendix A</span></a> shows how to create it from freely available data.</li>
+<li><code>lifeexp</code>, included with tidystata, describes 68 countries in Europe and the Americas in 1998: life expectancy, population growth, income per person, and access to safe water. The package rebuilds this teaching dataset from the World Bank’s World Development Indicators, following the layout of Stata’s example. Most indicators refer to 1998; safe water refers to 2000.</li>
+</ul>
+<section id="count" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="count"><span class="header-section-number">3.1</span> <code>count()</code></h2>
+<p>The GSS asks respondents how happy they are, all things considered: very happy, pretty happy, or not too happy.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the number of respondents in each category</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(happy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  happy             n
+  &lt;fct&gt;         &lt;int&gt;
+1 very happy      797
+2 pretty happy   2303
+3 not too happy   854
+4 &lt;NA&gt;             32</code></pre>
+</div>
+</div>
+<p>The last row, <code>&lt;NA&gt;</code>, counts the 32 respondents who did not answer.</p>
+</section>
+<section id="tab-tab1-and-tab2" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="tab-tab1-and-tab2"><span class="header-section-number">3.2</span> <code>tab()</code>, <code>tab1()</code>, and <code>tab2()</code></h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>These functions come from tidystata. After installing the package (see <a href="intro.html#sec-install-packages" class="quarto-xref"><span>Section 1.5</span></a>), load it with <code>library(tidystata)</code>.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidystata)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Much more information than count()</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab</span>(happy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 6
+  happy             n percent   cum valid valid_cum
+  &lt;fct&gt;         &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 very happy      797  20.0    20.0  20.2      20.2
+2 pretty happy   2303  57.8    77.8  58.2      78.4
+3 not too happy   854  21.4    99.2  21.6     100  
+4 &lt;NA&gt;             32   0.803 100    NA        NA  </code></pre>
+</div>
+</div>
+<p>Besides the count <code>n</code>, <code>tab()</code> reports:</p>
+<ul>
+<li><code>percent</code>: the percentage of all respondents in each category.</li>
+<li><code>cum</code>: the cumulative percentage.</li>
+<li><code>valid</code> and <code>valid_cum</code>: the same percentages among respondents who answered.</li>
+</ul>
+<p>Because 32 answers are missing, <code>percent</code> and <code>valid</code> differ slightly. <a href="#sec-stat-gss" class="quarto-xref"><span>Section 3.5</span></a> shows when this difference matters.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Two variables: one row for each combination</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab</span>(happy, health)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 7
+   happy         health        n percent    cum  valid valid_cum
+   &lt;fct&gt;         &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+ 1 very happy    excellent   246  6.17     6.17  6.24       6.24
+ 2 very happy    good        438 11.0     17.2  11.1       17.4 
+ 3 very happy    fair         96  2.41    19.6   2.44      19.8 
+ 4 very happy    poor         15  0.376   19.9   0.381     20.2 
+ 5 pretty happy  excellent   323  8.10    28.0   8.19      28.4 
+ 6 pretty happy  good       1338 33.6     61.6  33.9       62.3 
+ 7 pretty happy  fair        565 14.2     75.8  14.3       76.6 
+ 8 pretty happy  poor         69  1.73    77.5   1.75      78.4 
+ 9 not too happy excellent    94  2.36    79.9   2.38      80.8 
+10 not too happy good        360  9.03    88.9   9.13      89.9 
+11 not too happy fair        311  7.80    96.7   7.89      97.8 
+12 not too happy poor         87  2.18    98.9   2.21     100   
+13 very happy    &lt;NA&gt;          2  0.0502  98.9  NA         NA   
+14 pretty happy  &lt;NA&gt;          8  0.201   99.1  NA         NA   
+15 not too happy &lt;NA&gt;          2  0.0502  99.2  NA         NA   
+16 &lt;NA&gt;          excellent     2  0.0502  99.2  NA         NA   
+17 &lt;NA&gt;          good         15  0.376   99.6  NA         NA   
+18 &lt;NA&gt;          fair          3  0.0753  99.7  NA         NA   
+19 &lt;NA&gt;          poor          2  0.0502  99.7  NA         NA   
+20 &lt;NA&gt;          &lt;NA&gt;         10  0.251  100    NA         NA   </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A cross-tabulation (contingency table) of the same two variables</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab2</span>(happy, health)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 6
+  `happy \\ health` excellent  good  fair  poor  `NA`
+  &lt;fct&gt;                 &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+1 very happy              246   438    96    15     2
+2 pretty happy            323  1338   565    69     8
+3 not too happy            94   360   311    87     2
+4 &lt;NA&gt;                      2    15     3     2    10</code></pre>
+</div>
+</div>
+<p><code>tab(happy, health)</code> returns one row for each combination of happiness and self-rated health, including combinations with missing values. <code>tab2()</code> arranges the same counts as a contingency table, with happiness in the rows and health in the columns; the <code>NA</code> row and column hold the missing answers. Reading down the columns, 37% of respondents in excellent health are very happy, compared with 9% of those in poor health. Comparing groups this way, within the categories of one variable, is the subject of <a href="#sec-stat-gss" class="quarto-xref"><span>Section 3.5</span></a>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabulate several variables at once with tab1()</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab1</span>(happy, health, marital)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$happy
+# A tibble: 4 × 6
+  value             n percent   cum valid valid_cum
+  &lt;fct&gt;         &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 very happy      797  20.0    20.0  20.2      20.2
+2 pretty happy   2303  57.8    77.8  58.2      78.4
+3 not too happy   854  21.4    99.2  21.6     100  
+4 &lt;NA&gt;             32   0.803 100    NA        NA  
+
+$health
+# A tibble: 5 × 6
+  value         n percent   cum valid valid_cum
+  &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 excellent   665  16.7    16.7 16.8       16.8
+2 good       2151  54.0    70.6 54.3       71.0
+3 fair        975  24.5    95.1 24.6       95.6
+4 poor        173   4.34   99.4  4.36     100  
+5 &lt;NA&gt;         22   0.552 100   NA         NA  
+
+$marital
+# A tibble: 6 × 6
+  value             n percent   cum valid valid_cum
+  &lt;fct&gt;         &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 married        1659  41.6    41.6 41.8       41.8
+2 widowed         269   6.75   48.4  6.77      48.6
+3 divorced        579  14.5    62.9 14.6       63.1
+4 separated       130   3.26   66.2  3.27      66.4
+5 never married  1334  33.5    99.6 33.6      100  
+6 &lt;NA&gt;             15   0.376 100   NA         NA  </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabulate several variables at once, and combine the results into one tibble</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab1</span>(happy, health, marital, <span class="at">.type =</span> <span class="st">"tibble"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 15 × 7
+   variable value             n percent   cum valid valid_cum
+   &lt;chr&gt;    &lt;fct&gt;         &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+ 1 happy    very happy      797  20.0    20.0 20.2       20.2
+ 2 happy    pretty happy   2303  57.8    77.8 58.2       78.4
+ 3 happy    not too happy   854  21.4    99.2 21.6      100  
+ 4 happy    &lt;NA&gt;             32   0.803 100   NA         NA  
+ 5 health   excellent       665  16.7    16.7 16.8       16.8
+ 6 health   good           2151  54.0    70.6 54.3       71.0
+ 7 health   fair            975  24.5    95.1 24.6       95.6
+ 8 health   poor            173   4.34   99.4  4.36     100  
+ 9 health   &lt;NA&gt;             22   0.552 100   NA         NA  
+10 marital  married        1659  41.6    41.6 41.8       41.8
+11 marital  widowed         269   6.75   48.4  6.77      48.6
+12 marital  divorced        579  14.5    62.9 14.6       63.1
+13 marital  separated       130   3.26   66.2  3.27      66.4
+14 marital  never married  1334  33.5    99.6 33.6      100  
+15 marital  &lt;NA&gt;             15   0.376 100   NA         NA  </code></pre>
+</div>
+</div>
+<p>By default, <code>tab1()</code> returns a list with one table per variable. With <code>.type = "tibble"</code>, it stacks them into a single tibble and records the source of each row in <code>variable</code>.</p>
+<p><code>fre()</code> works like <code>tab()</code> but adds total rows, as in a printed frequency table:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fre</span>(happy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 6
+  happy             n percent   cum valid valid_cum
+  &lt;chr&gt;         &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 very happy      797  20.0    20.0  20.2      20.2
+2 pretty happy   2303  57.8    77.8  58.2      78.4
+3 not too happy   854  21.4    99.2  21.6     100  
+4 Valid Total    3954  99.2    NA   100        NA  
+5 &lt;NA&gt;             32   0.803 100    NA        NA  
+6 Total          3986 100      NA    NA        NA  </code></pre>
+</div>
+</div>
+</section>
+<section id="summarise" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="summarise"><span class="header-section-number">3.3</span> <code>summarise()</code></h2>
+<p>For continuous variables, we turn to <code>lifeexp</code>. The variable <code>lexp</code> is life expectancy at birth, in years.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean life expectancy across countries</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">mean</span>(lexp))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  `mean(lexp)`
+         &lt;dbl&gt;
+1         71.7</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Name the result</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">lexp =</span> <span class="fu">mean</span>(lexp))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+   lexp
+  &lt;dbl&gt;
+1  71.7</code></pre>
+</div>
+</div>
+<p>Each statistic needs its own expression. Describing a single variable fully soon becomes long:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">min =</span> <span class="fu">min</span>(lexp),</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">q1 =</span> <span class="fu">quantile</span>(lexp, .<span class="dv">25</span>),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(lexp),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">median =</span> <span class="fu">median</span>(lexp),</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(lexp),</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">q3 =</span> <span class="fu">quantile</span>(lexp, .<span class="dv">75</span>),</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">max =</span> <span class="fu">max</span>(lexp)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 7
+    min    q1  mean median    sd    q3   max
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1    57  68.8  71.7     72  5.16    76    79</code></pre>
+</div>
+</div>
+</section>
+<section id="summ" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="summ"><span class="header-section-number">3.4</span> <code>summ()</code></h2>
+<p><code>summarise()</code> is a basic building block. To make everyday descriptions quicker without giving up flexibility, I designed <code>summ()</code>. Here are its basic features:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The type, number of non-missing values, number of distinct values,</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># minimum, mean, standard deviation, and maximum of life expectancy</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summ</span>(lexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 7
+  type      n unique   min  mean    sd   max
+  &lt;chr&gt; &lt;int&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 dbl      68     20    57  71.7  5.16    79</code></pre>
+</div>
+</div>
+<p>The statistics above are:</p>
+<ul>
+<li><code>type</code>: the type of the variable (or its unit, if the variable has one).</li>
+<li><code>n</code>: the number of non-missing values.</li>
+<li><code>unique</code>: the number of distinct values.
+<ul>
+<li>Clearly, <code>unique</code> <span class="math inline">\(\leq\)</span> <code>n</code>.</li>
+<li>A larger <code>unique</code> means the variable is more “continuous” and carries more information.</li>
+<li>For example, <strong>age in years</strong> is usually a whole number between 0 and 120. Age in months has 12 times as many possible values, and <strong>age in days</strong> even more. Of the three, age in days is the smoothest and most continuous, carries the most information, and has the largest <code>unique</code>.</li>
+<li>Here, life expectancy is recorded in whole years, so 68 countries share only 20 distinct values. Survey and administrative data are often like this: many variables are counts, categories, or rounded numbers.</li>
+</ul></li>
+<li><code>min</code>: the minimum.</li>
+<li><code>mean</code>: the mean.</li>
+<li><code>sd</code>: the standard deviation.</li>
+<li><code>max</code>: the maximum.</li>
+</ul>
+<p>When you summarize several variables, a <code>name</code> column identifies each one:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize several variables at once</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summ</span>(popgrowth<span class="sc">:</span>safewater)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 8
+  name      type      n unique   min     mean       sd     max
+  &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;  &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+1 popgrowth dbl      68     32  -2.5    0.553     1.06     2.6
+2 lexp      dbl      68     20  57     71.7       5.16    79  
+3 gnppc     dbl      67     64 170   9137.    11497.   46650  
+4 safewater dbl      54     32  36     77.2      20.6    100  </code></pre>
+</div>
+</div>
+<p><code>popgrowth</code> is the average annual population growth rate (%), <code>gnppc</code> is gross national income per person (Atlas method, current US dollars), and <code>safewater</code> is the percentage of the population using safely managed drinking water services in 2000. The <code>n</code> column already reveals missing data: income is missing for 1 countries and safe water for 14.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show all available statistics</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summ</span>(popgrowth<span class="sc">:</span>safewater, <span class="at">.detail =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">width =</span> <span class="cn">Inf</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 19
+  name      type      n unique miss_n valid_pct   min      q1 median
+  &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+1 popgrowth dbl      68     32      0     1      -2.5   -0.05    0.5
+2 lexp      dbl      68     20      0     1      57     68.5    72  
+3 gnppc     dbl      67     64      1     0.985 170   1440    3380  
+4 safewater dbl      54     32     14     0.794  36     62      82.5
+      mean     mad       sd      q3     max      iqr   skew kurtosis
+     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
+1    0.553    1.04     1.06     1.5     2.6     1.55 -0.418     3.43
+2   71.7      5.93     5.16    76      79       7.5  -0.505     2.73
+3 9137.    3721.   11497.   13540   46650   12100     1.40      3.78
+4   77.2     21.5     20.6     95     100      33    -0.578     1.95
+        se      sum
+     &lt;dbl&gt;    &lt;dbl&gt;
+1    0.128     37.6
+2    0.626   4873  
+3 1405.    612160  
+4    2.80    4167  </code></pre>
+</div>
+</div>
+<p>The detailed statistics describe the shape of each distribution:</p>
+<p><code>summ()</code> uses Stata’s percentile rule, so its quartiles can differ from those produced by R’s default <code>quantile()</code>.</p>
+<ul>
+<li>For <code>gnppc</code>, the mean ($9,137) is far above the median ($3,380), and the skewness (<code>skew</code>) is positive. A few rich countries, such as Switzerland and Norway, pull the mean up, as income distributions usually do. The median better describes a typical country.</li>
+<li>For <code>lexp</code>, the skewness is negative: most countries cluster in the high 60s and 70s, while a few, such as Haiti at 57 years, have much lower life expectancy.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose your own statistics</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summ</span>(popgrowth<span class="sc">:</span>safewater, <span class="at">.stat =</span> <span class="fu">c</span>(<span class="st">"valid_pct"</span>, <span class="st">"mean"</span>, <span class="st">"se"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  name      type  valid_pct     mean       se
+  &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 popgrowth dbl       1        0.553    0.128
+2 lexp      dbl       1       71.7      0.626
+3 gnppc     dbl       0.985 9137.    1405.   
+4 safewater dbl       0.794   77.2      2.80 </code></pre>
+</div>
+</div>
+<p><code>valid_pct</code> is the proportion of non-missing values, and <code>se</code> is the standard error, an estimate of the uncertainty in the mean.</p>
+<p>Only 79.4% of countries report <code>safewater</code>, and the missing values are not spread evenly: 12 of the 14 countries without data are in the Americas. The mean of 77.2% describes the countries with reported data, most of which are in Europe and Central Asia. It does not summarize all 68 countries. Always check who is missing before interpreting a mean.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select all variables at once</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summ</span>(<span class="fu">everything</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: country is non-numeric and thus removed.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: region is a labelled variable (*).</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+  name      type        n unique   min     mean        sd     max
+  &lt;chr&gt;     &lt;chr&gt;   &lt;int&gt;  &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 *region   dbl+lbl    68      3   1      1.5       0.743     3  
+2 popgrowth dbl        68     32  -2.5    0.553     1.06      2.6
+3 lexp      dbl        68     20  57     71.7       5.16     79  
+4 gnppc     dbl        67     64 170   9137.    11497.    46650  
+5 safewater dbl        54     32  36     77.2      20.6     100  </code></pre>
+</div>
+</div>
+<p><code>summ()</code> drops <code>country</code> because it is text. <code>region</code> is stored as a labelled number (1, 2, 3) with a region name attached to each code, so its “mean” of 1.5 is just the average of the codes. tidystata marks it with <code>*</code> and prints a warning; <code>tab()</code> is more appropriate for it.</p>
+<p><code>summ()</code> and <code>codebook()</code> also handle many other column types. The tibble below (its code is hidden) contains dates, date-times, durations, text, logical values, numbers with units, factors, and missing values:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 1,000
+Columns: 14
+$ date      &lt;date&gt; 2024-02-08, 2024-02-07, 2024-02-06, 2024-02-05,…
+$ time      &lt;dttm&gt; 2024-02-09 11:59:59, 2024-02-09 11:59:58, 2024-…
+$ duration1 &lt;drtn&gt; 3 hours, 4 hours, 5 hours, 6 hours, 7 hours, 8 …
+$ duration2 &lt;time&gt; 12:34:56, 12:34:56, 12:34:56, 12:34:56, 12:34:5…
+$ string    &lt;chr&gt; "ABC", "ABC", "ABC", "ABC", "ABC", "ABC", "ABC",…
+$ logical   &lt;lgl&gt; TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, FAL…
+$ unit1     [m] 1 [m], 2 [m], 3 [m], 4 [m], 5 [m], 6 [m], 7 [m], 8…
+$ unit2     [m^2] 1 [m^2], 2 [m^2], 3 [m^2], 4 [m^2], 5 [m^2], 6 […
+$ factor    &lt;fct&gt; a, b, a, b, a, b, a, b, a, b, a, b, a, b, a, b, …
+$ order     &lt;ord&gt; a, b, a, b, a, b, a, b, a, b, a, b, a, b, a, b, …
+$ double    &lt;dbl&gt; 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0…
+$ integer   &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1…
+$ half_miss &lt;dbl&gt; 1, NA, 3, NA, 5, NA, 7, NA, 9, NA, 11, NA, 13, N…
+$ all_miss  &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>complex_tb <span class="sc">|&gt;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">codebook</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 14 × 4
+   variable  type                 n unique
+   &lt;chr&gt;     &lt;chr&gt;            &lt;int&gt;  &lt;int&gt;
+ 1 date      date              1000   1000
+ 2 time      datetime          1000   1000
+ 3 duration1 duration [hours]  1000   1000
+ 4 duration2 time [secs]       1000      1
+ 5 string    character         1000      1
+ 6 logical   logical           1000      2
+ 7 unit1     units [m]         1000   1000
+ 8 unit2     units [m^2]       1000   1000
+ 9 factor    factor            1000      2
+10 order     ordered           1000      2
+11 double    double            1000   1000
+12 integer   integer           1000   1000
+13 half_miss double             500    500
+14 all_miss  double               0      0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>complex_tb <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summ</span>(<span class="fu">everything</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: string is non-numeric and thus removed.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: all_miss is entirely missing; retained with n = 0.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: factor and order are factors (**).</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>A list is returned as statistics are heterogeneous.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$numeric
+# A tibble: 10 × 8
+   name      type             n unique   min  mean      sd   max
+   &lt;chr&gt;     &lt;chr&gt;        &lt;int&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1 duration1 drtn [hours]  1000   1000   3   502.  289.     1002
+ 2 logical   lgl           1000      2   0     0.5   0.500     1
+ 3 unit1     units [m]     1000   1000   1   500.  289.     1000
+ 4 unit2     units [m^2]   1000   1000   1   500.  289.     1000
+ 5 **factor  fct           1000      2   1     1.5   0.500     2
+ 6 **order   ord           1000      2   1     1.5   0.500     2
+ 7 double    dbl           1000   1000   0.1  50.0  28.9     100
+ 8 integer   int           1000   1000   1   500.  289.     1000
+ 9 half_miss dbl            500    500   1   500   289.      999
+10 all_miss  dbl              0      0  NA    NA    NA        NA
+
+$date
+# A tibble: 1 × 8
+  name  type      n unique mean       sd            min        max  
+  &lt;chr&gt; &lt;chr&gt; &lt;int&gt;  &lt;int&gt; &lt;chr&gt;      &lt;drtn&gt;        &lt;chr&gt;      &lt;chr&gt;
+1 date  date   1000   1000 2022-09-26 288.8194 days 2021-05-15 2024…
+
+$datetime
+# A tibble: 1 × 8
+  name  type      n unique mean             sd           min   max  
+  &lt;chr&gt; &lt;chr&gt; &lt;int&gt;  &lt;int&gt; &lt;chr&gt;            &lt;drtn&gt;       &lt;chr&gt; &lt;chr&gt;
+1 time  dttm   1000   1000 2024-02-09 11:51 4.813657 mi… 2024… 2024…
+
+$time
+# A tibble: 1 × 8
+  name      type      n unique mean     sd     min      max     
+  &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;  &lt;int&gt; &lt;chr&gt;    &lt;drtn&gt; &lt;chr&gt;    &lt;chr&gt;   
+1 duration2 time   1000      1 12:34:56 0 secs 12:34:56 12:34:56</code></pre>
+</div>
+</div>
+<p>The messages and the result show how <code>summ()</code> treats different kinds of variables:</p>
+<ul>
+<li><strong>Cannot be summarized:</strong> text, such as <code>string</code>. <code>summ()</code> drops it with a message; use <code>tab1()</code> instead. An entirely missing variable, such as <code>all_miss</code>, is kept with <code>n = 0</code>.</li>
+<li><strong>Can be summarized, but the results are usually not meaningful:</strong> factors, such as <code>factor</code> and <code>order</code>, marked with <code>**</code>. Use <code>tab1()</code> instead.</li>
+<li><strong>Can be summarized meaningfully:</strong> numbers, numbers with units, durations, and logical (dummy) variables.</li>
+<li><strong>Summarized in their own tables:</strong> dates, date-times, and times of day. Their means and ranges are displayed as formatted calendar dates and times, while standard deviations are durations. By default, <code>summ()</code> returns a list with one table for each kind.</li>
+</ul>
+</section>
+<section id="sec-stat-gss" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="sec-stat-gss"><span class="header-section-number">3.5</span> Application: education and income in the 2024 GSS</h2>
+<p>This section puts the tools together to describe education in the 2024 GSS, and shows why every percentage needs a clearly stated denominator.</p>
+<section id="who-has-which-degree" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="who-has-which-degree"><span class="header-section-number">3.5.1</span> Who has which degree?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab</span>(degree)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 6
+  degree                       n percent    cum valid valid_cum
+  &lt;fct&gt;                    &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 less than high school      362   9.08    9.08  9.10      9.10
+2 high school               1817  45.6    54.7  45.7      54.8 
+3 associate/junior college   360   9.03   63.7   9.05     63.8 
+4 bachelor's                 863  21.7    85.3  21.7      85.5 
+5 graduate                   577  14.5    99.8  14.5     100   
+6 &lt;NA&gt;                         7   0.176 100    NA        NA   </code></pre>
+</div>
+</div>
+<p>The last row shows that 7 respondents did not report a degree. That is why the two kinds of percentages differ:</p>
+<ul>
+<li><code>percent</code> divides by all 3,986 respondents.</li>
+<li><code>valid</code> divides by the 3,979 respondents who answered.</li>
+</ul>
+<p>Here the difference is tiny. Among those who answered, 45.7% have a high school diploma as their highest degree, and 36.2% hold a bachelor’s or graduate degree.</p>
+<p>For questions with more missing answers, the choice of denominator matters a great deal (see Exercise 2).</p>
+</section>
+<section id="comparing-groups-which-denominator" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="comparing-groups-which-denominator"><span class="header-section-number">3.5.2</span> Comparing groups: which denominator?</h3>
+<p>To compare women and men, tabulate <code>degree</code> within each category of <code>sex</code> with <code>.by</code>. We first drop the 30 respondents whose sex is missing, so that they do not form a group of their own:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex)) <span class="sc">|&gt;</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab</span>(degree, <span class="at">.by =</span> sex)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 7
+   sex    degree                    n percent    cum valid valid_cum
+   &lt;fct&gt;  &lt;fct&gt;                 &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+ 1 male   less than high school   135  7.55     7.55  7.57      7.57
+ 2 male   high school             860 48.1     55.7  48.2      55.8 
+ 3 male   associate/junior col…   141  7.89    63.6   7.90     63.7 
+ 4 male   bachelor's              395 22.1     85.7  22.1      85.8 
+ 5 male   graduate                253 14.2     99.8  14.2     100   
+ 6 male   &lt;NA&gt;                      3  0.168  100    NA        NA   
+ 7 female less than high school   208  9.59     9.59  9.60      9.60
+ 8 female high school             952 43.9     53.5  43.9      53.5 
+ 9 female associate/junior col…   219 10.1     63.6  10.1      63.6 
+10 female bachelor's              466 21.5     85.1  21.5      85.1 
+11 female graduate                322 14.8     99.9  14.9     100   
+12 female &lt;NA&gt;                      2  0.0922 100    NA        NA   </code></pre>
+</div>
+</div>
+<p>With <code>.by = sex</code>, the percentages add up to 100 within each sex. This table answers the question “What share of women hold a graduate degree?”</p>
+<p>Among those who answered, 36.4% of women and 36.3% of men hold a bachelor’s or graduate degree.</p>
+<p>A different question, “What share of graduate-degree holders are women?”, needs a different denominator. Swap the roles of the two variables:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex), <span class="sc">!</span><span class="fu">is.na</span>(degree)) <span class="sc">|&gt;</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab</span>(sex, <span class="at">.by =</span> degree)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 7
+   degree                  sex       n percent   cum valid valid_cum
+   &lt;fct&gt;                   &lt;fct&gt; &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+ 1 less than high school   male    135    39.4  39.4  39.4      39.4
+ 2 less than high school   fema…   208    60.6 100    60.6     100  
+ 3 high school             male    860    47.5  47.5  47.5      47.5
+ 4 high school             fema…   952    52.5 100    52.5     100  
+ 5 associate/junior colle… male    141    39.2  39.2  39.2      39.2
+ 6 associate/junior colle… fema…   219    60.8 100    60.8     100  
+ 7 bachelor's              male    395    45.9  45.9  45.9      45.9
+ 8 bachelor's              fema…   466    54.1 100    54.1     100  
+ 9 graduate                male    253    44    44    44        44  
+10 graduate                fema…   322    56   100    56       100  </code></pre>
+</div>
+</div>
+<p>Both tables come from the same counts, which <code>tab2()</code> shows directly:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex), <span class="sc">!</span><span class="fu">is.na</span>(degree)) <span class="sc">|&gt;</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab2</span>(degree, sex)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  `degree \\ sex`           male female
+  &lt;fct&gt;                    &lt;int&gt;  &lt;int&gt;
+1 less than high school      135    208
+2 high school                860    952
+3 associate/junior college   141    219
+4 bachelor's                 395    466
+5 graduate                   253    322</code></pre>
+</div>
+</div>
+<p>Before reporting a percentage, state its denominator: all respondents or valid answers, and which group.</p>
+</section>
+<section id="age-schooling-and-income" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="age-schooling-and-income"><span class="header-section-number">3.5.3</span> Age, schooling, and income</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summ</span>(age, educ, childs, realinc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 8
+  name    type      n unique   min     mean       sd     max
+  &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;  &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+1 age     dbl    3859     72   18     49.0     17.7      89 
+2 educ    dbl    3952     21    0     14.2      2.92     20 
+3 childs  dbl    3944      9    0      1.72     1.65      8 
+4 realinc dbl    3563     26  182. 34252.   34697.   117565.</code></pre>
+</div>
+</div>
+<ul>
+<li><code>age</code> is in years.</li>
+<li><code>educ</code> is the number of years of schooling completed.</li>
+<li><code>childs</code> is the number of children the respondent has ever had.</li>
+<li><code>realinc</code> is family income in constant 1986 dollars. The GSS asks about income in brackets, so <code>realinc</code> has only 26 distinct values.</li>
+</ul>
+<p>Each row uses the respondents who answered that question, so <code>n</code> differs across variables.</p>
+<p>To compare income across educational groups, <code>tabstat()</code>, a companion of <code>summ()</code> named after the Stata command, places selected statistics side by side:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(degree)) <span class="sc">|&gt;</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tabstat</span>(realinc, <span class="at">.by =</span> degree, <span class="at">.stat =</span> <span class="fu">c</span>(<span class="st">"n"</span>, <span class="st">"mean"</span>, <span class="st">"median"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 5
+  degree                   type      n   mean median
+  &lt;fct&gt;                    &lt;chr&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1 less than high school    dbl     287 13210.  7714.
+2 high school              dbl    1621 24308. 16335 
+3 associate/junior college dbl     336 31510. 19965 
+4 bachelor's               dbl     783 46575. 36300 
+5 graduate                 dbl     530 59746. 43560 </code></pre>
+</div>
+</div>
+<p>Median family income rises at every step of education, from $7,714 among respondents without a high school diploma to $43,560 among those with a graduate degree. In every group, the mean is above the median, a sign that a few high incomes pull the mean up.</p>
+<p>Two cautions apply to these descriptions:</p>
+<ul>
+<li>They describe associations in a sample. They do not show that a degree causes higher income.</li>
+<li>They are unweighted sample statistics. The GSS provides survey weights for estimating population figures; we return to weights later in the book.</li>
+</ul>
+</section>
+</section>
+<section id="sec-stat-exercises" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="sec-stat-exercises"><span class="header-section-number">3.6</span> Exercises</h2>
+<p><strong>1. Syntax and meaning.</strong> Tabulate <code>marital</code> in <code>gss24</code> with <code>count()</code> and then with <code>tab()</code>. Which column of <code>tab()</code> gives the share of each marital status among respondents who answered the question?</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(marital)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  marital           n
+  &lt;fct&gt;         &lt;int&gt;
+1 married        1659
+2 widowed         269
+3 divorced        579
+4 separated       130
+5 never married  1334
+6 &lt;NA&gt;             15</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab</span>(marital)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 6
+  marital           n percent   cum valid valid_cum
+  &lt;fct&gt;         &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 married        1659  41.6    41.6 41.8       41.8
+2 widowed         269   6.75   48.4  6.77      48.6
+3 divorced        579  14.5    62.9 14.6       63.1
+4 separated       130   3.26   66.2  3.27      66.4
+5 never married  1334  33.5    99.6 33.6      100  
+6 &lt;NA&gt;             15   0.376 100   NA         NA  </code></pre>
+</div>
+</div>
+<p>The <code>valid</code> column. <code>percent</code> also counts the 15 respondents with a missing answer in the denominator.</p>
+</div>
+</div>
+</div>
+<p><strong>2. Interpretation.</strong> Tabulate <code>conpress</code> (confidence in the press). Why are <code>percent</code> and <code>valid</code> so different? Which would you report?</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab</span>(conpress)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 6
+  conpress         n percent    cum valid valid_cum
+  &lt;fct&gt;        &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 a great deal   225    5.64   5.64  8.68      8.68
+2 only some     1045   26.2   31.9  40.3      49.0 
+3 hardly any    1321   33.1   65.0  51.0     100   
+4 &lt;NA&gt;          1395   35.0  100    NA        NA   </code></pre>
+</div>
+</div>
+<p>About a third of the values are missing. Most of these are not refusals: the GSS gives different sets of questions to different parts of the sample, and the confidence questions were asked on only two of the 2024 ballots. <code>percent</code> therefore mixes the answers with respondents who were never asked. Report <code>valid</code>, and say that it describes the respondents who were asked.</p>
+</div>
+</div>
+</div>
+<p><strong>3. Diagnose the code.</strong> The following code returns <code>NA</code>. Why, and how would you fix it?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_age =</span> <span class="fu">mean</span>(age))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>age</code> is missing for 127 respondents, and in R any calculation involving a missing value returns <code>NA</code> unless you say otherwise. Add <code>na.rm = TRUE</code>, or use <code>summ()</code>, which reports statistics for the non-missing values together with their number <code>n</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  mean_age
+     &lt;dbl&gt;
+1     49.0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summ</span>(age)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 7
+  type      n unique   min  mean    sd   max
+  &lt;chr&gt; &lt;int&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 dbl    3859     72    18  49.0  17.7    89</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>4. Applied exercise.</strong> Within each category of <code>race</code>, what percentage of respondents who answered hold a graduate degree? Drop respondents with missing <code>race</code> or <code>degree</code> first.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(race), <span class="sc">!</span><span class="fu">is.na</span>(degree)) <span class="sc">|&gt;</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab</span>(degree, <span class="at">.by =</span> race) <span class="sc">|&gt;</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(degree <span class="sc">==</span> <span class="st">"graduate"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 7
+  race  degree       n percent   cum valid valid_cum
+  &lt;fct&gt; &lt;fct&gt;    &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1 white graduate   387   15.9    100 15.9        100
+2 black graduate    69    8.54   100  8.54       100
+3 other graduate   108   16.6    100 16.6        100</code></pre>
+</div>
+</div>
+<p>Read the <code>valid</code> column. Each percentage uses the respondents in that racial category as its denominator.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/socimh\.github\.io\/R4SS\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./data-workflow.html" class="pagination-link" aria-label="Objects, data structures, and workflows">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects, data structures, and workflows</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./gss-data.html" class="pagination-link" aria-label="The GSS data in this book">
+        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">The GSS data in this book</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Minghong Shen · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
