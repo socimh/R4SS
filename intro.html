@@ -8,7 +8,7 @@
 
 <meta name="description" content="An introduction to R and the tidyverse for social-science research.">
 
-<title>1&nbsp; Introduction to R – R for Social Science</title>
+<title>1&nbsp; Get started with R – R for Social Science</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./data-workflow.html" rel="next">
+<link href="./objects.html" rel="next">
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -82,9 +82,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-684a58a98314b78713c09aa595376ac7.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4e8b6bb1c918ce48c6344a3599f12dee.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-6c46b2821aad66193e5af05cedf4b233.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-4e8b6bb1c918ce48c6344a3599f12dee.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f762a00757381c0eb797acef47548461.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-49a5c3d3f733115b1117348003870229.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f762a00757381c0eb797acef47548461.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -112,14 +115,1058 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<style>
+
+.book-console .ansi-bold         { font-weight: bold;             }
+
+.book-console .ansi-italic       { font-style: italic;            }
+
+.book-console .ansi-underline    { text-decoration: underline;    }
+
+.book-console .ansi-blink        { text-decoration: blink;        }
+
+.book-console .ansi-hide         { visibility: hidden;            }
+
+.book-console .ansi-crossedout   { text-decoration: line-through; }
+
+.book-console .ansi-link:hover   { text-decoration: underline;    }
+
+.book-console .ansi-color-0      { color: #000000 }
+
+.book-console .ansi-color-1      { color: #cd0000 }
+
+.book-console .ansi-color-2      { color: #00cd00 }
+
+.book-console .ansi-color-3      { color: #cdcd00 }
+
+.book-console .ansi-color-4      { color: #0000ee }
+
+.book-console .ansi-color-5      { color: #cd00cd }
+
+.book-console .ansi-color-6      { color: #00cdcd }
+
+.book-console .ansi-color-7      { color: #e5e5e5 }
+
+.book-console .ansi-color-8      { color: #7f7f7f }
+
+.book-console .ansi-color-9      { color: #ff0000 }
+
+.book-console .ansi-color-10     { color: #00ff00 }
+
+.book-console .ansi-color-11     { color: #ffff00 }
+
+.book-console .ansi-color-12     { color: #5c5cff }
+
+.book-console .ansi-color-13     { color: #ff00ff }
+
+.book-console .ansi-color-14     { color: #00ffff }
+
+.book-console .ansi-color-15     { color: #ffffff }
+
+.book-console .ansi-bg-color-0   { background-color: #000000 }
+
+.book-console .ansi-bg-color-1   { background-color: #cd0000 }
+
+.book-console .ansi-bg-color-2   { background-color: #00cd00 }
+
+.book-console .ansi-bg-color-3   { background-color: #cdcd00 }
+
+.book-console .ansi-bg-color-4   { background-color: #0000ee }
+
+.book-console .ansi-bg-color-5   { background-color: #cd00cd }
+
+.book-console .ansi-bg-color-6   { background-color: #00cdcd }
+
+.book-console .ansi-bg-color-7   { background-color: #e5e5e5 }
+
+.book-console .ansi-bg-color-8   { background-color: #7f7f7f }
+
+.book-console .ansi-bg-color-9   { background-color: #ff0000 }
+
+.book-console .ansi-bg-color-10  { background-color: #00ff00 }
+
+.book-console .ansi-bg-color-11  { background-color: #ffff00 }
+
+.book-console .ansi-bg-color-12  { background-color: #5c5cff }
+
+.book-console .ansi-bg-color-13  { background-color: #ff00ff }
+
+.book-console .ansi-bg-color-14  { background-color: #00ffff }
+
+.book-console .ansi-bg-color-15  { background-color: #ffffff }
+
+.book-console .ansi-color-16     { color: #000000 }
+
+.book-console .ansi-color-52     { color: #330000 }
+
+.book-console .ansi-color-88     { color: #660000 }
+
+.book-console .ansi-color-124    { color: #990000 }
+
+.book-console .ansi-color-160    { color: #cc0000 }
+
+.book-console .ansi-color-196    { color: #ff0000 }
+
+.book-console .ansi-color-22     { color: #003300 }
+
+.book-console .ansi-color-58     { color: #333300 }
+
+.book-console .ansi-color-94     { color: #663300 }
+
+.book-console .ansi-color-130    { color: #993300 }
+
+.book-console .ansi-color-166    { color: #cc3300 }
+
+.book-console .ansi-color-202    { color: #ff3300 }
+
+.book-console .ansi-color-28     { color: #006600 }
+
+.book-console .ansi-color-64     { color: #336600 }
+
+.book-console .ansi-color-100    { color: #666600 }
+
+.book-console .ansi-color-136    { color: #996600 }
+
+.book-console .ansi-color-172    { color: #cc6600 }
+
+.book-console .ansi-color-208    { color: #ff6600 }
+
+.book-console .ansi-color-34     { color: #009900 }
+
+.book-console .ansi-color-70     { color: #339900 }
+
+.book-console .ansi-color-106    { color: #669900 }
+
+.book-console .ansi-color-142    { color: #999900 }
+
+.book-console .ansi-color-178    { color: #cc9900 }
+
+.book-console .ansi-color-214    { color: #ff9900 }
+
+.book-console .ansi-color-40     { color: #00cc00 }
+
+.book-console .ansi-color-76     { color: #33cc00 }
+
+.book-console .ansi-color-112    { color: #66cc00 }
+
+.book-console .ansi-color-148    { color: #99cc00 }
+
+.book-console .ansi-color-184    { color: #cccc00 }
+
+.book-console .ansi-color-220    { color: #ffcc00 }
+
+.book-console .ansi-color-46     { color: #00ff00 }
+
+.book-console .ansi-color-82     { color: #33ff00 }
+
+.book-console .ansi-color-118    { color: #66ff00 }
+
+.book-console .ansi-color-154    { color: #99ff00 }
+
+.book-console .ansi-color-190    { color: #ccff00 }
+
+.book-console .ansi-color-226    { color: #ffff00 }
+
+.book-console .ansi-color-17     { color: #000033 }
+
+.book-console .ansi-color-53     { color: #330033 }
+
+.book-console .ansi-color-89     { color: #660033 }
+
+.book-console .ansi-color-125    { color: #990033 }
+
+.book-console .ansi-color-161    { color: #cc0033 }
+
+.book-console .ansi-color-197    { color: #ff0033 }
+
+.book-console .ansi-color-23     { color: #003333 }
+
+.book-console .ansi-color-59     { color: #333333 }
+
+.book-console .ansi-color-95     { color: #663333 }
+
+.book-console .ansi-color-131    { color: #993333 }
+
+.book-console .ansi-color-167    { color: #cc3333 }
+
+.book-console .ansi-color-203    { color: #ff3333 }
+
+.book-console .ansi-color-29     { color: #006633 }
+
+.book-console .ansi-color-65     { color: #336633 }
+
+.book-console .ansi-color-101    { color: #666633 }
+
+.book-console .ansi-color-137    { color: #996633 }
+
+.book-console .ansi-color-173    { color: #cc6633 }
+
+.book-console .ansi-color-209    { color: #ff6633 }
+
+.book-console .ansi-color-35     { color: #009933 }
+
+.book-console .ansi-color-71     { color: #339933 }
+
+.book-console .ansi-color-107    { color: #669933 }
+
+.book-console .ansi-color-143    { color: #999933 }
+
+.book-console .ansi-color-179    { color: #cc9933 }
+
+.book-console .ansi-color-215    { color: #ff9933 }
+
+.book-console .ansi-color-41     { color: #00cc33 }
+
+.book-console .ansi-color-77     { color: #33cc33 }
+
+.book-console .ansi-color-113    { color: #66cc33 }
+
+.book-console .ansi-color-149    { color: #99cc33 }
+
+.book-console .ansi-color-185    { color: #cccc33 }
+
+.book-console .ansi-color-221    { color: #ffcc33 }
+
+.book-console .ansi-color-47     { color: #00ff33 }
+
+.book-console .ansi-color-83     { color: #33ff33 }
+
+.book-console .ansi-color-119    { color: #66ff33 }
+
+.book-console .ansi-color-155    { color: #99ff33 }
+
+.book-console .ansi-color-191    { color: #ccff33 }
+
+.book-console .ansi-color-227    { color: #ffff33 }
+
+.book-console .ansi-color-18     { color: #000066 }
+
+.book-console .ansi-color-54     { color: #330066 }
+
+.book-console .ansi-color-90     { color: #660066 }
+
+.book-console .ansi-color-126    { color: #990066 }
+
+.book-console .ansi-color-162    { color: #cc0066 }
+
+.book-console .ansi-color-198    { color: #ff0066 }
+
+.book-console .ansi-color-24     { color: #003366 }
+
+.book-console .ansi-color-60     { color: #333366 }
+
+.book-console .ansi-color-96     { color: #663366 }
+
+.book-console .ansi-color-132    { color: #993366 }
+
+.book-console .ansi-color-168    { color: #cc3366 }
+
+.book-console .ansi-color-204    { color: #ff3366 }
+
+.book-console .ansi-color-30     { color: #006666 }
+
+.book-console .ansi-color-66     { color: #336666 }
+
+.book-console .ansi-color-102    { color: #666666 }
+
+.book-console .ansi-color-138    { color: #996666 }
+
+.book-console .ansi-color-174    { color: #cc6666 }
+
+.book-console .ansi-color-210    { color: #ff6666 }
+
+.book-console .ansi-color-36     { color: #009966 }
+
+.book-console .ansi-color-72     { color: #339966 }
+
+.book-console .ansi-color-108    { color: #669966 }
+
+.book-console .ansi-color-144    { color: #999966 }
+
+.book-console .ansi-color-180    { color: #cc9966 }
+
+.book-console .ansi-color-216    { color: #ff9966 }
+
+.book-console .ansi-color-42     { color: #00cc66 }
+
+.book-console .ansi-color-78     { color: #33cc66 }
+
+.book-console .ansi-color-114    { color: #66cc66 }
+
+.book-console .ansi-color-150    { color: #99cc66 }
+
+.book-console .ansi-color-186    { color: #cccc66 }
+
+.book-console .ansi-color-222    { color: #ffcc66 }
+
+.book-console .ansi-color-48     { color: #00ff66 }
+
+.book-console .ansi-color-84     { color: #33ff66 }
+
+.book-console .ansi-color-120    { color: #66ff66 }
+
+.book-console .ansi-color-156    { color: #99ff66 }
+
+.book-console .ansi-color-192    { color: #ccff66 }
+
+.book-console .ansi-color-228    { color: #ffff66 }
+
+.book-console .ansi-color-19     { color: #000099 }
+
+.book-console .ansi-color-55     { color: #330099 }
+
+.book-console .ansi-color-91     { color: #660099 }
+
+.book-console .ansi-color-127    { color: #990099 }
+
+.book-console .ansi-color-163    { color: #cc0099 }
+
+.book-console .ansi-color-199    { color: #ff0099 }
+
+.book-console .ansi-color-25     { color: #003399 }
+
+.book-console .ansi-color-61     { color: #333399 }
+
+.book-console .ansi-color-97     { color: #663399 }
+
+.book-console .ansi-color-133    { color: #993399 }
+
+.book-console .ansi-color-169    { color: #cc3399 }
+
+.book-console .ansi-color-205    { color: #ff3399 }
+
+.book-console .ansi-color-31     { color: #006699 }
+
+.book-console .ansi-color-67     { color: #336699 }
+
+.book-console .ansi-color-103    { color: #666699 }
+
+.book-console .ansi-color-139    { color: #996699 }
+
+.book-console .ansi-color-175    { color: #cc6699 }
+
+.book-console .ansi-color-211    { color: #ff6699 }
+
+.book-console .ansi-color-37     { color: #009999 }
+
+.book-console .ansi-color-73     { color: #339999 }
+
+.book-console .ansi-color-109    { color: #669999 }
+
+.book-console .ansi-color-145    { color: #999999 }
+
+.book-console .ansi-color-181    { color: #cc9999 }
+
+.book-console .ansi-color-217    { color: #ff9999 }
+
+.book-console .ansi-color-43     { color: #00cc99 }
+
+.book-console .ansi-color-79     { color: #33cc99 }
+
+.book-console .ansi-color-115    { color: #66cc99 }
+
+.book-console .ansi-color-151    { color: #99cc99 }
+
+.book-console .ansi-color-187    { color: #cccc99 }
+
+.book-console .ansi-color-223    { color: #ffcc99 }
+
+.book-console .ansi-color-49     { color: #00ff99 }
+
+.book-console .ansi-color-85     { color: #33ff99 }
+
+.book-console .ansi-color-121    { color: #66ff99 }
+
+.book-console .ansi-color-157    { color: #99ff99 }
+
+.book-console .ansi-color-193    { color: #ccff99 }
+
+.book-console .ansi-color-229    { color: #ffff99 }
+
+.book-console .ansi-color-20     { color: #0000cc }
+
+.book-console .ansi-color-56     { color: #3300cc }
+
+.book-console .ansi-color-92     { color: #6600cc }
+
+.book-console .ansi-color-128    { color: #9900cc }
+
+.book-console .ansi-color-164    { color: #cc00cc }
+
+.book-console .ansi-color-200    { color: #ff00cc }
+
+.book-console .ansi-color-26     { color: #0033cc }
+
+.book-console .ansi-color-62     { color: #3333cc }
+
+.book-console .ansi-color-98     { color: #6633cc }
+
+.book-console .ansi-color-134    { color: #9933cc }
+
+.book-console .ansi-color-170    { color: #cc33cc }
+
+.book-console .ansi-color-206    { color: #ff33cc }
+
+.book-console .ansi-color-32     { color: #0066cc }
+
+.book-console .ansi-color-68     { color: #3366cc }
+
+.book-console .ansi-color-104    { color: #6666cc }
+
+.book-console .ansi-color-140    { color: #9966cc }
+
+.book-console .ansi-color-176    { color: #cc66cc }
+
+.book-console .ansi-color-212    { color: #ff66cc }
+
+.book-console .ansi-color-38     { color: #0099cc }
+
+.book-console .ansi-color-74     { color: #3399cc }
+
+.book-console .ansi-color-110    { color: #6699cc }
+
+.book-console .ansi-color-146    { color: #9999cc }
+
+.book-console .ansi-color-182    { color: #cc99cc }
+
+.book-console .ansi-color-218    { color: #ff99cc }
+
+.book-console .ansi-color-44     { color: #00cccc }
+
+.book-console .ansi-color-80     { color: #33cccc }
+
+.book-console .ansi-color-116    { color: #66cccc }
+
+.book-console .ansi-color-152    { color: #99cccc }
+
+.book-console .ansi-color-188    { color: #cccccc }
+
+.book-console .ansi-color-224    { color: #ffcccc }
+
+.book-console .ansi-color-50     { color: #00ffcc }
+
+.book-console .ansi-color-86     { color: #33ffcc }
+
+.book-console .ansi-color-122    { color: #66ffcc }
+
+.book-console .ansi-color-158    { color: #99ffcc }
+
+.book-console .ansi-color-194    { color: #ccffcc }
+
+.book-console .ansi-color-230    { color: #ffffcc }
+
+.book-console .ansi-color-21     { color: #0000ff }
+
+.book-console .ansi-color-57     { color: #3300ff }
+
+.book-console .ansi-color-93     { color: #6600ff }
+
+.book-console .ansi-color-129    { color: #9900ff }
+
+.book-console .ansi-color-165    { color: #cc00ff }
+
+.book-console .ansi-color-201    { color: #ff00ff }
+
+.book-console .ansi-color-27     { color: #0033ff }
+
+.book-console .ansi-color-63     { color: #3333ff }
+
+.book-console .ansi-color-99     { color: #6633ff }
+
+.book-console .ansi-color-135    { color: #9933ff }
+
+.book-console .ansi-color-171    { color: #cc33ff }
+
+.book-console .ansi-color-207    { color: #ff33ff }
+
+.book-console .ansi-color-33     { color: #0066ff }
+
+.book-console .ansi-color-69     { color: #3366ff }
+
+.book-console .ansi-color-105    { color: #6666ff }
+
+.book-console .ansi-color-141    { color: #9966ff }
+
+.book-console .ansi-color-177    { color: #cc66ff }
+
+.book-console .ansi-color-213    { color: #ff66ff }
+
+.book-console .ansi-color-39     { color: #0099ff }
+
+.book-console .ansi-color-75     { color: #3399ff }
+
+.book-console .ansi-color-111    { color: #6699ff }
+
+.book-console .ansi-color-147    { color: #9999ff }
+
+.book-console .ansi-color-183    { color: #cc99ff }
+
+.book-console .ansi-color-219    { color: #ff99ff }
+
+.book-console .ansi-color-45     { color: #00ccff }
+
+.book-console .ansi-color-81     { color: #33ccff }
+
+.book-console .ansi-color-117    { color: #66ccff }
+
+.book-console .ansi-color-153    { color: #99ccff }
+
+.book-console .ansi-color-189    { color: #ccccff }
+
+.book-console .ansi-color-225    { color: #ffccff }
+
+.book-console .ansi-color-51     { color: #00ffff }
+
+.book-console .ansi-color-87     { color: #33ffff }
+
+.book-console .ansi-color-123    { color: #66ffff }
+
+.book-console .ansi-color-159    { color: #99ffff }
+
+.book-console .ansi-color-195    { color: #ccffff }
+
+.book-console .ansi-color-231    { color: #ffffff }
+
+.book-console .ansi-color-232    { color: #0a0a0a }
+
+.book-console .ansi-color-233    { color: #141414 }
+
+.book-console .ansi-color-234    { color: #1f1f1f }
+
+.book-console .ansi-color-235    { color: #292929 }
+
+.book-console .ansi-color-236    { color: #333333 }
+
+.book-console .ansi-color-237    { color: #3d3d3d }
+
+.book-console .ansi-color-238    { color: #474747 }
+
+.book-console .ansi-color-239    { color: #525252 }
+
+.book-console .ansi-color-240    { color: #5c5c5c }
+
+.book-console .ansi-color-241    { color: #666666 }
+
+.book-console .ansi-color-242    { color: #707070 }
+
+.book-console .ansi-color-243    { color: #7a7a7a }
+
+.book-console .ansi-color-244    { color: #858585 }
+
+.book-console .ansi-color-245    { color: #8f8f8f }
+
+.book-console .ansi-color-246    { color: #999999 }
+
+.book-console .ansi-color-247    { color: #a3a3a3 }
+
+.book-console .ansi-color-248    { color: #adadad }
+
+.book-console .ansi-color-249    { color: #b8b8b8 }
+
+.book-console .ansi-color-250    { color: #c2c2c2 }
+
+.book-console .ansi-color-251    { color: #cccccc }
+
+.book-console .ansi-color-252    { color: #d6d6d6 }
+
+.book-console .ansi-color-253    { color: #e0e0e0 }
+
+.book-console .ansi-color-254    { color: #ebebeb }
+
+.book-console .ansi-color-255    { color: #f5f5f5 }
+
+.book-console .ansi-bg-color-16  { background-color: #000000 }
+
+.book-console .ansi-bg-color-52  { background-color: #330000 }
+
+.book-console .ansi-bg-color-88  { background-color: #660000 }
+
+.book-console .ansi-bg-color-124 { background-color: #990000 }
+
+.book-console .ansi-bg-color-160 { background-color: #cc0000 }
+
+.book-console .ansi-bg-color-196 { background-color: #ff0000 }
+
+.book-console .ansi-bg-color-22  { background-color: #003300 }
+
+.book-console .ansi-bg-color-58  { background-color: #333300 }
+
+.book-console .ansi-bg-color-94  { background-color: #663300 }
+
+.book-console .ansi-bg-color-130 { background-color: #993300 }
+
+.book-console .ansi-bg-color-166 { background-color: #cc3300 }
+
+.book-console .ansi-bg-color-202 { background-color: #ff3300 }
+
+.book-console .ansi-bg-color-28  { background-color: #006600 }
+
+.book-console .ansi-bg-color-64  { background-color: #336600 }
+
+.book-console .ansi-bg-color-100 { background-color: #666600 }
+
+.book-console .ansi-bg-color-136 { background-color: #996600 }
+
+.book-console .ansi-bg-color-172 { background-color: #cc6600 }
+
+.book-console .ansi-bg-color-208 { background-color: #ff6600 }
+
+.book-console .ansi-bg-color-34  { background-color: #009900 }
+
+.book-console .ansi-bg-color-70  { background-color: #339900 }
+
+.book-console .ansi-bg-color-106 { background-color: #669900 }
+
+.book-console .ansi-bg-color-142 { background-color: #999900 }
+
+.book-console .ansi-bg-color-178 { background-color: #cc9900 }
+
+.book-console .ansi-bg-color-214 { background-color: #ff9900 }
+
+.book-console .ansi-bg-color-40  { background-color: #00cc00 }
+
+.book-console .ansi-bg-color-76  { background-color: #33cc00 }
+
+.book-console .ansi-bg-color-112 { background-color: #66cc00 }
+
+.book-console .ansi-bg-color-148 { background-color: #99cc00 }
+
+.book-console .ansi-bg-color-184 { background-color: #cccc00 }
+
+.book-console .ansi-bg-color-220 { background-color: #ffcc00 }
+
+.book-console .ansi-bg-color-46  { background-color: #00ff00 }
+
+.book-console .ansi-bg-color-82  { background-color: #33ff00 }
+
+.book-console .ansi-bg-color-118 { background-color: #66ff00 }
+
+.book-console .ansi-bg-color-154 { background-color: #99ff00 }
+
+.book-console .ansi-bg-color-190 { background-color: #ccff00 }
+
+.book-console .ansi-bg-color-226 { background-color: #ffff00 }
+
+.book-console .ansi-bg-color-17  { background-color: #000033 }
+
+.book-console .ansi-bg-color-53  { background-color: #330033 }
+
+.book-console .ansi-bg-color-89  { background-color: #660033 }
+
+.book-console .ansi-bg-color-125 { background-color: #990033 }
+
+.book-console .ansi-bg-color-161 { background-color: #cc0033 }
+
+.book-console .ansi-bg-color-197 { background-color: #ff0033 }
+
+.book-console .ansi-bg-color-23  { background-color: #003333 }
+
+.book-console .ansi-bg-color-59  { background-color: #333333 }
+
+.book-console .ansi-bg-color-95  { background-color: #663333 }
+
+.book-console .ansi-bg-color-131 { background-color: #993333 }
+
+.book-console .ansi-bg-color-167 { background-color: #cc3333 }
+
+.book-console .ansi-bg-color-203 { background-color: #ff3333 }
+
+.book-console .ansi-bg-color-29  { background-color: #006633 }
+
+.book-console .ansi-bg-color-65  { background-color: #336633 }
+
+.book-console .ansi-bg-color-101 { background-color: #666633 }
+
+.book-console .ansi-bg-color-137 { background-color: #996633 }
+
+.book-console .ansi-bg-color-173 { background-color: #cc6633 }
+
+.book-console .ansi-bg-color-209 { background-color: #ff6633 }
+
+.book-console .ansi-bg-color-35  { background-color: #009933 }
+
+.book-console .ansi-bg-color-71  { background-color: #339933 }
+
+.book-console .ansi-bg-color-107 { background-color: #669933 }
+
+.book-console .ansi-bg-color-143 { background-color: #999933 }
+
+.book-console .ansi-bg-color-179 { background-color: #cc9933 }
+
+.book-console .ansi-bg-color-215 { background-color: #ff9933 }
+
+.book-console .ansi-bg-color-41  { background-color: #00cc33 }
+
+.book-console .ansi-bg-color-77  { background-color: #33cc33 }
+
+.book-console .ansi-bg-color-113 { background-color: #66cc33 }
+
+.book-console .ansi-bg-color-149 { background-color: #99cc33 }
+
+.book-console .ansi-bg-color-185 { background-color: #cccc33 }
+
+.book-console .ansi-bg-color-221 { background-color: #ffcc33 }
+
+.book-console .ansi-bg-color-47  { background-color: #00ff33 }
+
+.book-console .ansi-bg-color-83  { background-color: #33ff33 }
+
+.book-console .ansi-bg-color-119 { background-color: #66ff33 }
+
+.book-console .ansi-bg-color-155 { background-color: #99ff33 }
+
+.book-console .ansi-bg-color-191 { background-color: #ccff33 }
+
+.book-console .ansi-bg-color-227 { background-color: #ffff33 }
+
+.book-console .ansi-bg-color-18  { background-color: #000066 }
+
+.book-console .ansi-bg-color-54  { background-color: #330066 }
+
+.book-console .ansi-bg-color-90  { background-color: #660066 }
+
+.book-console .ansi-bg-color-126 { background-color: #990066 }
+
+.book-console .ansi-bg-color-162 { background-color: #cc0066 }
+
+.book-console .ansi-bg-color-198 { background-color: #ff0066 }
+
+.book-console .ansi-bg-color-24  { background-color: #003366 }
+
+.book-console .ansi-bg-color-60  { background-color: #333366 }
+
+.book-console .ansi-bg-color-96  { background-color: #663366 }
+
+.book-console .ansi-bg-color-132 { background-color: #993366 }
+
+.book-console .ansi-bg-color-168 { background-color: #cc3366 }
+
+.book-console .ansi-bg-color-204 { background-color: #ff3366 }
+
+.book-console .ansi-bg-color-30  { background-color: #006666 }
+
+.book-console .ansi-bg-color-66  { background-color: #336666 }
+
+.book-console .ansi-bg-color-102 { background-color: #666666 }
+
+.book-console .ansi-bg-color-138 { background-color: #996666 }
+
+.book-console .ansi-bg-color-174 { background-color: #cc6666 }
+
+.book-console .ansi-bg-color-210 { background-color: #ff6666 }
+
+.book-console .ansi-bg-color-36  { background-color: #009966 }
+
+.book-console .ansi-bg-color-72  { background-color: #339966 }
+
+.book-console .ansi-bg-color-108 { background-color: #669966 }
+
+.book-console .ansi-bg-color-144 { background-color: #999966 }
+
+.book-console .ansi-bg-color-180 { background-color: #cc9966 }
+
+.book-console .ansi-bg-color-216 { background-color: #ff9966 }
+
+.book-console .ansi-bg-color-42  { background-color: #00cc66 }
+
+.book-console .ansi-bg-color-78  { background-color: #33cc66 }
+
+.book-console .ansi-bg-color-114 { background-color: #66cc66 }
+
+.book-console .ansi-bg-color-150 { background-color: #99cc66 }
+
+.book-console .ansi-bg-color-186 { background-color: #cccc66 }
+
+.book-console .ansi-bg-color-222 { background-color: #ffcc66 }
+
+.book-console .ansi-bg-color-48  { background-color: #00ff66 }
+
+.book-console .ansi-bg-color-84  { background-color: #33ff66 }
+
+.book-console .ansi-bg-color-120 { background-color: #66ff66 }
+
+.book-console .ansi-bg-color-156 { background-color: #99ff66 }
+
+.book-console .ansi-bg-color-192 { background-color: #ccff66 }
+
+.book-console .ansi-bg-color-228 { background-color: #ffff66 }
+
+.book-console .ansi-bg-color-19  { background-color: #000099 }
+
+.book-console .ansi-bg-color-55  { background-color: #330099 }
+
+.book-console .ansi-bg-color-91  { background-color: #660099 }
+
+.book-console .ansi-bg-color-127 { background-color: #990099 }
+
+.book-console .ansi-bg-color-163 { background-color: #cc0099 }
+
+.book-console .ansi-bg-color-199 { background-color: #ff0099 }
+
+.book-console .ansi-bg-color-25  { background-color: #003399 }
+
+.book-console .ansi-bg-color-61  { background-color: #333399 }
+
+.book-console .ansi-bg-color-97  { background-color: #663399 }
+
+.book-console .ansi-bg-color-133 { background-color: #993399 }
+
+.book-console .ansi-bg-color-169 { background-color: #cc3399 }
+
+.book-console .ansi-bg-color-205 { background-color: #ff3399 }
+
+.book-console .ansi-bg-color-31  { background-color: #006699 }
+
+.book-console .ansi-bg-color-67  { background-color: #336699 }
+
+.book-console .ansi-bg-color-103 { background-color: #666699 }
+
+.book-console .ansi-bg-color-139 { background-color: #996699 }
+
+.book-console .ansi-bg-color-175 { background-color: #cc6699 }
+
+.book-console .ansi-bg-color-211 { background-color: #ff6699 }
+
+.book-console .ansi-bg-color-37  { background-color: #009999 }
+
+.book-console .ansi-bg-color-73  { background-color: #339999 }
+
+.book-console .ansi-bg-color-109 { background-color: #669999 }
+
+.book-console .ansi-bg-color-145 { background-color: #999999 }
+
+.book-console .ansi-bg-color-181 { background-color: #cc9999 }
+
+.book-console .ansi-bg-color-217 { background-color: #ff9999 }
+
+.book-console .ansi-bg-color-43  { background-color: #00cc99 }
+
+.book-console .ansi-bg-color-79  { background-color: #33cc99 }
+
+.book-console .ansi-bg-color-115 { background-color: #66cc99 }
+
+.book-console .ansi-bg-color-151 { background-color: #99cc99 }
+
+.book-console .ansi-bg-color-187 { background-color: #cccc99 }
+
+.book-console .ansi-bg-color-223 { background-color: #ffcc99 }
+
+.book-console .ansi-bg-color-49  { background-color: #00ff99 }
+
+.book-console .ansi-bg-color-85  { background-color: #33ff99 }
+
+.book-console .ansi-bg-color-121 { background-color: #66ff99 }
+
+.book-console .ansi-bg-color-157 { background-color: #99ff99 }
+
+.book-console .ansi-bg-color-193 { background-color: #ccff99 }
+
+.book-console .ansi-bg-color-229 { background-color: #ffff99 }
+
+.book-console .ansi-bg-color-20  { background-color: #0000cc }
+
+.book-console .ansi-bg-color-56  { background-color: #3300cc }
+
+.book-console .ansi-bg-color-92  { background-color: #6600cc }
+
+.book-console .ansi-bg-color-128 { background-color: #9900cc }
+
+.book-console .ansi-bg-color-164 { background-color: #cc00cc }
+
+.book-console .ansi-bg-color-200 { background-color: #ff00cc }
+
+.book-console .ansi-bg-color-26  { background-color: #0033cc }
+
+.book-console .ansi-bg-color-62  { background-color: #3333cc }
+
+.book-console .ansi-bg-color-98  { background-color: #6633cc }
+
+.book-console .ansi-bg-color-134 { background-color: #9933cc }
+
+.book-console .ansi-bg-color-170 { background-color: #cc33cc }
+
+.book-console .ansi-bg-color-206 { background-color: #ff33cc }
+
+.book-console .ansi-bg-color-32  { background-color: #0066cc }
+
+.book-console .ansi-bg-color-68  { background-color: #3366cc }
+
+.book-console .ansi-bg-color-104 { background-color: #6666cc }
+
+.book-console .ansi-bg-color-140 { background-color: #9966cc }
+
+.book-console .ansi-bg-color-176 { background-color: #cc66cc }
+
+.book-console .ansi-bg-color-212 { background-color: #ff66cc }
+
+.book-console .ansi-bg-color-38  { background-color: #0099cc }
+
+.book-console .ansi-bg-color-74  { background-color: #3399cc }
+
+.book-console .ansi-bg-color-110 { background-color: #6699cc }
+
+.book-console .ansi-bg-color-146 { background-color: #9999cc }
+
+.book-console .ansi-bg-color-182 { background-color: #cc99cc }
+
+.book-console .ansi-bg-color-218 { background-color: #ff99cc }
+
+.book-console .ansi-bg-color-44  { background-color: #00cccc }
+
+.book-console .ansi-bg-color-80  { background-color: #33cccc }
+
+.book-console .ansi-bg-color-116 { background-color: #66cccc }
+
+.book-console .ansi-bg-color-152 { background-color: #99cccc }
+
+.book-console .ansi-bg-color-188 { background-color: #cccccc }
+
+.book-console .ansi-bg-color-224 { background-color: #ffcccc }
+
+.book-console .ansi-bg-color-50  { background-color: #00ffcc }
+
+.book-console .ansi-bg-color-86  { background-color: #33ffcc }
+
+.book-console .ansi-bg-color-122 { background-color: #66ffcc }
+
+.book-console .ansi-bg-color-158 { background-color: #99ffcc }
+
+.book-console .ansi-bg-color-194 { background-color: #ccffcc }
+
+.book-console .ansi-bg-color-230 { background-color: #ffffcc }
+
+.book-console .ansi-bg-color-21  { background-color: #0000ff }
+
+.book-console .ansi-bg-color-57  { background-color: #3300ff }
+
+.book-console .ansi-bg-color-93  { background-color: #6600ff }
+
+.book-console .ansi-bg-color-129 { background-color: #9900ff }
+
+.book-console .ansi-bg-color-165 { background-color: #cc00ff }
+
+.book-console .ansi-bg-color-201 { background-color: #ff00ff }
+
+.book-console .ansi-bg-color-27  { background-color: #0033ff }
+
+.book-console .ansi-bg-color-63  { background-color: #3333ff }
+
+.book-console .ansi-bg-color-99  { background-color: #6633ff }
+
+.book-console .ansi-bg-color-135 { background-color: #9933ff }
+
+.book-console .ansi-bg-color-171 { background-color: #cc33ff }
+
+.book-console .ansi-bg-color-207 { background-color: #ff33ff }
+
+.book-console .ansi-bg-color-33  { background-color: #0066ff }
+
+.book-console .ansi-bg-color-69  { background-color: #3366ff }
+
+.book-console .ansi-bg-color-105 { background-color: #6666ff }
+
+.book-console .ansi-bg-color-141 { background-color: #9966ff }
+
+.book-console .ansi-bg-color-177 { background-color: #cc66ff }
+
+.book-console .ansi-bg-color-213 { background-color: #ff66ff }
+
+.book-console .ansi-bg-color-39  { background-color: #0099ff }
+
+.book-console .ansi-bg-color-75  { background-color: #3399ff }
+
+.book-console .ansi-bg-color-111 { background-color: #6699ff }
+
+.book-console .ansi-bg-color-147 { background-color: #9999ff }
+
+.book-console .ansi-bg-color-183 { background-color: #cc99ff }
+
+.book-console .ansi-bg-color-219 { background-color: #ff99ff }
+
+.book-console .ansi-bg-color-45  { background-color: #00ccff }
+
+.book-console .ansi-bg-color-81  { background-color: #33ccff }
+
+.book-console .ansi-bg-color-117 { background-color: #66ccff }
+
+.book-console .ansi-bg-color-153 { background-color: #99ccff }
+
+.book-console .ansi-bg-color-189 { background-color: #ccccff }
+
+.book-console .ansi-bg-color-225 { background-color: #ffccff }
+
+.book-console .ansi-bg-color-51  { background-color: #00ffff }
+
+.book-console .ansi-bg-color-87  { background-color: #33ffff }
+
+.book-console .ansi-bg-color-123 { background-color: #66ffff }
+
+.book-console .ansi-bg-color-159 { background-color: #99ffff }
+
+.book-console .ansi-bg-color-195 { background-color: #ccffff }
+
+.book-console .ansi-bg-color-231 { background-color: #ffffff }
+
+.book-console .ansi-bg-color-232 { background-color: #0a0a0a }
+
+.book-console .ansi-bg-color-233 { background-color: #141414 }
+
+.book-console .ansi-bg-color-234 { background-color: #1f1f1f }
+
+.book-console .ansi-bg-color-235 { background-color: #292929 }
+
+.book-console .ansi-bg-color-236 { background-color: #333333 }
+
+.book-console .ansi-bg-color-237 { background-color: #3d3d3d }
+
+.book-console .ansi-bg-color-238 { background-color: #474747 }
+
+.book-console .ansi-bg-color-239 { background-color: #525252 }
+
+.book-console .ansi-bg-color-240 { background-color: #5c5c5c }
+
+.book-console .ansi-bg-color-241 { background-color: #666666 }
+
+.book-console .ansi-bg-color-242 { background-color: #707070 }
+
+.book-console .ansi-bg-color-243 { background-color: #7a7a7a }
+
+.book-console .ansi-bg-color-244 { background-color: #858585 }
+
+.book-console .ansi-bg-color-245 { background-color: #8f8f8f }
+
+.book-console .ansi-bg-color-246 { background-color: #999999 }
+
+.book-console .ansi-bg-color-247 { background-color: #a3a3a3 }
+
+.book-console .ansi-bg-color-248 { background-color: #adadad }
+
+.book-console .ansi-bg-color-249 { background-color: #b8b8b8 }
+
+.book-console .ansi-bg-color-250 { background-color: #c2c2c2 }
+
+.book-console .ansi-bg-color-251 { background-color: #cccccc }
+
+.book-console .ansi-bg-color-252 { background-color: #d6d6d6 }
+
+.book-console .ansi-bg-color-253 { background-color: #e0e0e0 }
+
+.book-console .ansi-bg-color-254 { background-color: #ebebeb }
+
+.book-console .ansi-bg-color-255 { background-color: #f5f5f5 }
+
+</style>
+
 
 
 <link rel="stylesheet" href="book.css">
-<meta property="og:title" content="1&nbsp; Introduction to R – R for Social Science">
+<meta property="og:title" content="1&nbsp; Get started with R – R for Social Science">
 <meta property="og:description" content="An introduction to R and the tidyverse for social-science research.">
-<meta property="og:image" content="https://socimh.github.io/R4SS/fig/task-tool-map.svg">
+<meta property="og:image" content="https://socimh.github.io/R4SS/fig/ggplot-social-science.png">
 <meta property="og:site_name" content="R for Social Science">
-<meta property="og:image:alt" content="Task-to-tool map: Excel for shared spreadsheets; Stata for survey data and labels; R for statistical analysis and reproducible reports; Python for general programming and APIs; Julia and MATLAB for numerical computing; Java and C++ for application engineering. R is highlighted. These uses overlap.">
+<meta property="og:image:alt" content="Scatterplot of country life expectancy against GNI per capita in 1998. Regions use different colors and point shapes.">
+<meta property="og:image:height" content="800">
+<meta property="og:image:width" content="1400">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -131,7 +1178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Getting started</a></li><li class="breadcrumb-item"><a href="./intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Getting started</a></li><li class="breadcrumb-item"><a href="./intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Get started with R</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -177,13 +1224,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./intro.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Get started with R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects, data structures, and workflows</span></span></a>
+  <a href="./objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects in R</span></span></a>
   </div>
 </li>
       </ul>
@@ -191,7 +1238,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Working with data</span></a>
+ <span class="menu-text">Manipulate tables</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -199,8 +1246,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dplyr-stat.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tabulation and summary statistics</span></span></a>
+  <a href="./dplyr-grammar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Select columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-sort.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sort observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-pipe.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pipe</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-select.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Select observations</span></span></a>
   </div>
 </li>
       </ul>
@@ -208,7 +1273,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
+ <span class="menu-text">Explore variables</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -216,8 +1281,195 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./dplyr-skim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Inspect a dataset</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-tab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Tabulate data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-stat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summarize data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./missing-values.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Missing values</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Visualize data</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manipulate variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Create variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./group-variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Group variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./numeric-logical.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logicals and numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./categorical-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Strings and factors</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./text-dates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Dates and times</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lists.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">List columns</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manage datasets</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Import and export</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-group.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Group and reshape</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-join.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Combine datasets</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Nested datasets</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyze variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ggplot2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./statistical-tests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Statistical tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">OLS regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logit-probit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Logit and probit</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fixed-effects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Fixed effects</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Programming</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./basic-operations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Basic expressions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tibble.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./gss-data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">The GSS data in this book</span></span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">GSS data</span></span></a>
   </div>
 </li>
       </ul>
@@ -231,22 +1483,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
     <h2 id="toc-title">On this page</h2>
    
-  <ul>
-  <li><a href="#where-r-falls-short" id="toc-where-r-falls-short" class="nav-link active" data-scroll-target="#where-r-falls-short"><span class="header-section-number">1.1</span> Where R falls short</a></li>
-  <li><a href="#where-r-shines" id="toc-where-r-shines" class="nav-link" data-scroll-target="#where-r-shines"><span class="header-section-number">1.2</span> Where R shines</a></li>
-  <li><a href="#sec-download-r" id="toc-sec-download-r" class="nav-link" data-scroll-target="#sec-download-r"><span class="header-section-number">1.3</span> Downloading R and Positron</a></li>
-  <li><a href="#sec-first-code" id="toc-sec-first-code" class="nav-link" data-scroll-target="#sec-first-code"><span class="header-section-number">1.4</span> Trying some simple code</a></li>
-  <li><a href="#sec-install-packages" id="toc-sec-install-packages" class="nav-link" data-scroll-target="#sec-install-packages"><span class="header-section-number">1.5</span> Installing R packages</a></li>
-  <li><a href="#sec-ai-learning" id="toc-sec-ai-learning" class="nav-link" data-scroll-target="#sec-ai-learning"><span class="header-section-number">1.6</span> Using AI while learning R</a></li>
+  <ul class="collapse">
+  <li><a href="#sec-download-r" id="toc-sec-download-r" class="nav-link active" data-scroll-target="#sec-download-r"><span class="header-section-number">1.1</span> Downloading R and Positron</a></li>
+  <li><a href="#sec-first-code" id="toc-sec-first-code" class="nav-link" data-scroll-target="#sec-first-code"><span class="header-section-number">1.2</span> Trying some simple code</a></li>
+  <li><a href="#sec-install-packages" id="toc-sec-install-packages" class="nav-link" data-scroll-target="#sec-install-packages"><span class="header-section-number">1.3</span> Installing R packages</a></li>
+  <li><a href="#sec-data-functions" id="toc-sec-data-functions" class="nav-link" data-scroll-target="#sec-data-functions"><span class="header-section-number">1.4</span> Data and functions</a></li>
+  <li><a href="#sec-getting-help" id="toc-sec-getting-help" class="nav-link" data-scroll-target="#sec-getting-help"><span class="header-section-number">1.5</span> Asking for help</a></li>
+  <li><a href="#optional-where-r-falls-short" id="toc-optional-where-r-falls-short" class="nav-link" data-scroll-target="#optional-where-r-falls-short"><span class="header-section-number">1.6</span> Where R falls short</a></li>
+  <li><a href="#optional-where-r-shines" id="toc-optional-where-r-shines" class="nav-link" data-scroll-target="#optional-where-r-shines"><span class="header-section-number">1.7</span> Where R shines</a></li>
+  <li><a href="#sec-ai-learning" id="toc-sec-ai-learning" class="nav-link" data-scroll-target="#sec-ai-learning"><span class="header-section-number">1.8</span> Learning R with AI [Optional]</a></li>
+  <li><a href="#sec-intro-review" id="toc-sec-intro-review" class="nav-link" data-scroll-target="#sec-intro-review"><span class="header-section-number">1.9</span> Review</a></li>
+  <li><a href="#sec-intro-check" id="toc-sec-intro-check" class="nav-link" data-scroll-target="#sec-intro-check"><span class="header-section-number">1.10</span> Exercises</a></li>
+  <li><a href="#worked-answers" id="toc-worked-answers" class="nav-link" data-scroll-target="#worked-answers">Worked answers</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Getting started</a></li><li class="breadcrumb-item"><a href="./intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">Getting started</a></li><li class="breadcrumb-item"><a href="./intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Get started with R</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R</span></h1>
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Get started with R</span></h1>
 </div>
 
 
@@ -273,94 +1530,70 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This pilot introduces the basic ideas behind R and the tidyverse. Some technical explanations and software comparisons are still under review.</p>
+<p>This edition introduces the basic ideas behind R and the tidyverse. Some technical explanations and software comparisons are still under review.</p>
 </div>
 </div>
 <p>R is a programming language designed by statisticians.</p>
-<section id="where-r-falls-short" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="where-r-falls-short"><span class="header-section-number">1.1</span> Where R falls short</h2>
-<p>Learning a new language takes time. If Stata already handles your data, statistical methods, and outputs well, you may have little immediate reason to learn R. A useful starting question is whether a recurring research task is becoming difficult to express, repeat, or extend in your current software.</p>
-<div id="fig-tool-landscape" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Task-to-tool map: Excel for shared spreadsheets; Stata for survey data and labels; R for statistical analysis and reproducible reports; Python for general programming and APIs; Julia and MATLAB for numerical computing; Java and C++ for application engineering. R is highlighted. These uses overlap." data-fig-align="center">
+<p>Your first goal is to run a saved script, then open a real dataset. This chapter introduces the setup and code you need, then considers where R fits into social-science research: what it asks you to learn and what it makes possible. The final discussion of learning with AI is optional.</p>
+<div id="fig-ggplot-social-science" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Scatterplot of country life expectancy against GNI per capita in 1998. Regions use different colors and point shapes.">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-tool-landscape-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="fig/task-tool-map.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Task-to-tool map: Excel for shared spreadsheets; Stata for survey data and labels; R for statistical analysis and reproducible reports; Python for general programming and APIs; Julia and MATLAB for numerical computing; Java and C++ for application engineering. R is highlighted. These uses overlap." width="440">
+<div aria-describedby="fig-ggplot-social-science-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fig/ggplot-social-science.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1.1: An example of a ggplot2 figure."><img src="fig/ggplot-social-science.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Scatterplot of country life expectancy against GNI per capita in 1998. Regions use different colors and point shapes." width="780"></a>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tool-landscape-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.1: Common workflows and the tools often used for them. R is highlighted as this book’s focus.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ggplot-social-science-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: An example of a ggplot2 figure.
 </figcaption>
 </figure>
 </div>
-<p>Different tools have their own comfortable areas of use. Stata provides a familiar environment for survey analysis and econometrics. <a href="https://www.python.org/about/apps/">Python</a> is widely used for general programming, web applications, and scientific computing; a project built around a framework such as <a href="https://pytorch.org/">PyTorch</a> may give you a reason to learn Python. These areas overlap. Choose a language with attention to your research question, collaborators, and the tools you need.</p>
-</section>
-<section id="where-r-shines" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="where-r-shines"><span class="header-section-number">1.2</span> Where R shines</h2>
-<p>For many social scientists, the first reasons to learn R arise before model fitting. You may need to combine survey files with administrative records, read spreadsheets and data from online services, keep several datasets and intermediate results available, or repeat complicated cleaning across many survey waves. R lets you organize these as named objects and reusable functions. Stata also supports <a href="https://www.stata.com/features/overview/multiple-datasets-in-memory/">multiple datasets through frames</a>; R’s appeal grows when you want to connect data preparation with a wider range of research tools.</p>
-<div id="fig-r-reusable-workflow" class="quarto-float quarto-figure quarto-figure-center anchored" alt="File icons lead through a reusable R step to table and chart icons." data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-r-reusable-workflow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="fig/research-workflow.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="File icons lead through a reusable R step to table and chart icons." width="780">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-r-reusable-workflow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.2: Many sources, reusable R code, and different research outputs.
-</figcaption>
-</figure>
-</div>
-<p>Visualization is another common reason. <a href="https://ggplot2.tidyverse.org/">ggplot2</a> provides a consistent way to build and refine figures, from a quick check of a distribution to a comparison across groups. The <a href="https://www.tidyverse.org/packages/">tidyverse</a> connects importing, cleaning, reshaping, and plotting data through related conventions. Learning those conventions can make an entire analysis easier to adapt as your question changes.</p>
-<div id="fig-ggplot-diamonds" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Scatterplot with translucent colored symbols showing diamond prices against weight from 0 to 3 carats." data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-ggplot-diamonds-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="fig/ggplot-diamonds.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Scatterplot with translucent colored symbols showing diamond prices against weight from 0 to 3 carats." width="780">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ggplot-diamonds-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.3: An example of a ggplot2 figure.
-</figcaption>
-</figure>
-</div>
-<p>As research needs expand, R offers packages for text, spatial, and network data, as well as causal inference, machine learning, simulation, and Bayesian analysis. The <a href="https://cran.r-project.org/web/views/">CRAN Task Views</a> organize packages by these areas. R can also connect analysis to interactive displays and reports. You can add specialized tools as your work requires them; this book begins with the data preparation, description, and visualization skills that support many such applications.</p>
-<p>Some extensions require additional infrastructure. For example, <a href="https://arrow.apache.org/docs/r/">Arrow</a> lets R work with multi-file and larger-than-memory datasets, but installing R alone does not remove memory or computing limits. The value of learning R depends on the workflow it makes possible for you. Its free, open-source ecosystem gives you room to extend that workflow as new needs arise.</p>
-</section>
-<section id="sec-download-r" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="sec-download-r"><span class="header-section-number">1.3</span> Downloading R and Positron</h2>
+<section id="sec-download-r" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="sec-download-r"><span class="header-section-number">1.1</span> Downloading R and Positron</h2>
 <p>Install two separate programs: R, which runs your code, and an integrated development environment (IDE), which helps you write code, inspect data, and view results. This book uses Positron as its main IDE.</p>
 <p>Start by downloading R from the <a href="https://www.r-project.org/">R website</a>. Follow the CRAN link and choose the installer for your operating system. Install R before opening Positron.</p>
-<div id="fig-r-website" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The R Project homepage. The Download section on the left contains the CRAN link; the Getting Started paragraph also links to download R." data-fig-align="center">
+<div id="fig-r-website" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="The R Project homepage. The Download section on the left contains the CRAN link; the Getting Started paragraph also links to download R.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-r-website-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="fig/rweb-current.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The R Project homepage. The Download section on the left contains the CRAN link; the Getting Started paragraph also links to download R." width="720">
+<a href="fig/rweb-current.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;1.2: The R website, with links to download R through CRAN."><img src="fig/rweb-current.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The R Project homepage. The Download section on the left contains the CRAN link; the Getting Started paragraph also links to download R." width="720"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-r-website-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.4: The R website, with links to download R through CRAN.
+Figure&nbsp;1.2: The R website, with links to download R through CRAN.
 </figcaption>
 </figure>
 </div>
 <p>Next, download and install <a href="https://positron.posit.co/download.html">Positron</a>. Choose the installer for your operating system and processor. The website may show a different recommended download on your computer. Positron requires R 4.2 or later; its download page lists any additional system requirements.</p>
-<div id="fig-positron-download" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The Positron download page shows Windows download buttons for x64 and ARM64, followed by installer choices for macOS, Windows, and Linux." data-fig-align="center">
+<div id="fig-positron-download" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="The Positron download page shows Windows download buttons for x64 and ARM64, followed by installer choices for macOS, Windows, and Linux.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-positron-download-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="fig/positron-download.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The Positron download page shows Windows download buttons for x64 and ARM64, followed by installer choices for macOS, Windows, and Linux." width="720">
+<a href="fig/positron-download.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;1.3: The Positron download page, shown on Windows."><img src="fig/positron-download.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The Positron download page shows Windows download buttons for x64 and ARM64, followed by installer choices for macOS, Windows, and Linux." width="720"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-positron-download-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.5: The Positron download page, shown on Windows.
+Figure&nbsp;1.3: The Positron download page, shown on Windows.
 </figcaption>
 </figure>
 </div>
 <p>Positron includes support for running R code, exploring data, viewing plots, and reading help. <a href="https://positron.posit.co/faqs.html#is-rstudio-going-away">Posit recommends it for new R users</a>. We use one main IDE so that beginners can follow a consistent set of instructions. RStudio remains supported and is a useful alternative if your course already uses it. VS Code also supports R, but its setup requires an R extension and the languageserver package. Readers already comfortable with either editor can continue using it for the R examples in this book.</p>
-<div id="fig-positron-interface" class="quarto-float quarto-figure quarto-figure-center anchored" alt="An annotated Positron workspace running R. The Activity Bar is at the far left, the file explorer is in the primary sidebar, the editor is in the center above the console, and the secondary sidebar shows variables and a plot." data-fig-align="center">
+<div id="fig-positron-interface" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="An annotated Positron workspace running R. The Activity Bar is at the far left, the file explorer is in the primary sidebar, the editor is in the center above the console, and the secondary sidebar shows variables and a plot.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-positron-interface-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="fig/positron-interface.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="An annotated Positron workspace running R. The Activity Bar is at the far left, the file explorer is in the primary sidebar, the editor is in the center above the console, and the secondary sidebar shows variables and a plot." width="780">
+<a href="fig/positron-interface.jpeg" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;1.4: The main regions of Positron, illustrated in Posit’s documentation. Source: Posit Software, PBC."><img src="fig/positron-interface.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="An annotated Positron workspace running R. The Activity Bar is at the far left, the file explorer is in the primary sidebar, the editor is in the center above the console, and the secondary sidebar shows variables and a plot." width="780"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-positron-interface-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.6: The main regions of Positron, illustrated in Posit’s documentation. Source: Posit Software, PBC.
+Figure&nbsp;1.4: The main regions of Positron, illustrated in Posit’s documentation. Source: Posit Software, PBC.
 </figcaption>
 </figure>
 </div>
 <p>In the layout shown here, the file explorer is on the left, the editor is in the center, and the console is below the editor. The right sidebar contains variables and plots, with tabs for help and other tools. The layout can be customized, so your screen may differ. Open an R script, select an R interpreter if prompted, and use the console to run code. The screenshot is an orientation example from the official documentation; you do not need its example files, packages, or R version.</p>
 <p>For now, remember one shortcut: <code>Ctrl + Enter</code> on Windows or Linux, or <code>Cmd + Enter</code> on macOS, runs the selected code in the editor. If no code is selected, Positron runs the current statement.</p>
+<section id="sec-first-script" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="sec-first-script"><span class="header-section-number">1.1.1</span> Keeping your work</h3>
+<p>Create a folder called <code>r4ss</code> in a location you can find again, such as your Documents folder. Use Positron’s Open Folder command to open it. This is your project folder: keep this book’s scripts, downloaded examples, and saved results together here.</p>
+<p>Create a new text file in the editor and save it inside that folder as <code>first.R</code>. The <code>.R</code> extension identifies an R script. Type the examples in the next section into this file, save it, and run statements from top to bottom with the shortcut above. The editor keeps your instructions; the console runs them and displays results. Saving the file keeps the instructions on disk. Running a line creates or changes objects in the current R session.</p>
+<p>Reopen this folder and the saved <code>first.R</code> file whenever you resume your work. Saving a script does not preserve the running session’s objects; running its statements in order recreates them. You can also select all the code in a script and run the selection when every line is intended to run. We will check where R reads and writes files when we export our first table in <a href="dplyr-pipe.html#sec-pipe-export" class="quarto-xref"><span>Section 5.5</span></a>.</p>
 </section>
-<section id="sec-first-code" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="sec-first-code"><span class="header-section-number">1.4</span> Trying some simple code</h2>
+</section>
+<section id="sec-first-code" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-first-code"><span class="header-section-number">1.2</span> Trying some simple code</h2>
 <p>Once R and your IDE are installed, we can try a little code. R can perform arithmetic directly:</p>
+<p>The shaded R blocks contain code to run; the output appears separately below them. In the console, <code>&gt;</code> is R’s prompt for new input. Do not type that prompt or copy output back as code. An output marker such as <code>[1]</code> identifies the position of the first printed value; it is not part of the answer. Text after <code>#</code> on a code line is a comment for the reader and is ignored by R.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -380,65 +1613,453 @@ Figure&nbsp;1.6: The main regions of Positron, illustrated in Posit’s document
 <pre><code>[1] "Hello, R!"</code></pre>
 </div>
 </div>
-<p>We can also call functions to perform more complex tasks:</p>
+<p>A <strong>function</strong> performs an operation on supplied inputs and returns a result. Write its name followed by parentheses containing the input. For example, <code>sqrt()</code> takes a number and returns its square root:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use sqrt() to calculate a square root</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">25</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5</code></pre>
 </div>
+</div>
+<p>The result is <code>5</code>: five multiplied by itself gives 25. The parentheses make this a function call. The name <code>sqrt</code> refers to the function itself; <code>sqrt(25)</code> calls it on the number 25.</p>
+<p>For text, <code>nchar()</code> returns the number of characters. Quotation marks identify the text input:</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use nchar() to count characters</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nchar</span>(<span class="st">"hello"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5</code></pre>
 </div>
 </div>
+<p>The result is also <code>5</code>, because <code>hello</code> contains five characters. The two functions perform different operations even though these calls return the same number.</p>
+<p>If the console shows <code>+</code> instead of <code>&gt;</code>, R is waiting for the rest of an incomplete expression. For example, typing <code>sqrt(25</code> leaves its opening parenthesis unmatched:</p>
+<pre class="text"><code>&gt; sqrt(25
++</code></pre>
+<p>The <code>+</code> here is a continuation prompt, not an instruction to add something. Check that parentheses and quotation marks have matching partners. To cancel this unfinished input in Positron, press Ctrl+C with the console focused and no text selected. When the normal prompt returns, enter the complete <code>sqrt(25)</code> again.</p>
+<p>For information about a function, enter <code>help("sqrt")</code> in the console. Positron displays its documentation in the Help pane. Find <strong>Arguments</strong> to see what inputs the function accepts and <strong>Examples</strong> to see calls you can try. Read the input description before changing a call; help explains the function, while your question determines which input is appropriate.</p>
 <p>We can store results for later use:</p>
+<p>The arrow <code>&lt;-</code> assigns the result on its right to the name on its left. Assignment is normally silent: <code>a &lt;- 123</code> stores a value without displaying it. Typing <code>a</code> displays that stored value. <code>a * 2</code> displays a calculation without changing <code>a</code>, while <code>b &lt;- a * 2</code> stores that calculation under a second name:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign 123 to a</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">123</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the value of a</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign 123 to a</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">123</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the value of a</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 123</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiply a by 2</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>a <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiply a by 2</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>a <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 246</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign the result of a * 2 to b</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> a <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the value of b</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign the result of a * 2 to b</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> a <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the value of b</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 246</code></pre>
 </div>
 </div>
-</section>
-<section id="sec-install-packages" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="sec-install-packages"><span class="header-section-number">1.5</span> Installing R packages</h2>
-<p>This book mainly uses the tidyverse and tidystata packages. Before continuing, install these two packages:</p>
+<p>Here, <code>b</code> stores <code>246</code>. It is a calculated value, not a spreadsheet formula that stays linked to <code>a</code>. If you change <code>a</code>, rerun <code>b &lt;- a * 2</code> to update <code>b</code>. After restarting R, run <code>a &lt;- 123</code> before <code>b &lt;- a * 2</code>; running the second line alone in an empty session gives an object-not-found error.</p>
+<p>Object names must match exactly, including capital letters: <code>a</code> and <code>A</code> are different names. Creating <code>a</code> does not create <code>A</code>; looking up <code>A</code> gives an object-not-found error unless you have separately assigned it. Prefer short, descriptive lower-case names, with underscores between words, such as <code>income_total</code>. This is a naming convention that helps you read and retype code consistently.</p>
+<p>Later chapters deliberately reuse example names such as <code>countries</code>. Running a chapter’s setup replaces an older object with that name in the session. Keep each chapter’s setup with its examples in your saved script, and run the setup before the examples that depend on it.</p>
+<section id="sec-basics-expressions" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="sec-basics-expressions"><span class="header-section-number">1.2.1</span> Values and functions</h3>
+<p>Store a number under the name <code>x</code>, then display it:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install tidyverse</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Install tidystata from GitHub</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"pak"</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>pak<span class="sc">::</span><span class="fu">pak</span>(<span class="st">"socimh/tidystata"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Store a number</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fl">2.75</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.75</code></pre>
+</div>
+</div>
+<p>The next line displays the saved value, <code>2.75</code>. R stores even one number as a vector of length one.</p>
+<p>An <strong>expression</strong> is something R can evaluate to produce a result: a number, a calculation, or a function call. The inputs to a function are called <strong>arguments</strong>. A comma separates arguments, and <code>=</code> names an argument. <code>round()</code> takes a number and returns a rounded value; its <code>digits</code> argument sets the number of decimal places:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(x, <span class="at">digits =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.8</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.75</code></pre>
+</div>
+</div>
+<p>The first argument supplies the value and <code>digits = 1</code> requests one decimal place. The result is <code>2.8</code>, while <code>x</code> remains <code>2.75</code>.</p>
+<p>Here <code>=</code> supplies an input setting; <code>&lt;-</code> stores a returned result. Later, <code>==</code> will test equality. To keep the rounded result, assign it separately:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>rounded_x <span class="ot">&lt;-</span> <span class="fu">round</span>(x, <span class="at">digits =</span> <span class="dv">1</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>rounded_x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.8</code></pre>
+</div>
+</div>
+<p><code>rounded_x</code> stores <code>2.8</code>. The original <code>x</code> still holds <code>2.75</code>.</p>
+</section>
+</section>
+<section id="sec-install-packages" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-install-packages"><span class="header-section-number">1.3</span> Installing R packages</h2>
+<p>This book mainly uses the tidyverse and tidystata packages. A package adds functions to R. <strong>Installing</strong> puts a package in a library on your computer; normally you do this once, then install again only when you want an update. <strong>Loading</strong> with <code>library()</code> makes its functions available in the current session, so repeat that step after restarting R. Installing a package does not load it.</p>
+<p>Before continuing, install these two packages. <code>install.packages()</code> downloads from a package repository; pak provides another installer. In <code>pak::pak()</code>, the part before <code>::</code> names the package and the part after it names the function. This notation calls a function from an installed package without loading the whole package:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install tidyverse</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the pak installer</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"pak"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now call pak to install the tested tidystata revision from GitHub:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pak<span class="sc">::</span><span class="fu">pak</span>(<span class="st">"socimh/tidystata@fd6ef6b9080a7527e870a4bbc5c9c1ff13c7fa46"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>These lessons were tested with tidystata 0.4.1 and dplyr 1.2.1. The GitHub revision above fixes the tidystata version used in the examples; installing the current tidyverse supplies dplyr.</p>
+<p>When you later run <code>library(tidyverse)</code>, attachment messages list the loaded packages. A conflict notice means that two packages supply the same function name; <code>package::function()</code> selects the one you intend. These notices are informational. A message beginning with <code>Error</code>, such as a report that a package is missing, means the requested operation failed and needs attention.</p>
+</section>
+<section id="sec-data-functions" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-data-functions"><span class="header-section-number">1.4</span> Data and functions</h2>
+<p>To understand a line of R code, ask two questions: what data are we supplying, and what do we want to do with them? In the earlier calls, <code>sqrt()</code> received a number and calculated its square root; <code>nchar()</code> received text and counted its characters. Both returned results that we could save with assignment. Data can record information about people, places, and activities; functions let us work with the values representing that information.</p>
+<p>Code that contains only data usually does very little. Think of data as nouns and functions as verbs. “Students, scores, average” is a list of words. “Calculate the average of the students’ scores” describes an action. In the same way, a function tells R what to do with data.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In R, data usually act like nouns, while functions usually act like verbs.</p>
+</div>
 </div>
 </section>
-<section id="sec-ai-learning" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="sec-ai-learning"><span class="header-section-number">1.6</span> Using AI while learning R</h2>
-<p>AI assistance is optional. You can work through this book without an AI account or coding assistant. Try the examples yourself first. If you get stuck, an assistant can help explain a line of code or suggest a next step. Ask for a hint or an explanation before asking for a complete solution.</p>
-<p>For example, you might ask: “Explain what <code>a &lt;- 123</code> does, then give me a similar question to try without showing the answer.”</p>
-<p>When an assistant suggests code:</p>
+<section id="sec-getting-help" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="sec-getting-help"><span class="header-section-number">1.5</span> Asking for help</h2>
+<p>A useful help request lets someone reproduce the problem without your current session. Before sending it:</p>
 <ol type="1">
-<li>Read each line and ask about anything unfamiliar.</li>
-<li>Predict what the code will do before running it.</li>
-<li>Run it and inspect the result.</li>
-<li>Check that the result answers your question. If it differs from your prediction, investigate why.</li>
+<li>Keep the smallest input and code that still show the problem. Plain values from this chapter are enough for many questions; do not send private respondent records.</li>
+<li>Include the assignments that create needed objects and any package-loading calls. For <code>round(x, digits = 1)</code>, include the preceding <code>x &lt;- 2.75</code>.</li>
+<li>Copy the exact error message and say what you expected. Here, a successful call should return <code>2.8</code>.</li>
+<li>Start a fresh R session and run just the code you intend to share, from the beginning. Check that it reproduces the same problem.</li>
 </ol>
-<p>The aim is to understand enough to explain and check your own work. Keep examples small while you are learning. Optional editor setup is described in the <a href="https://positron.posit.co/assistant-completions.html">Positron completions guide</a> and the <a href="https://docs.posit.co/ide/user/ide/guide/tools/copilot.html">RStudio Copilot guide</a>.</p>
+<p>These details help another reader distinguish a missing input, a mistyped name, and an unexpected result.</p>
+<p>You have now used functions to calculate results and saved instructions that you can run again. These small examples introduce a way of working that can extend to an entire analysis. Before we open a dataset, consider where that approach is useful and what it requires of you.</p>
+</section>
+<section id="optional-where-r-falls-short" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="optional-where-r-falls-short"><span class="header-section-number">1.6</span> Where R falls short</h2>
+<p>Writing instructions makes an analysis repeatable, but you must learn the syntax and keep track of the objects those instructions use. In the examples above, running a calculation before creating its input produces an error; changing an input does not automatically update a saved result. Learning to recognize and resolve these problems takes practice.</p>
+<p>R also need not replace every tool you already use. If Stata already handles your data, statistical methods, and outputs well, you may have little immediate reason to switch. A useful starting question is whether a recurring research task is becoming difficult to express, repeat, or extend in your current software.</p>
+<div id="fig-tool-landscape" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Task-to-tool map: Excel for shared spreadsheets; Stata for survey data and labels; R for statistical analysis and reproducible reports; Python for general programming and APIs; Julia and MATLAB for numerical computing; Java and C++ for application engineering. R is highlighted. These uses overlap.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tool-landscape-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fig/task-tool-map.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;1.5: Common workflows and the tools often used for them. R is highlighted as this book’s focus."><img src="fig/task-tool-map.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Task-to-tool map: Excel for shared spreadsheets; Stata for survey data and labels; R for statistical analysis and reproducible reports; Python for general programming and APIs; Julia and MATLAB for numerical computing; Java and C++ for application engineering. R is highlighted. These uses overlap." width="440"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tool-landscape-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.5: Common workflows and the tools often used for them. R is highlighted as this book’s focus.
+</figcaption>
+</figure>
+</div>
+<p>Different tools have their own comfortable areas of use. Stata provides a familiar environment for survey analysis and econometrics. <a href="https://www.python.org/about/apps/">Python</a> is widely used for general programming, web applications, and scientific computing; a project built around a framework such as <a href="https://pytorch.org/">PyTorch</a> may give you a reason to learn Python. These areas overlap. Choose a language with attention to your research question, collaborators, and the tools you need.</p>
+</section>
+<section id="optional-where-r-shines" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="optional-where-r-shines"><span class="header-section-number">1.7</span> Where R shines</h2>
+<p>The same features that take practice can become useful as a project grows. Your saved script already records how to recreate a result, and named objects let you keep inputs and results available together. For many social scientists, the first reasons to develop these habits arise before model fitting. You may need to combine survey files with administrative records, read spreadsheets and data from online services, keep several datasets and intermediate results available, or repeat complicated cleaning across many survey waves. R lets you organize these as named objects and reusable functions. Stata also supports <a href="https://www.stata.com/features/overview/multiple-datasets-in-memory/">multiple datasets through frames</a>; R’s appeal grows when you want to connect data preparation with a wider range of research tools.</p>
+<div id="fig-r-reusable-workflow" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="File icons lead through a reusable R step to table and chart icons.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-r-reusable-workflow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fig/research-workflow.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;1.6: Many sources, reusable R code, and different research outputs."><img src="fig/research-workflow.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="File icons lead through a reusable R step to table and chart icons." width="780"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-r-reusable-workflow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.6: Many sources, reusable R code, and different research outputs.
+</figcaption>
+</figure>
+</div>
+<p>Visualization is another common reason. <a href="https://ggplot2.tidyverse.org/">ggplot2</a> provides a consistent way to build and refine figures, from a quick check of a distribution to a comparison across groups. The <a href="https://www.tidyverse.org/packages/">tidyverse</a> connects importing, cleaning, reshaping, and plotting data through related conventions. Learning those conventions can make an entire analysis easier to adapt as your question changes.</p>
+<p>See <a href="#fig-ggplot-social-science" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> for an example of a ggplot2 figure.</p>
+<p>As research needs expand, R offers packages for text, spatial, and network data, as well as causal inference, machine learning, simulation, and Bayesian analysis. The <a href="https://cran.r-project.org/web/views/">CRAN Task Views</a> organize packages by these areas. R can also connect analysis to interactive displays and reports. You can add specialized tools as your work requires them; this book begins with the data preparation, description, and visualization skills that support many such applications.</p>
+<p>Some extensions require additional infrastructure. For example, <a href="https://arrow.apache.org/docs/r/">Arrow</a> lets R work with multi-file and larger-than-memory datasets, but installing R alone does not remove memory or computing limits. The value of learning R depends on the workflow it makes possible for you. Its free, open-source ecosystem gives you room to extend that workflow as new needs arise.</p>
+<p>We will build on these ideas by comparing ways to organize data in <a href="objects.html" class="quarto-xref"><span>Chapter 2</span></a>, then choosing columns from a real table in <a href="dplyr-grammar.html" class="quarto-xref"><span>Chapter 3</span></a>. First, the <a href="#sec-intro-check">exercises</a> let you practise calculating with R, storing a value, and using a function. The following discussion of AI is optional; you can go directly to those exercises.</p>
+<!-- early-core-end -->
+</section>
+<section id="sec-ai-learning" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="sec-ai-learning"><span class="header-section-number">1.8</span> Learning R with AI [Optional]</h2>
+<p>You may know what you want to find out before you know the R commands to use. An AI assistant can help you turn that intention into code, explain unfamiliar functions, and get past errors. You can then run the code in R and inspect what it actually does. AI assistance is optional; you can follow this book without it.</p>
+<section id="sec-ai-explanation" class="level3" data-number="1.8.1">
+<h3 data-number="1.8.1" class="anchored" data-anchor-id="sec-ai-explanation"><span class="header-section-number">1.8.1</span> Understanding unfamiliar code</h3>
+<p>Consider five countries from <code>tidystata::lifeexp</code>: Albania, Poland, Canada, Cuba, and Argentina. Their life expectancy at birth is recorded in years. These are rounded World Bank World Development Indicators observations for 1998, distributed with tidystata. We transcribe the five named rows below so that you can inspect every input. The <a href="https://databank.worldbank.org/source/world-development-indicators">World Bank data</a> are available under <a href="https://datacatalog.worldbank.org/public-licenses#cc-by">CC BY 4.0</a>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr"><pre class="book-console"><code>── <span class="ansi ansi-bold">Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──
+<span class="ansi ansi-color-2">✔</span> <span class="ansi ansi-color-4">dplyr    </span> 1.2.1     <span class="ansi ansi-color-2">✔</span> <span class="ansi ansi-color-4">readr    </span> 2.2.0
+<span class="ansi ansi-color-2">✔</span> <span class="ansi ansi-color-4">forcats  </span> 1.0.1     <span class="ansi ansi-color-2">✔</span> <span class="ansi ansi-color-4">stringr  </span> 1.6.0
+<span class="ansi ansi-color-2">✔</span> <span class="ansi ansi-color-4">ggplot2  </span> 4.0.3     <span class="ansi ansi-color-2">✔</span> <span class="ansi ansi-color-4">tibble   </span> 3.3.1
+<span class="ansi ansi-color-2">✔</span> <span class="ansi ansi-color-4">lubridate</span> 1.9.5     <span class="ansi ansi-color-2">✔</span> <span class="ansi ansi-color-4">tidyr    </span> 1.3.2
+<span class="ansi ansi-color-2">✔</span> <span class="ansi ansi-color-4">purrr    </span> 1.2.2     
+── <span class="ansi ansi-bold">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──
+<span class="ansi ansi-color-1">✖</span> <span class="ansi ansi-color-4">dplyr</span>::<span class="ansi ansi-color-2">filter()</span> masks <span class="ansi ansi-color-4">stats</span>::filter()
+<span class="ansi ansi-color-1">✖</span> <span class="ansi ansi-color-4">dplyr</span>::<span class="ansi ansi-color-2">lag()</span>    masks <span class="ansi ansi-color-4">stats</span>::lag()
+<span class="ansi ansi-color-6">ℹ</span> Use the conflicted package (<span class="ansi ansi-italic ansi-color-4">&lt;http://conflicted.r-lib.org/&gt;</span>) to force all conflicts to become errors
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>countries <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">country =</span> <span class="fu">c</span>(<span class="st">"Albania"</span>, <span class="st">"Poland"</span>, <span class="st">"Canada"</span>, <span class="st">"Cuba"</span>, <span class="st">"Argentina"</span>),</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">lexp =</span> <span class="fu">c</span>(<span class="dv">74</span>, <span class="dv">73</span>, <span class="dv">79</span>, <span class="dv">75</span>, <span class="dv">73</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>countries</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 5 × 2</span>
+  country    lexp
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> Albania      74
+<span class="ansi ansi-color-250">2</span> Poland       73
+<span class="ansi ansi-color-250">3</span> Canada       79
+<span class="ansi ansi-color-250">4</span> Cuba         75
+<span class="ansi ansi-color-250">5</span> Argentina    73
+</code></pre></div>
+</div>
+<p><strong>Ask for an explanation.</strong> The exchanges here are illustrative; a chatbot or coding assistant may reply differently.</p>
+<blockquote class="blockquote">
+<p><strong>You:</strong> Explain this code to a beginner. What does each row represent, and what are the units?</p>
+<p><strong>Assistant:</strong> <code>library(tidyverse)</code> loads the packages. <code>tibble()</code> creates a table with two columns, <code>country</code> and <code>lexp</code>; <code>c()</code> combines the entries in each column. The arrow <code>&lt;-</code> stores the table as <code>countries</code>. Each row connects a named country with its life expectancy at birth, measured in years.</p>
+</blockquote>
+<p>Typing <code>countries</code> displays the table. Compare Canada’s row with the transcribed code: its recorded value is 79 years. Keeping country names attached to their measurements lets you check which observation an output describes.</p>
+</section>
+<section id="sec-ai-figure" class="level3" data-number="1.8.2">
+<h3 data-number="1.8.2" class="anchored" data-anchor-id="sec-ai-figure"><span class="header-section-number">1.8.2</span> From a question to a figure</h3>
+<p><strong>Describe the result you want.</strong> Continue with the same table:</p>
+<blockquote class="blockquote">
+<p><strong>You:</strong> Use ggplot2 to compare life expectancy in these five countries in a bar chart. Put countries on the horizontal axis and years on the vertical axis. Explain the code.</p>
+<p><strong>Assistant:</strong> <code>ggplot()</code> uses the <code>countries</code> table. Inside <code>aes()</code>, <code>country</code> supplies the horizontal positions and <code>lexp</code> supplies the heights. <code>geom_col()</code> draws the bars; <code>labs()</code> sets the axis titles. The <code>+</code> signs add these parts to the plot.</p>
+</blockquote>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(countries, <span class="fu">aes</span>(<span class="at">x =</span> country, <span class="at">y =</span> lexp)) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Country"</span>, <span class="at">y =</span> <span class="st">"Life expectancy at birth (years)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-ai-lifeexp" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bar chart with a zero baseline: Albania 74, Argentina 73, Canada 79, Cuba 75, and Poland 73 years.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ai-lifeexp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="intro_files/figure-html/fig-ai-lifeexp-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;1.7: Life expectancy at birth in five countries, 1998. Source: World Bank WDI, as distributed in tidystata::lifeexp; rounded years."><img src="intro_files/figure-html/fig-ai-lifeexp-1.png" class="img-fluid figure-img" alt="Bar chart with a zero baseline: Albania 74, Argentina 73, Canada 79, Cuba 75, and Poland 73 years." width="624"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ai-lifeexp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.7: Life expectancy at birth in five countries, 1998. Source: World Bank WDI, as distributed in tidystata::lifeexp; rounded years.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Ask about a specific error.</strong> If you accidentally type <code>lepx</code> in place of <code>lexp</code>, the plot fails. Include your code and the error when asking for help. Use the help-request checklist in <a href="#sec-getting-help" class="quarto-xref"><span>Section 1.5</span></a> to make the problem reproducible.</p>
+<blockquote class="blockquote">
+<p><strong>You:</strong> My code uses <code>aes(x = country, y = lepx)</code>. The error says <code>object 'lepx' not found</code>. The table above has a column called <code>lexp</code>. What is the smallest correction?</p>
+<p><strong>Assistant:</strong> Change <code>y = lepx</code> to <code>y = lexp</code>. Column names must match exactly.</p>
+</blockquote>
+<p>Run the corrected code and check Canada’s bar against its recorded 79 years. The default display puts country names in alphabetical order, so compare names rather than assuming that the third bar is the third input row. This connects the assistant’s suggestion to a result you can verify.</p>
+</section>
+<section id="sec-ai-checking" class="level3" data-number="1.8.3">
+<h3 data-number="1.8.3" class="anchored" data-anchor-id="sec-ai-checking"><span class="header-section-number">1.8.3</span> Checking AI’s suggestions</h3>
+<p><strong>Check the answer and its meaning.</strong> For the same five countries, ask the assistant to calculate the average using dplyr:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(countries, <span class="at">average =</span> <span class="fu">mean</span>(lexp))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 1 × 1</span>
+  average
+    <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span>    74.8
+</code></pre></div>
+</div>
+<p>Here, <code>summarise()</code> produces a summary table, <code>mean(lexp)</code> calculates the arithmetic average, and <code>average</code> names the result column. The result is 74.8 years: the five values sum to 374, and 374 divided by 5 is 74.8. Each country contributes equally; this calculation does not weight countries by their population size.</p>
+<blockquote class="blockquote">
+<p><strong>You:</strong> Can I conclude that people worldwide had a life expectancy of 74.8 years in 1998?</p>
+<p><strong>Assistant:</strong> This calculation describes the five selected countries. They were chosen for this teaching example, so their average is not a worldwide estimate. A population-weighted average would also require population counts and a different calculation.</p>
+</blockquote>
+<p>Try the task yourself first. When you need help, ask for a hint or explanation, read the suggested code, predict its result, and run it. AI can help write the commands; knowing the source, units, and selection of observations helps you judge the conclusion.</p>
+</section>
+<section id="sec-ai-tools" class="level3" data-number="1.8.4">
+<h3 data-number="1.8.4" class="anchored" data-anchor-id="sec-ai-tools"><span class="header-section-number">1.8.4</span> AI tools [Optional]</h3>
+<p>You can ask questions in a chatbot or use an assistant alongside your code. These tools are optional. The tabs show examples from official documentation; their code illustrates the interfaces rather than the country comparison. Select a tab and click its image to enlarge it. Your editor and version may look different.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">GitHub Copilot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Claude Code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">OpenAI Codex</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p><a href="https://docs.github.com/en/copilot/get-started/about-github-copilot">GitHub Copilot</a> offers code suggestions and chat, depending on the editor. In this RStudio example, a comment describes the task and lighter text shows suggested code. Read a suggestion before accepting it. For our country example, a comment could ask for a ggplot2 bar chart.</p>
+<div id="fig-ai-copilot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="RStudio source editor with an R script. A comment marked 1 asks to add a standard error; lighter suggested code is marked 2. The bottom status message marked 3 says Copilot: Completion response received.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ai-copilot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fig/ai-copilot-rstudio.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;1.8: Copilot suggests code inside RStudio’s editor. Source: Posit Software, PBC, RStudio User Guide."><img src="fig/ai-copilot-rstudio.png" class="img-fluid figure-img" alt="RStudio source editor with an R script. A comment marked 1 asks to add a standard error; lighter suggested code is marked 2. The bottom status message marked 3 says Copilot: Completion response received." width="740"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ai-copilot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.8: Copilot suggests code inside RStudio’s editor. Source: Posit Software, PBC, <a href="https://docs.posit.co/ide/user/ide/guide/tools/copilot.html">RStudio User Guide</a>.
+</figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p><a href="https://code.claude.com/docs/en/vs-code">Claude Code</a> lets you discuss code and request changes. Here, selected code is on the left and a question and explanation appear on the right. You could select the life-expectancy plotting code and ask, “Explain what each line does.”</p>
+<div id="fig-ai-claude-code" class="quarto-float quarto-figure quarto-figure-center anchored" alt="VS Code shows a Python file with two lines selected on the left. The Claude Code panel on the right references those lines, asks What does this line do?, and displays an explanation above the prompt box.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ai-claude-code-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fig/ai-claude-code.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;1.9: Claude Code explains selected code in VS Code. Source: Anthropic, Claude Code documentation."><img src="fig/ai-claude-code.png" class="img-fluid figure-img" alt="VS Code shows a Python file with two lines selected on the left. The Claude Code panel on the right references those lines, asks What does this line do?, and displays an explanation above the prompt box." width="740"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ai-claude-code-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.9: Claude Code explains selected code in VS Code. Source: Anthropic, <a href="https://code.claude.com/docs/en/vs-code">Claude Code documentation</a>.
+</figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p><a href="https://learn.chatgpt.com/docs/ide">OpenAI Codex</a> can work with project files and propose edits. Here, the conversation is on the right and changed lines are visible on the left. You could ask it to fix <code>lepx</code> in the country plotting script, then review the change and rerun the code.</p>
+<div id="fig-ai-codex" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Codex in a code editor. The left side shows removed and added lines in several files. The right side contains a conversation, a summary of edited files, and Undo and Review controls above the follow-up prompt box.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ai-codex-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fig/ai-codex-ide.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;1.10: Codex presents file changes for review beside its conversation. Source: OpenAI, Codex IDE documentation."><img src="fig/ai-codex-ide.webp" class="img-fluid figure-img" alt="Codex in a code editor. The left side shows removed and added lines in several files. The right side contains a conversation, a summary of edited files, and Undo and Review controls above the follow-up prompt box." width="740"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ai-codex-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.10: Codex presents file changes for review beside its conversation. Source: OpenAI, <a href="https://learn.chatgpt.com/docs/ide">Codex IDE documentation</a>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-intro-review" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="sec-intro-review"><span class="header-section-number">1.9</span> Review</h2>
+<ul>
+<li><code>&lt;-</code> stores a result under a name; saving a script keeps the instructions for another session.</li>
+<li><code>sqrt()</code> calculates square roots, <code>nchar()</code> counts characters, and <code>round()</code> rounds numbers.</li>
+<li><code>help()</code> opens function documentation; include setup, code, and the exact problem when asking for help.</li>
+<li><code>install.packages()</code> installs packages from CRAN; <code>pak::pak()</code> can install tidystata from GitHub.</li>
+<li><code>library()</code> loads an installed package for the current session.</li>
+</ul>
+<p>Next, <a href="objects.html" class="quarto-xref"><span>Chapter 2</span></a> introduces the structures that hold our data and explains why this book mainly uses tibbles.</p>
+</section>
+<section id="sec-intro-check" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="sec-intro-check"><span class="header-section-number">1.10</span> Exercises</h2>
+<p>Practise calculating, saving results, and rebuilding a session from your script. Predict each result before running the code. After trying a question, open the answer with the same number under <strong>Worked answers</strong>.</p>
+<ol type="1">
+<li><p><strong>Calculate with R.</strong> In <a href="#sec-first-code" class="quarto-xref"><span>Section 1.2</span></a>, <code>+</code> adds numbers and <code>*</code> multiplies them. Run these two lines, one at a time. What answer does each line give?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="dv">8</span> <span class="sc">+</span> <span class="dv">2</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="dv">8</span> <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p><strong>Saved values and names.</strong> Run <code>a &lt;- 10</code> and <code>b &lt;- a * 2</code>. Predict <code>b</code> after running <code>a &lt;- 12</code>. What must you rerun to update <code>b</code>? Explain why typing <code>A</code> cannot retrieve the value stored as <code>a</code>.</p></li>
+<li><p><strong>Change a function’s input.</strong> The function <code>round()</code> rounds a number. Its <code>digits</code> argument tells R how many decimal places to keep, as in <a href="#sec-basics-expressions" class="quarto-xref"><span>Section 1.2.1</span></a>. Run the line below. Then change <code>digits = 1</code> to <code>digits = 2</code> and run it again. What result do you get each time?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fl">2.75</span>, <span class="at">digits =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p><strong>Reconstruct a session.</strong> Save these lines in <code>first.R</code>. Restart R with your IDE’s restart command, then run only the last line. Explain the error. Now run the saved script from the beginning and report both values. What did saving the script preserve?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>starting_value <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>doubled_value <span class="ot">&lt;-</span> starting_value <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>doubled_value</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+</ol>
+</section>
+<section id="worked-answers" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="worked-answers">Worked answers</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="1. Calculate with R">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Calculate with R
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="dv">8</span> <span class="sc">+</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="dv">8</span> <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 16</code></pre>
+</div>
+</div>
+<p>The first answer is <code>10</code>: R adds 8 and 2. The second is <code>16</code>: R multiplies 8 by 2. Changing the symbol changes the calculation.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="2. Saved values and names">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Saved values and names
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> a <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> a <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 24</code></pre>
+</div>
+</div>
+<p>The first printed <code>b</code> is <code>20</code>. It stores the earlier calculation; changing <code>a</code> does not recalculate it. Rerunning the assignment to <code>b</code> produces <code>24</code>. Names are case-sensitive: <code>A</code> is a different name and, unless separately created, gives an object-not-found error. Use the lower-case <code>a</code> to retrieve <code>12</code>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="3. Change a function's input">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Change a function’s input
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fl">2.75</span>, <span class="at">digits =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.8</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fl">2.75</span>, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.75</code></pre>
+</div>
+</div>
+<p>With <code>digits = 1</code>, the answer is <code>2.8</code>, rounded to one decimal place. With <code>digits = 2</code>, the answer is <code>2.75</code>, which already has two decimal places. The number being rounded stays the same; the named argument changes how many decimal places we request.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="4. Reconstruct a session">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Reconstruct a session
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>In a fresh session, the last line alone fails because <code>doubled_value</code> has not been created. Run all three saved lines in order:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>starting_value <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>doubled_value <span class="ot">&lt;-</span> starting_value <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>doubled_value</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>starting_value</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+</div>
+<p>The results are <code>20</code> and <code>10</code>. The script preserved instructions on disk, not the previous session’s objects. Replaying those instructions creates the inputs before they are needed.</p>
+</div>
+</div>
+</div>
+<p>Continue to <a href="objects.html" class="quarto-xref"><span>Chapter 2</span></a> for a short tour of R objects and a comparison of data-frame and tibble output.</p>
 
 
 </section>
@@ -851,8 +2472,8 @@ Figure&nbsp;1.6: The main regions of Positron, illustrated in Posit’s document
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./data-workflow.html" class="pagination-link" aria-label="Objects, data structures, and workflows">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects, data structures, and workflows</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./objects.html" class="pagination-link" aria-label="Objects in R">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects in R</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -870,6 +2491,38 @@ Figure&nbsp;1.6: The main regions of Positron, illustrated in Posit’s document
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Minghong Shen">
-<meta name="dcterms.date" content="2026-10-25">
+<meta name="dcterms.date" content="2026-11-02">
 <meta name="description" content="An introduction to R and the tidyverse for social-science research.">
 
 <title>R for Social Science</title>
@@ -48,9 +48,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-684a58a98314b78713c09aa595376ac7.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4e8b6bb1c918ce48c6344a3599f12dee.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-6c46b2821aad66193e5af05cedf4b233.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-4e8b6bb1c918ce48c6344a3599f12dee.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f762a00757381c0eb797acef47548461.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-49a5c3d3f733115b1117348003870229.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f762a00757381c0eb797acef47548461.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -141,13 +141,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Get started with R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects, data structures, and workflows</span></span></a>
+  <a href="./objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects in R</span></span></a>
   </div>
 </li>
       </ul>
@@ -155,7 +155,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Working with data</span></a>
+ <span class="menu-text">Manipulate tables</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -163,8 +163,26 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dplyr-stat.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tabulation and summary statistics</span></span></a>
+  <a href="./dplyr-grammar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Select columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-sort.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sort observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-pipe.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pipe</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-select.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Select observations</span></span></a>
   </div>
 </li>
       </ul>
@@ -172,7 +190,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
+ <span class="menu-text">Explore variables</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -180,8 +198,195 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./dplyr-skim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Inspect a dataset</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-tab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Tabulate data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-stat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summarize data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./missing-values.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Missing values</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Visualize data</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manipulate variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Create variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./group-variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Group variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./numeric-logical.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logicals and numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./categorical-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Strings and factors</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./text-dates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Dates and times</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lists.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">List columns</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manage datasets</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Import and export</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-group.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Group and reshape</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-join.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Combine datasets</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Nested datasets</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyze variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ggplot2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./statistical-tests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Statistical tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">OLS regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logit-probit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Logit and probit</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fixed-effects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Fixed effects</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Programming</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./basic-operations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Basic expressions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tibble.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./gss-data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">The GSS data in this book</span></span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">GSS data</span></span></a>
   </div>
 </li>
       </ul>
@@ -196,7 +401,14 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a>
+  <ul class="collapse">
+  <li><a href="#who-this-book-is-for" id="toc-who-this-book-is-for" class="nav-link" data-scroll-target="#who-this-book-is-for">Who this book is for</a></li>
+  <li><a href="#learning-with-real-data" id="toc-learning-with-real-data" class="nav-link" data-scroll-target="#learning-with-real-data">Learning with real data</a></li>
+  <li><a href="#how-to-use-this-book" id="toc-how-to-use-this-book" class="nav-link" data-scroll-target="#how-to-use-this-book">How to use this book</a></li>
+  <li><a href="#reading-conventions" id="toc-reading-conventions" class="nav-link" data-scroll-target="#reading-conventions">Reading conventions</a></li>
+  <li><a href="#license" id="toc-license" class="nav-link" data-scroll-target="#license">License</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -223,7 +435,7 @@ ul.task-list li input[type="checkbox"] {
   </div>
   <div class="quarto-title-meta-contents">
         <p class="affiliation">
-            Population Studies Center, University of Pennsylvania
+            Population Studies Center, &nbsp;University of Pennsylvania
           </p>
       </div>
   </div>
@@ -234,7 +446,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 25, 2026</p>
+      <p class="date">November 2, 2026</p>
     </div>
   </div>
   
@@ -248,23 +460,67 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="preface" class="level1 unnumbered">
 <h1 class="unnumbered">Preface</h1>
-<div class="callout callout-style-default callout-note callout-titled" title="Pilot edition">
+<p>Welcome to <em>R for Social Science</em>! This book introduces R, <a href="https://socimh.github.io/tidystata/">tidystata</a>, and the <a href="https://www.tidyverse.org/">tidyverse</a> through practical examples from social-science research. You will learn how to organize your work, explore datasets, transform variables, and summarize data using R. Tidystata supplies the main tools for routine recoding, tabulation, and numerical summaries; the tidyverse supplies general table operations and graphics.</p>
+<p>The goal is not simply to teach R commands, but to help you develop the skills and habits needed for clear, efficient, and reproducible social-science research.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Current edition">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Pilot edition
+<span class="screen-reader-only">Note</span>Current edition
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This pilot edition currently includes the preface, two introductory chapters, a draft chapter on tabulation and summary statistics, and a GSS data appendix. It is written for readers learning R for the first time. Technical advice and software comparisons are awaiting a separate editorial review.</p>
+<p>This edition includes twenty-eight written chapters, a preface, and a General Social Survey (GSS) data appendix. Technical recommendations and software comparisons are subject to further editorial review.</p>
 </div>
 </div>
-<p>Welcome to <em>R for Social Science</em>, an introduction to R and the tidyverse for social-science research. The book also uses <a href="https://socimh.github.io/tidystata/">tidystata</a>, the author’s companion R package.</p>
-<p>This book is freely available under the <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0 license</a>. It may not be used for commercial purposes without permission.</p>
+<section id="who-this-book-is-for" class="level2">
+<h2 class="anchored" data-anchor-id="who-this-book-is-for">Who this book is for</h2>
+<p>This book is written for students and researchers in sociology, political science, economics, education, and related fields who want to learn R for data analysis.</p>
+<p>No prior programming experience is required. Basic familiarity with variables, averages, and percentages is sufficient. We introduce R syntax from the beginning and explain statistical concepts as they become relevant.</p>
+<p>If you have used Stata, SPSS, or another statistical package, you may find some concepts familiar. However, the book assumes no experience with statistical software.</p>
+</section>
+<section id="learning-with-real-data" class="level2">
+<h2 class="anchored" data-anchor-id="learning-with-real-data">Learning with real data</h2>
+<p>Social-science research involves more than writing code. Understanding what observations represent, how variables are measured, and how results should be interpreted is equally important.</p>
+<p>Basic syntax examples use small numbers, strings, and logical values so that you can follow each operation directly. Data-handling and analysis lessons use real datasets, especially World Bank country indicators in <code>lifeexp</code> and the 2024 General Social Survey (GSS). Each chapter normally keeps one main dataset, and adjacent lessons reuse it where possible. Other datasets are introduced when they supply a needed feature, such as genuine dates.</p>
+<p>For these data examples, the book explains the relevant sources, units of measurement, and transformations so that you can understand both the code and the underlying data.</p>
+</section>
+<section id="how-to-use-this-book" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-use-this-book">How to use this book</h2>
+<p>The book is designed to be read progressively, with each chapter building on the skills introduced earlier.</p>
+<p>Begin with <em>Get started with R</em>, then read <a href="objects.html" class="quarto-xref"><span>2&nbsp; Objects in R</span></a> for an overview of R objects and the reasons this book centers on tibbles. Enter Manipulate tables next. <a href="dplyr-grammar.html" class="quarto-xref"><span>3&nbsp; Select columns</span></a> introduces the packaged country data and the shared selection language. Sorting, the pipe, and observation selection then show how to work with one table and connect operations.</p>
+<p><a href="dplyr-select.html" class="quarto-xref"><span>6&nbsp; Select observations</span></a> continues with the same country data. <a href="dplyr-tab.html" class="quarto-xref"><span>8&nbsp; Tabulate data</span></a> introduces the 2024 GSS for tabulation, summaries, descriptive plots, and variable manipulation. Follow the one-time preparation recipe in <a href="gss-data.html" class="quarto-xref"><span>Appendix A: GSS data</span></a> at that point; later survey chapters reuse the saved extract.</p>
+<p>Explore variables follows. <a href="dplyr-skim.html" class="quarto-xref"><span>7&nbsp; Inspect a dataset</span></a> examines records and variable descriptions, then teaches a CSV download, import, and export. Continue to <a href="dplyr-tab.html" class="quarto-xref"><span>8&nbsp; Tabulate data</span></a>, <a href="dplyr-stat.html" class="quarto-xref"><span>9&nbsp; Summarize data</span></a>, and <a href="visualization.html" class="quarto-xref"><span>11&nbsp; Visualize data</span></a> to describe categories, numerical distributions, and graphical patterns. Return to these inspection tools whenever a transformation needs checking.</p>
+<p>Manipulate variables starts with <a href="dplyr-mutate.html" class="quarto-xref"><span>12&nbsp; Create variables</span></a>, then develops numeric and logical transformations in <a href="numeric-logical.html" class="quarto-xref"><span>14&nbsp; Logicals and numbers</span></a>, factors and questionnaire scores in <a href="categorical-data.html" class="quarto-xref"><span>15&nbsp; Strings and factors</span></a>, and strings and dates in <a href="text-dates.html" class="quarto-xref"><span>16&nbsp; Dates and times</span></a>. Return to frequency tables and summaries after a transformation to check what changed.</p>
+<p>Manage datasets covers <a href="data-workflow.html" class="quarto-xref"><span>18&nbsp; Import and export</span></a>, <a href="dplyr-group.html" class="quarto-xref"><span>19&nbsp; Group and reshape</span></a>, and <a href="dplyr-join.html" class="quarto-xref"><span>20&nbsp; Combine datasets</span></a>: bring files into R, reorganize observations, and connect tables through checked identifiers. Analyze variables then uses <a href="ggplot2.html" class="quarto-xref"><span>22&nbsp; ggplot2</span></a> to build and refine figures, <a href="statistical-tests.html" class="quarto-xref"><span>23&nbsp; Statistical tests</span></a> to compare groups and test associations, <a href="regression.html" class="quarto-xref"><span>24&nbsp; OLS regression</span></a> for OLS models, and <a href="logit-probit.html" class="quarto-xref"><span>25&nbsp; Logit and probit</span></a> for binary-outcome models.</p>
+<p>The final part, Programming, is optional. It explains basic expressions, vectors, and other R data structures in more detail. Read it when you want to understand the machinery behind an operation; it is not a prerequisite for the practical chapters. Each practical chapter explains the syntax needed for its own tasks.</p>
+<p>A few suggestions will help you get the most out of the book:</p>
+<ol type="1">
+<li><strong>Run the examples yourself.</strong> Follow the examples in order, beginning with the package and data setup provided in each chapter.</li>
+<li><strong>Work with the data.</strong> Experiment with the code, inspect the results, and consider what the output means.</li>
+<li><strong>Complete the exercises.</strong> Try solving problems independently before consulting the worked answers or an AI assistant.</li>
+<li><strong>Keep your work organized.</strong> Save your scripts and data files so that you can return to previous exercises and reproduce your results.</li>
+</ol>
+<p>Before working with the GSS examples, follow the instructions in <a href="gss-data.html" class="quarto-xref"><span>Appendix A: GSS data</span></a> to prepare and save the required data extract. Subsequent chapters will use this saved file.</p>
+</section>
+<section id="reading-conventions" class="level2">
+<h2 class="anchored" data-anchor-id="reading-conventions">Reading conventions</h2>
+<p>Throughout the book, a few conventions help distinguish essential material from supplementary information.</p>
+<ul>
+<li><strong>Optional references</strong> provide additional explanations or resources. You can skip them on a first reading without missing the main lesson. The GSS applications state their data setup explicitly.</li>
+<li><strong>Previews</strong> illustrate techniques that will be explained in greater detail later. Focus on understanding their purpose rather than memorizing every command.</li>
+<li><strong>Installation instructions</strong> generally need to be run only once when setting up your environment. Other code blocks may demonstrate operations on your own files or optional software rather than code executed automatically by the book.</li>
+</ul>
+<p>You do not need to understand every detail on your first reading. The most effective way to learn R is to practice regularly and return to earlier examples as your skills develop.</p>
+</section>
+<section id="license" class="level2">
+<h2 class="anchored" data-anchor-id="license">License</h2>
+<p>This book is freely available under the <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>. Commercial use and distribution of adapted versions require permission.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -672,8 +928,8 @@ ul.task-list li input[type="checkbox"] {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link" aria-label="Introduction to R">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./intro.html" class="pagination-link" aria-label="Get started with R">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Get started with R</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

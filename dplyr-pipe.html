@@ -1,0 +1,2393 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="An introduction to R and the tidyverse for social-science research.">
+
+<title>5&nbsp; Pipe – R for Social Science</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./dplyr-select.html" rel="next">
+<link href="./dplyr-sort.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-684a58a98314b78713c09aa595376ac7.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d86a9a5236ec3aeeb637912bee877918.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-684a58a98314b78713c09aa595376ac7.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-f762a00757381c0eb797acef47548461.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-49a5c3d3f733115b1117348003870229.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f762a00757381c0eb797acef47548461.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+.book-console .ansi-bold         { font-weight: bold;             }
+
+.book-console .ansi-italic       { font-style: italic;            }
+
+.book-console .ansi-underline    { text-decoration: underline;    }
+
+.book-console .ansi-blink        { text-decoration: blink;        }
+
+.book-console .ansi-hide         { visibility: hidden;            }
+
+.book-console .ansi-crossedout   { text-decoration: line-through; }
+
+.book-console .ansi-link:hover   { text-decoration: underline;    }
+
+.book-console .ansi-color-0      { color: #000000 }
+
+.book-console .ansi-color-1      { color: #cd0000 }
+
+.book-console .ansi-color-2      { color: #00cd00 }
+
+.book-console .ansi-color-3      { color: #cdcd00 }
+
+.book-console .ansi-color-4      { color: #0000ee }
+
+.book-console .ansi-color-5      { color: #cd00cd }
+
+.book-console .ansi-color-6      { color: #00cdcd }
+
+.book-console .ansi-color-7      { color: #e5e5e5 }
+
+.book-console .ansi-color-8      { color: #7f7f7f }
+
+.book-console .ansi-color-9      { color: #ff0000 }
+
+.book-console .ansi-color-10     { color: #00ff00 }
+
+.book-console .ansi-color-11     { color: #ffff00 }
+
+.book-console .ansi-color-12     { color: #5c5cff }
+
+.book-console .ansi-color-13     { color: #ff00ff }
+
+.book-console .ansi-color-14     { color: #00ffff }
+
+.book-console .ansi-color-15     { color: #ffffff }
+
+.book-console .ansi-bg-color-0   { background-color: #000000 }
+
+.book-console .ansi-bg-color-1   { background-color: #cd0000 }
+
+.book-console .ansi-bg-color-2   { background-color: #00cd00 }
+
+.book-console .ansi-bg-color-3   { background-color: #cdcd00 }
+
+.book-console .ansi-bg-color-4   { background-color: #0000ee }
+
+.book-console .ansi-bg-color-5   { background-color: #cd00cd }
+
+.book-console .ansi-bg-color-6   { background-color: #00cdcd }
+
+.book-console .ansi-bg-color-7   { background-color: #e5e5e5 }
+
+.book-console .ansi-bg-color-8   { background-color: #7f7f7f }
+
+.book-console .ansi-bg-color-9   { background-color: #ff0000 }
+
+.book-console .ansi-bg-color-10  { background-color: #00ff00 }
+
+.book-console .ansi-bg-color-11  { background-color: #ffff00 }
+
+.book-console .ansi-bg-color-12  { background-color: #5c5cff }
+
+.book-console .ansi-bg-color-13  { background-color: #ff00ff }
+
+.book-console .ansi-bg-color-14  { background-color: #00ffff }
+
+.book-console .ansi-bg-color-15  { background-color: #ffffff }
+
+.book-console .ansi-color-16     { color: #000000 }
+
+.book-console .ansi-color-52     { color: #330000 }
+
+.book-console .ansi-color-88     { color: #660000 }
+
+.book-console .ansi-color-124    { color: #990000 }
+
+.book-console .ansi-color-160    { color: #cc0000 }
+
+.book-console .ansi-color-196    { color: #ff0000 }
+
+.book-console .ansi-color-22     { color: #003300 }
+
+.book-console .ansi-color-58     { color: #333300 }
+
+.book-console .ansi-color-94     { color: #663300 }
+
+.book-console .ansi-color-130    { color: #993300 }
+
+.book-console .ansi-color-166    { color: #cc3300 }
+
+.book-console .ansi-color-202    { color: #ff3300 }
+
+.book-console .ansi-color-28     { color: #006600 }
+
+.book-console .ansi-color-64     { color: #336600 }
+
+.book-console .ansi-color-100    { color: #666600 }
+
+.book-console .ansi-color-136    { color: #996600 }
+
+.book-console .ansi-color-172    { color: #cc6600 }
+
+.book-console .ansi-color-208    { color: #ff6600 }
+
+.book-console .ansi-color-34     { color: #009900 }
+
+.book-console .ansi-color-70     { color: #339900 }
+
+.book-console .ansi-color-106    { color: #669900 }
+
+.book-console .ansi-color-142    { color: #999900 }
+
+.book-console .ansi-color-178    { color: #cc9900 }
+
+.book-console .ansi-color-214    { color: #ff9900 }
+
+.book-console .ansi-color-40     { color: #00cc00 }
+
+.book-console .ansi-color-76     { color: #33cc00 }
+
+.book-console .ansi-color-112    { color: #66cc00 }
+
+.book-console .ansi-color-148    { color: #99cc00 }
+
+.book-console .ansi-color-184    { color: #cccc00 }
+
+.book-console .ansi-color-220    { color: #ffcc00 }
+
+.book-console .ansi-color-46     { color: #00ff00 }
+
+.book-console .ansi-color-82     { color: #33ff00 }
+
+.book-console .ansi-color-118    { color: #66ff00 }
+
+.book-console .ansi-color-154    { color: #99ff00 }
+
+.book-console .ansi-color-190    { color: #ccff00 }
+
+.book-console .ansi-color-226    { color: #ffff00 }
+
+.book-console .ansi-color-17     { color: #000033 }
+
+.book-console .ansi-color-53     { color: #330033 }
+
+.book-console .ansi-color-89     { color: #660033 }
+
+.book-console .ansi-color-125    { color: #990033 }
+
+.book-console .ansi-color-161    { color: #cc0033 }
+
+.book-console .ansi-color-197    { color: #ff0033 }
+
+.book-console .ansi-color-23     { color: #003333 }
+
+.book-console .ansi-color-59     { color: #333333 }
+
+.book-console .ansi-color-95     { color: #663333 }
+
+.book-console .ansi-color-131    { color: #993333 }
+
+.book-console .ansi-color-167    { color: #cc3333 }
+
+.book-console .ansi-color-203    { color: #ff3333 }
+
+.book-console .ansi-color-29     { color: #006633 }
+
+.book-console .ansi-color-65     { color: #336633 }
+
+.book-console .ansi-color-101    { color: #666633 }
+
+.book-console .ansi-color-137    { color: #996633 }
+
+.book-console .ansi-color-173    { color: #cc6633 }
+
+.book-console .ansi-color-209    { color: #ff6633 }
+
+.book-console .ansi-color-35     { color: #009933 }
+
+.book-console .ansi-color-71     { color: #339933 }
+
+.book-console .ansi-color-107    { color: #669933 }
+
+.book-console .ansi-color-143    { color: #999933 }
+
+.book-console .ansi-color-179    { color: #cc9933 }
+
+.book-console .ansi-color-215    { color: #ff9933 }
+
+.book-console .ansi-color-41     { color: #00cc33 }
+
+.book-console .ansi-color-77     { color: #33cc33 }
+
+.book-console .ansi-color-113    { color: #66cc33 }
+
+.book-console .ansi-color-149    { color: #99cc33 }
+
+.book-console .ansi-color-185    { color: #cccc33 }
+
+.book-console .ansi-color-221    { color: #ffcc33 }
+
+.book-console .ansi-color-47     { color: #00ff33 }
+
+.book-console .ansi-color-83     { color: #33ff33 }
+
+.book-console .ansi-color-119    { color: #66ff33 }
+
+.book-console .ansi-color-155    { color: #99ff33 }
+
+.book-console .ansi-color-191    { color: #ccff33 }
+
+.book-console .ansi-color-227    { color: #ffff33 }
+
+.book-console .ansi-color-18     { color: #000066 }
+
+.book-console .ansi-color-54     { color: #330066 }
+
+.book-console .ansi-color-90     { color: #660066 }
+
+.book-console .ansi-color-126    { color: #990066 }
+
+.book-console .ansi-color-162    { color: #cc0066 }
+
+.book-console .ansi-color-198    { color: #ff0066 }
+
+.book-console .ansi-color-24     { color: #003366 }
+
+.book-console .ansi-color-60     { color: #333366 }
+
+.book-console .ansi-color-96     { color: #663366 }
+
+.book-console .ansi-color-132    { color: #993366 }
+
+.book-console .ansi-color-168    { color: #cc3366 }
+
+.book-console .ansi-color-204    { color: #ff3366 }
+
+.book-console .ansi-color-30     { color: #006666 }
+
+.book-console .ansi-color-66     { color: #336666 }
+
+.book-console .ansi-color-102    { color: #666666 }
+
+.book-console .ansi-color-138    { color: #996666 }
+
+.book-console .ansi-color-174    { color: #cc6666 }
+
+.book-console .ansi-color-210    { color: #ff6666 }
+
+.book-console .ansi-color-36     { color: #009966 }
+
+.book-console .ansi-color-72     { color: #339966 }
+
+.book-console .ansi-color-108    { color: #669966 }
+
+.book-console .ansi-color-144    { color: #999966 }
+
+.book-console .ansi-color-180    { color: #cc9966 }
+
+.book-console .ansi-color-216    { color: #ff9966 }
+
+.book-console .ansi-color-42     { color: #00cc66 }
+
+.book-console .ansi-color-78     { color: #33cc66 }
+
+.book-console .ansi-color-114    { color: #66cc66 }
+
+.book-console .ansi-color-150    { color: #99cc66 }
+
+.book-console .ansi-color-186    { color: #cccc66 }
+
+.book-console .ansi-color-222    { color: #ffcc66 }
+
+.book-console .ansi-color-48     { color: #00ff66 }
+
+.book-console .ansi-color-84     { color: #33ff66 }
+
+.book-console .ansi-color-120    { color: #66ff66 }
+
+.book-console .ansi-color-156    { color: #99ff66 }
+
+.book-console .ansi-color-192    { color: #ccff66 }
+
+.book-console .ansi-color-228    { color: #ffff66 }
+
+.book-console .ansi-color-19     { color: #000099 }
+
+.book-console .ansi-color-55     { color: #330099 }
+
+.book-console .ansi-color-91     { color: #660099 }
+
+.book-console .ansi-color-127    { color: #990099 }
+
+.book-console .ansi-color-163    { color: #cc0099 }
+
+.book-console .ansi-color-199    { color: #ff0099 }
+
+.book-console .ansi-color-25     { color: #003399 }
+
+.book-console .ansi-color-61     { color: #333399 }
+
+.book-console .ansi-color-97     { color: #663399 }
+
+.book-console .ansi-color-133    { color: #993399 }
+
+.book-console .ansi-color-169    { color: #cc3399 }
+
+.book-console .ansi-color-205    { color: #ff3399 }
+
+.book-console .ansi-color-31     { color: #006699 }
+
+.book-console .ansi-color-67     { color: #336699 }
+
+.book-console .ansi-color-103    { color: #666699 }
+
+.book-console .ansi-color-139    { color: #996699 }
+
+.book-console .ansi-color-175    { color: #cc6699 }
+
+.book-console .ansi-color-211    { color: #ff6699 }
+
+.book-console .ansi-color-37     { color: #009999 }
+
+.book-console .ansi-color-73     { color: #339999 }
+
+.book-console .ansi-color-109    { color: #669999 }
+
+.book-console .ansi-color-145    { color: #999999 }
+
+.book-console .ansi-color-181    { color: #cc9999 }
+
+.book-console .ansi-color-217    { color: #ff9999 }
+
+.book-console .ansi-color-43     { color: #00cc99 }
+
+.book-console .ansi-color-79     { color: #33cc99 }
+
+.book-console .ansi-color-115    { color: #66cc99 }
+
+.book-console .ansi-color-151    { color: #99cc99 }
+
+.book-console .ansi-color-187    { color: #cccc99 }
+
+.book-console .ansi-color-223    { color: #ffcc99 }
+
+.book-console .ansi-color-49     { color: #00ff99 }
+
+.book-console .ansi-color-85     { color: #33ff99 }
+
+.book-console .ansi-color-121    { color: #66ff99 }
+
+.book-console .ansi-color-157    { color: #99ff99 }
+
+.book-console .ansi-color-193    { color: #ccff99 }
+
+.book-console .ansi-color-229    { color: #ffff99 }
+
+.book-console .ansi-color-20     { color: #0000cc }
+
+.book-console .ansi-color-56     { color: #3300cc }
+
+.book-console .ansi-color-92     { color: #6600cc }
+
+.book-console .ansi-color-128    { color: #9900cc }
+
+.book-console .ansi-color-164    { color: #cc00cc }
+
+.book-console .ansi-color-200    { color: #ff00cc }
+
+.book-console .ansi-color-26     { color: #0033cc }
+
+.book-console .ansi-color-62     { color: #3333cc }
+
+.book-console .ansi-color-98     { color: #6633cc }
+
+.book-console .ansi-color-134    { color: #9933cc }
+
+.book-console .ansi-color-170    { color: #cc33cc }
+
+.book-console .ansi-color-206    { color: #ff33cc }
+
+.book-console .ansi-color-32     { color: #0066cc }
+
+.book-console .ansi-color-68     { color: #3366cc }
+
+.book-console .ansi-color-104    { color: #6666cc }
+
+.book-console .ansi-color-140    { color: #9966cc }
+
+.book-console .ansi-color-176    { color: #cc66cc }
+
+.book-console .ansi-color-212    { color: #ff66cc }
+
+.book-console .ansi-color-38     { color: #0099cc }
+
+.book-console .ansi-color-74     { color: #3399cc }
+
+.book-console .ansi-color-110    { color: #6699cc }
+
+.book-console .ansi-color-146    { color: #9999cc }
+
+.book-console .ansi-color-182    { color: #cc99cc }
+
+.book-console .ansi-color-218    { color: #ff99cc }
+
+.book-console .ansi-color-44     { color: #00cccc }
+
+.book-console .ansi-color-80     { color: #33cccc }
+
+.book-console .ansi-color-116    { color: #66cccc }
+
+.book-console .ansi-color-152    { color: #99cccc }
+
+.book-console .ansi-color-188    { color: #cccccc }
+
+.book-console .ansi-color-224    { color: #ffcccc }
+
+.book-console .ansi-color-50     { color: #00ffcc }
+
+.book-console .ansi-color-86     { color: #33ffcc }
+
+.book-console .ansi-color-122    { color: #66ffcc }
+
+.book-console .ansi-color-158    { color: #99ffcc }
+
+.book-console .ansi-color-194    { color: #ccffcc }
+
+.book-console .ansi-color-230    { color: #ffffcc }
+
+.book-console .ansi-color-21     { color: #0000ff }
+
+.book-console .ansi-color-57     { color: #3300ff }
+
+.book-console .ansi-color-93     { color: #6600ff }
+
+.book-console .ansi-color-129    { color: #9900ff }
+
+.book-console .ansi-color-165    { color: #cc00ff }
+
+.book-console .ansi-color-201    { color: #ff00ff }
+
+.book-console .ansi-color-27     { color: #0033ff }
+
+.book-console .ansi-color-63     { color: #3333ff }
+
+.book-console .ansi-color-99     { color: #6633ff }
+
+.book-console .ansi-color-135    { color: #9933ff }
+
+.book-console .ansi-color-171    { color: #cc33ff }
+
+.book-console .ansi-color-207    { color: #ff33ff }
+
+.book-console .ansi-color-33     { color: #0066ff }
+
+.book-console .ansi-color-69     { color: #3366ff }
+
+.book-console .ansi-color-105    { color: #6666ff }
+
+.book-console .ansi-color-141    { color: #9966ff }
+
+.book-console .ansi-color-177    { color: #cc66ff }
+
+.book-console .ansi-color-213    { color: #ff66ff }
+
+.book-console .ansi-color-39     { color: #0099ff }
+
+.book-console .ansi-color-75     { color: #3399ff }
+
+.book-console .ansi-color-111    { color: #6699ff }
+
+.book-console .ansi-color-147    { color: #9999ff }
+
+.book-console .ansi-color-183    { color: #cc99ff }
+
+.book-console .ansi-color-219    { color: #ff99ff }
+
+.book-console .ansi-color-45     { color: #00ccff }
+
+.book-console .ansi-color-81     { color: #33ccff }
+
+.book-console .ansi-color-117    { color: #66ccff }
+
+.book-console .ansi-color-153    { color: #99ccff }
+
+.book-console .ansi-color-189    { color: #ccccff }
+
+.book-console .ansi-color-225    { color: #ffccff }
+
+.book-console .ansi-color-51     { color: #00ffff }
+
+.book-console .ansi-color-87     { color: #33ffff }
+
+.book-console .ansi-color-123    { color: #66ffff }
+
+.book-console .ansi-color-159    { color: #99ffff }
+
+.book-console .ansi-color-195    { color: #ccffff }
+
+.book-console .ansi-color-231    { color: #ffffff }
+
+.book-console .ansi-color-232    { color: #0a0a0a }
+
+.book-console .ansi-color-233    { color: #141414 }
+
+.book-console .ansi-color-234    { color: #1f1f1f }
+
+.book-console .ansi-color-235    { color: #292929 }
+
+.book-console .ansi-color-236    { color: #333333 }
+
+.book-console .ansi-color-237    { color: #3d3d3d }
+
+.book-console .ansi-color-238    { color: #474747 }
+
+.book-console .ansi-color-239    { color: #525252 }
+
+.book-console .ansi-color-240    { color: #5c5c5c }
+
+.book-console .ansi-color-241    { color: #666666 }
+
+.book-console .ansi-color-242    { color: #707070 }
+
+.book-console .ansi-color-243    { color: #7a7a7a }
+
+.book-console .ansi-color-244    { color: #858585 }
+
+.book-console .ansi-color-245    { color: #8f8f8f }
+
+.book-console .ansi-color-246    { color: #999999 }
+
+.book-console .ansi-color-247    { color: #a3a3a3 }
+
+.book-console .ansi-color-248    { color: #adadad }
+
+.book-console .ansi-color-249    { color: #b8b8b8 }
+
+.book-console .ansi-color-250    { color: #c2c2c2 }
+
+.book-console .ansi-color-251    { color: #cccccc }
+
+.book-console .ansi-color-252    { color: #d6d6d6 }
+
+.book-console .ansi-color-253    { color: #e0e0e0 }
+
+.book-console .ansi-color-254    { color: #ebebeb }
+
+.book-console .ansi-color-255    { color: #f5f5f5 }
+
+.book-console .ansi-bg-color-16  { background-color: #000000 }
+
+.book-console .ansi-bg-color-52  { background-color: #330000 }
+
+.book-console .ansi-bg-color-88  { background-color: #660000 }
+
+.book-console .ansi-bg-color-124 { background-color: #990000 }
+
+.book-console .ansi-bg-color-160 { background-color: #cc0000 }
+
+.book-console .ansi-bg-color-196 { background-color: #ff0000 }
+
+.book-console .ansi-bg-color-22  { background-color: #003300 }
+
+.book-console .ansi-bg-color-58  { background-color: #333300 }
+
+.book-console .ansi-bg-color-94  { background-color: #663300 }
+
+.book-console .ansi-bg-color-130 { background-color: #993300 }
+
+.book-console .ansi-bg-color-166 { background-color: #cc3300 }
+
+.book-console .ansi-bg-color-202 { background-color: #ff3300 }
+
+.book-console .ansi-bg-color-28  { background-color: #006600 }
+
+.book-console .ansi-bg-color-64  { background-color: #336600 }
+
+.book-console .ansi-bg-color-100 { background-color: #666600 }
+
+.book-console .ansi-bg-color-136 { background-color: #996600 }
+
+.book-console .ansi-bg-color-172 { background-color: #cc6600 }
+
+.book-console .ansi-bg-color-208 { background-color: #ff6600 }
+
+.book-console .ansi-bg-color-34  { background-color: #009900 }
+
+.book-console .ansi-bg-color-70  { background-color: #339900 }
+
+.book-console .ansi-bg-color-106 { background-color: #669900 }
+
+.book-console .ansi-bg-color-142 { background-color: #999900 }
+
+.book-console .ansi-bg-color-178 { background-color: #cc9900 }
+
+.book-console .ansi-bg-color-214 { background-color: #ff9900 }
+
+.book-console .ansi-bg-color-40  { background-color: #00cc00 }
+
+.book-console .ansi-bg-color-76  { background-color: #33cc00 }
+
+.book-console .ansi-bg-color-112 { background-color: #66cc00 }
+
+.book-console .ansi-bg-color-148 { background-color: #99cc00 }
+
+.book-console .ansi-bg-color-184 { background-color: #cccc00 }
+
+.book-console .ansi-bg-color-220 { background-color: #ffcc00 }
+
+.book-console .ansi-bg-color-46  { background-color: #00ff00 }
+
+.book-console .ansi-bg-color-82  { background-color: #33ff00 }
+
+.book-console .ansi-bg-color-118 { background-color: #66ff00 }
+
+.book-console .ansi-bg-color-154 { background-color: #99ff00 }
+
+.book-console .ansi-bg-color-190 { background-color: #ccff00 }
+
+.book-console .ansi-bg-color-226 { background-color: #ffff00 }
+
+.book-console .ansi-bg-color-17  { background-color: #000033 }
+
+.book-console .ansi-bg-color-53  { background-color: #330033 }
+
+.book-console .ansi-bg-color-89  { background-color: #660033 }
+
+.book-console .ansi-bg-color-125 { background-color: #990033 }
+
+.book-console .ansi-bg-color-161 { background-color: #cc0033 }
+
+.book-console .ansi-bg-color-197 { background-color: #ff0033 }
+
+.book-console .ansi-bg-color-23  { background-color: #003333 }
+
+.book-console .ansi-bg-color-59  { background-color: #333333 }
+
+.book-console .ansi-bg-color-95  { background-color: #663333 }
+
+.book-console .ansi-bg-color-131 { background-color: #993333 }
+
+.book-console .ansi-bg-color-167 { background-color: #cc3333 }
+
+.book-console .ansi-bg-color-203 { background-color: #ff3333 }
+
+.book-console .ansi-bg-color-29  { background-color: #006633 }
+
+.book-console .ansi-bg-color-65  { background-color: #336633 }
+
+.book-console .ansi-bg-color-101 { background-color: #666633 }
+
+.book-console .ansi-bg-color-137 { background-color: #996633 }
+
+.book-console .ansi-bg-color-173 { background-color: #cc6633 }
+
+.book-console .ansi-bg-color-209 { background-color: #ff6633 }
+
+.book-console .ansi-bg-color-35  { background-color: #009933 }
+
+.book-console .ansi-bg-color-71  { background-color: #339933 }
+
+.book-console .ansi-bg-color-107 { background-color: #669933 }
+
+.book-console .ansi-bg-color-143 { background-color: #999933 }
+
+.book-console .ansi-bg-color-179 { background-color: #cc9933 }
+
+.book-console .ansi-bg-color-215 { background-color: #ff9933 }
+
+.book-console .ansi-bg-color-41  { background-color: #00cc33 }
+
+.book-console .ansi-bg-color-77  { background-color: #33cc33 }
+
+.book-console .ansi-bg-color-113 { background-color: #66cc33 }
+
+.book-console .ansi-bg-color-149 { background-color: #99cc33 }
+
+.book-console .ansi-bg-color-185 { background-color: #cccc33 }
+
+.book-console .ansi-bg-color-221 { background-color: #ffcc33 }
+
+.book-console .ansi-bg-color-47  { background-color: #00ff33 }
+
+.book-console .ansi-bg-color-83  { background-color: #33ff33 }
+
+.book-console .ansi-bg-color-119 { background-color: #66ff33 }
+
+.book-console .ansi-bg-color-155 { background-color: #99ff33 }
+
+.book-console .ansi-bg-color-191 { background-color: #ccff33 }
+
+.book-console .ansi-bg-color-227 { background-color: #ffff33 }
+
+.book-console .ansi-bg-color-18  { background-color: #000066 }
+
+.book-console .ansi-bg-color-54  { background-color: #330066 }
+
+.book-console .ansi-bg-color-90  { background-color: #660066 }
+
+.book-console .ansi-bg-color-126 { background-color: #990066 }
+
+.book-console .ansi-bg-color-162 { background-color: #cc0066 }
+
+.book-console .ansi-bg-color-198 { background-color: #ff0066 }
+
+.book-console .ansi-bg-color-24  { background-color: #003366 }
+
+.book-console .ansi-bg-color-60  { background-color: #333366 }
+
+.book-console .ansi-bg-color-96  { background-color: #663366 }
+
+.book-console .ansi-bg-color-132 { background-color: #993366 }
+
+.book-console .ansi-bg-color-168 { background-color: #cc3366 }
+
+.book-console .ansi-bg-color-204 { background-color: #ff3366 }
+
+.book-console .ansi-bg-color-30  { background-color: #006666 }
+
+.book-console .ansi-bg-color-66  { background-color: #336666 }
+
+.book-console .ansi-bg-color-102 { background-color: #666666 }
+
+.book-console .ansi-bg-color-138 { background-color: #996666 }
+
+.book-console .ansi-bg-color-174 { background-color: #cc6666 }
+
+.book-console .ansi-bg-color-210 { background-color: #ff6666 }
+
+.book-console .ansi-bg-color-36  { background-color: #009966 }
+
+.book-console .ansi-bg-color-72  { background-color: #339966 }
+
+.book-console .ansi-bg-color-108 { background-color: #669966 }
+
+.book-console .ansi-bg-color-144 { background-color: #999966 }
+
+.book-console .ansi-bg-color-180 { background-color: #cc9966 }
+
+.book-console .ansi-bg-color-216 { background-color: #ff9966 }
+
+.book-console .ansi-bg-color-42  { background-color: #00cc66 }
+
+.book-console .ansi-bg-color-78  { background-color: #33cc66 }
+
+.book-console .ansi-bg-color-114 { background-color: #66cc66 }
+
+.book-console .ansi-bg-color-150 { background-color: #99cc66 }
+
+.book-console .ansi-bg-color-186 { background-color: #cccc66 }
+
+.book-console .ansi-bg-color-222 { background-color: #ffcc66 }
+
+.book-console .ansi-bg-color-48  { background-color: #00ff66 }
+
+.book-console .ansi-bg-color-84  { background-color: #33ff66 }
+
+.book-console .ansi-bg-color-120 { background-color: #66ff66 }
+
+.book-console .ansi-bg-color-156 { background-color: #99ff66 }
+
+.book-console .ansi-bg-color-192 { background-color: #ccff66 }
+
+.book-console .ansi-bg-color-228 { background-color: #ffff66 }
+
+.book-console .ansi-bg-color-19  { background-color: #000099 }
+
+.book-console .ansi-bg-color-55  { background-color: #330099 }
+
+.book-console .ansi-bg-color-91  { background-color: #660099 }
+
+.book-console .ansi-bg-color-127 { background-color: #990099 }
+
+.book-console .ansi-bg-color-163 { background-color: #cc0099 }
+
+.book-console .ansi-bg-color-199 { background-color: #ff0099 }
+
+.book-console .ansi-bg-color-25  { background-color: #003399 }
+
+.book-console .ansi-bg-color-61  { background-color: #333399 }
+
+.book-console .ansi-bg-color-97  { background-color: #663399 }
+
+.book-console .ansi-bg-color-133 { background-color: #993399 }
+
+.book-console .ansi-bg-color-169 { background-color: #cc3399 }
+
+.book-console .ansi-bg-color-205 { background-color: #ff3399 }
+
+.book-console .ansi-bg-color-31  { background-color: #006699 }
+
+.book-console .ansi-bg-color-67  { background-color: #336699 }
+
+.book-console .ansi-bg-color-103 { background-color: #666699 }
+
+.book-console .ansi-bg-color-139 { background-color: #996699 }
+
+.book-console .ansi-bg-color-175 { background-color: #cc6699 }
+
+.book-console .ansi-bg-color-211 { background-color: #ff6699 }
+
+.book-console .ansi-bg-color-37  { background-color: #009999 }
+
+.book-console .ansi-bg-color-73  { background-color: #339999 }
+
+.book-console .ansi-bg-color-109 { background-color: #669999 }
+
+.book-console .ansi-bg-color-145 { background-color: #999999 }
+
+.book-console .ansi-bg-color-181 { background-color: #cc9999 }
+
+.book-console .ansi-bg-color-217 { background-color: #ff9999 }
+
+.book-console .ansi-bg-color-43  { background-color: #00cc99 }
+
+.book-console .ansi-bg-color-79  { background-color: #33cc99 }
+
+.book-console .ansi-bg-color-115 { background-color: #66cc99 }
+
+.book-console .ansi-bg-color-151 { background-color: #99cc99 }
+
+.book-console .ansi-bg-color-187 { background-color: #cccc99 }
+
+.book-console .ansi-bg-color-223 { background-color: #ffcc99 }
+
+.book-console .ansi-bg-color-49  { background-color: #00ff99 }
+
+.book-console .ansi-bg-color-85  { background-color: #33ff99 }
+
+.book-console .ansi-bg-color-121 { background-color: #66ff99 }
+
+.book-console .ansi-bg-color-157 { background-color: #99ff99 }
+
+.book-console .ansi-bg-color-193 { background-color: #ccff99 }
+
+.book-console .ansi-bg-color-229 { background-color: #ffff99 }
+
+.book-console .ansi-bg-color-20  { background-color: #0000cc }
+
+.book-console .ansi-bg-color-56  { background-color: #3300cc }
+
+.book-console .ansi-bg-color-92  { background-color: #6600cc }
+
+.book-console .ansi-bg-color-128 { background-color: #9900cc }
+
+.book-console .ansi-bg-color-164 { background-color: #cc00cc }
+
+.book-console .ansi-bg-color-200 { background-color: #ff00cc }
+
+.book-console .ansi-bg-color-26  { background-color: #0033cc }
+
+.book-console .ansi-bg-color-62  { background-color: #3333cc }
+
+.book-console .ansi-bg-color-98  { background-color: #6633cc }
+
+.book-console .ansi-bg-color-134 { background-color: #9933cc }
+
+.book-console .ansi-bg-color-170 { background-color: #cc33cc }
+
+.book-console .ansi-bg-color-206 { background-color: #ff33cc }
+
+.book-console .ansi-bg-color-32  { background-color: #0066cc }
+
+.book-console .ansi-bg-color-68  { background-color: #3366cc }
+
+.book-console .ansi-bg-color-104 { background-color: #6666cc }
+
+.book-console .ansi-bg-color-140 { background-color: #9966cc }
+
+.book-console .ansi-bg-color-176 { background-color: #cc66cc }
+
+.book-console .ansi-bg-color-212 { background-color: #ff66cc }
+
+.book-console .ansi-bg-color-38  { background-color: #0099cc }
+
+.book-console .ansi-bg-color-74  { background-color: #3399cc }
+
+.book-console .ansi-bg-color-110 { background-color: #6699cc }
+
+.book-console .ansi-bg-color-146 { background-color: #9999cc }
+
+.book-console .ansi-bg-color-182 { background-color: #cc99cc }
+
+.book-console .ansi-bg-color-218 { background-color: #ff99cc }
+
+.book-console .ansi-bg-color-44  { background-color: #00cccc }
+
+.book-console .ansi-bg-color-80  { background-color: #33cccc }
+
+.book-console .ansi-bg-color-116 { background-color: #66cccc }
+
+.book-console .ansi-bg-color-152 { background-color: #99cccc }
+
+.book-console .ansi-bg-color-188 { background-color: #cccccc }
+
+.book-console .ansi-bg-color-224 { background-color: #ffcccc }
+
+.book-console .ansi-bg-color-50  { background-color: #00ffcc }
+
+.book-console .ansi-bg-color-86  { background-color: #33ffcc }
+
+.book-console .ansi-bg-color-122 { background-color: #66ffcc }
+
+.book-console .ansi-bg-color-158 { background-color: #99ffcc }
+
+.book-console .ansi-bg-color-194 { background-color: #ccffcc }
+
+.book-console .ansi-bg-color-230 { background-color: #ffffcc }
+
+.book-console .ansi-bg-color-21  { background-color: #0000ff }
+
+.book-console .ansi-bg-color-57  { background-color: #3300ff }
+
+.book-console .ansi-bg-color-93  { background-color: #6600ff }
+
+.book-console .ansi-bg-color-129 { background-color: #9900ff }
+
+.book-console .ansi-bg-color-165 { background-color: #cc00ff }
+
+.book-console .ansi-bg-color-201 { background-color: #ff00ff }
+
+.book-console .ansi-bg-color-27  { background-color: #0033ff }
+
+.book-console .ansi-bg-color-63  { background-color: #3333ff }
+
+.book-console .ansi-bg-color-99  { background-color: #6633ff }
+
+.book-console .ansi-bg-color-135 { background-color: #9933ff }
+
+.book-console .ansi-bg-color-171 { background-color: #cc33ff }
+
+.book-console .ansi-bg-color-207 { background-color: #ff33ff }
+
+.book-console .ansi-bg-color-33  { background-color: #0066ff }
+
+.book-console .ansi-bg-color-69  { background-color: #3366ff }
+
+.book-console .ansi-bg-color-105 { background-color: #6666ff }
+
+.book-console .ansi-bg-color-141 { background-color: #9966ff }
+
+.book-console .ansi-bg-color-177 { background-color: #cc66ff }
+
+.book-console .ansi-bg-color-213 { background-color: #ff66ff }
+
+.book-console .ansi-bg-color-39  { background-color: #0099ff }
+
+.book-console .ansi-bg-color-75  { background-color: #3399ff }
+
+.book-console .ansi-bg-color-111 { background-color: #6699ff }
+
+.book-console .ansi-bg-color-147 { background-color: #9999ff }
+
+.book-console .ansi-bg-color-183 { background-color: #cc99ff }
+
+.book-console .ansi-bg-color-219 { background-color: #ff99ff }
+
+.book-console .ansi-bg-color-45  { background-color: #00ccff }
+
+.book-console .ansi-bg-color-81  { background-color: #33ccff }
+
+.book-console .ansi-bg-color-117 { background-color: #66ccff }
+
+.book-console .ansi-bg-color-153 { background-color: #99ccff }
+
+.book-console .ansi-bg-color-189 { background-color: #ccccff }
+
+.book-console .ansi-bg-color-225 { background-color: #ffccff }
+
+.book-console .ansi-bg-color-51  { background-color: #00ffff }
+
+.book-console .ansi-bg-color-87  { background-color: #33ffff }
+
+.book-console .ansi-bg-color-123 { background-color: #66ffff }
+
+.book-console .ansi-bg-color-159 { background-color: #99ffff }
+
+.book-console .ansi-bg-color-195 { background-color: #ccffff }
+
+.book-console .ansi-bg-color-231 { background-color: #ffffff }
+
+.book-console .ansi-bg-color-232 { background-color: #0a0a0a }
+
+.book-console .ansi-bg-color-233 { background-color: #141414 }
+
+.book-console .ansi-bg-color-234 { background-color: #1f1f1f }
+
+.book-console .ansi-bg-color-235 { background-color: #292929 }
+
+.book-console .ansi-bg-color-236 { background-color: #333333 }
+
+.book-console .ansi-bg-color-237 { background-color: #3d3d3d }
+
+.book-console .ansi-bg-color-238 { background-color: #474747 }
+
+.book-console .ansi-bg-color-239 { background-color: #525252 }
+
+.book-console .ansi-bg-color-240 { background-color: #5c5c5c }
+
+.book-console .ansi-bg-color-241 { background-color: #666666 }
+
+.book-console .ansi-bg-color-242 { background-color: #707070 }
+
+.book-console .ansi-bg-color-243 { background-color: #7a7a7a }
+
+.book-console .ansi-bg-color-244 { background-color: #858585 }
+
+.book-console .ansi-bg-color-245 { background-color: #8f8f8f }
+
+.book-console .ansi-bg-color-246 { background-color: #999999 }
+
+.book-console .ansi-bg-color-247 { background-color: #a3a3a3 }
+
+.book-console .ansi-bg-color-248 { background-color: #adadad }
+
+.book-console .ansi-bg-color-249 { background-color: #b8b8b8 }
+
+.book-console .ansi-bg-color-250 { background-color: #c2c2c2 }
+
+.book-console .ansi-bg-color-251 { background-color: #cccccc }
+
+.book-console .ansi-bg-color-252 { background-color: #d6d6d6 }
+
+.book-console .ansi-bg-color-253 { background-color: #e0e0e0 }
+
+.book-console .ansi-bg-color-254 { background-color: #ebebeb }
+
+.book-console .ansi-bg-color-255 { background-color: #f5f5f5 }
+
+</style>
+
+
+
+<link rel="stylesheet" href="book.css">
+<meta property="og:title" content="5&nbsp; Pipe – R for Social Science">
+<meta property="og:description" content="An introduction to R and the tidyverse for social-science research.">
+<meta property="og:site_name" content="R for Social Science">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dplyr-grammar.html">Manipulate tables</a></li><li class="breadcrumb-item"><a href="./dplyr-pipe.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pipe</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R for Social Science</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/socimh/R4SS/tree/main/en/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Get started with R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects in R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manipulate tables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-grammar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Select columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-sort.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sort observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-pipe.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pipe</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-select.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Select observations</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Explore variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-skim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Inspect a dataset</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-tab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Tabulate data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-stat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summarize data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./missing-values.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Missing values</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Visualize data</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manipulate variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Create variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./group-variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Group variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./numeric-logical.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logicals and numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./categorical-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Strings and factors</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./text-dates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Dates and times</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lists.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">List columns</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manage datasets</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Import and export</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-group.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Group and reshape</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-join.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Combine datasets</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Nested datasets</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyze variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ggplot2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./statistical-tests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Statistical tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">OLS regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logit-probit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Logit and probit</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fixed-effects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Fixed effects</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Programming</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./basic-operations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Basic expressions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tibble.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gss-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">GSS data</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#sec-country-pipe" id="toc-sec-country-pipe" class="nav-link active" data-scroll-target="#sec-country-pipe"><span class="header-section-number">5.1</span> Read the pipe as “and then”</a></li>
+  <li><a href="#sec-country-pipe-steps" id="toc-sec-country-pipe-steps" class="nav-link" data-scroll-target="#sec-country-pipe-steps"><span class="header-section-number">5.2</span> Connect familiar table operations</a></li>
+  <li><a href="#sec-country-pipe-check" id="toc-sec-country-pipe-check" class="nav-link" data-scroll-target="#sec-country-pipe-check"><span class="header-section-number">5.3</span> Save and check results</a></li>
+  <li><a href="#sec-selectvars-pull" id="toc-sec-selectvars-pull" class="nav-link" data-scroll-target="#sec-selectvars-pull"><span class="header-section-number">5.4</span> Optional: a table or a vector?</a></li>
+  <li><a href="#sec-pipe-export" id="toc-sec-pipe-export" class="nav-link" data-scroll-target="#sec-pipe-export"><span class="header-section-number">5.5</span> Export the finished table</a></li>
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">5.6</span> Review</a></li>
+  <li><a href="#sec-pipe-core-exercises" id="toc-sec-pipe-core-exercises" class="nav-link" data-scroll-target="#sec-pipe-core-exercises"><span class="header-section-number">5.7</span> Exercises</a></li>
+  <li><a href="#worked-answers" id="toc-worked-answers" class="nav-link" data-scroll-target="#worked-answers">Worked answers</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dplyr-grammar.html">Manipulate tables</a></li><li class="breadcrumb-item"><a href="./dplyr-pipe.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pipe</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-pipe" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pipe</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>We can now choose columns, move them, and order rows. A research task often needs several of these operations. The pipe, <code>|&gt;</code>, connects them so that the code follows the order in which we describe the work.</p>
+<p>By the end of this chapter, you will be able to read a pipeline, save its result, and inspect a step when the result is unexpected. The operations themselves come from <a href="dplyr-grammar.html" class="quarto-xref"><span>Chapter 3</span></a> and <a href="dplyr-sort.html" class="quarto-xref"><span>Chapter 4</span></a>.</p>
+<section id="sec-country-pipe" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="sec-country-pipe"><span class="header-section-number">5.1</span> Read the pipe as “and then”</h2>
+<p>Imagine making French fries: wash the potatoes, cut them into sticks, dry them, fry them, and season. The following blocks use imaginary functions to illustrate the syntax, so read them as a recipe rather than code to run. We could nest the steps inside one another:</p>
+<pre class="text"><code>season(fry(dry(cut_into_sticks(wash(potatoes))), oil = TRUE))</code></pre>
+<p>To follow the steps, we must read from the inside outward. The <strong>pipe</strong>, written <code>|&gt;</code>, puts them in the order we would naturally describe them:</p>
+<pre class="text"><code>potatoes |&gt;
+  wash() |&gt;
+  cut_into_sticks() |&gt;
+  dry() |&gt;
+  fry(oil = TRUE) |&gt;
+  season()</code></pre>
+<p>Read <code>|&gt;</code> as <strong>“and then”</strong>: each step passes its result to the next. In <code>fry(oil = TRUE)</code>, the pipe supplies the potatoes, while <code>oil = TRUE</code> specifies an option. The function calls describe the operations; the pipes pass each result onward.</p>
+<div id="sec-pipe-first-argument">
+
+</div>
+<p>The native pipe <code>|&gt;</code> is part of R (since R 4.1). For the calls in this chapter, it supplies the result on its left as the first argument of the function on its right. Other arguments, such as <code>oil = TRUE</code> in the recipe, stay inside that function’s parentheses.</p>
+<p>Data preparation follows the same pattern. We can connect the table operations from the preceding chapters, passing a whole table from one step to the next.</p>
+</section>
+<section id="sec-country-pipe-steps" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="sec-country-pipe-steps"><span class="header-section-number">5.2</span> Connect familiar table operations</h2>
+<p>Load the packages to work with the same <code>lifeexp</code> country data as before:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidystata)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Suppose we want country names, life expectancy, and water coverage, with water beside the name and high life expectancy first. We can retain each intermediate table:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>country_view <span class="ot">&lt;-</span> <span class="fu">select</span>(lifeexp, country, lexp, safewater)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>water_beside_name <span class="ot">&lt;-</span> <span class="fu">relocate</span>(country_view, safewater, <span class="at">.after =</span> country)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>country_ranked <span class="ot">&lt;-</span> <span class="fu">arrange</span>(water_beside_name, <span class="fu">desc</span>(lexp), country)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(country_ranked)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 6 × 3</span>
+  country     safewater  lexp
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>           <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> Canada             99    79
+<span class="ansi ansi-color-250">2</span> France             97    79
+<span class="ansi ansi-color-250">3</span> Italy              95    79
+<span class="ansi ansi-color-250">4</span> Spain              99    79
+<span class="ansi ansi-color-250">5</span> Sweden             99    79
+<span class="ansi ansi-color-250">6</span> Switzerland        97    79
+</code></pre></div>
+</div>
+<p>These functions take a table and return another table. That shared structure lets one operation use the result of the previous operation, like pieces with compatible connectors. The columns and row order can change while the result remains a tibble.</p>
+<p>Each line uses the result from the preceding line. Every stored table remains available with all 68 countries; <code>head()</code> returns six rows for inspection. These intermediate names are useful when checking the work.</p>
+<p>As in the nested French fries recipe, we can supply one function’s result directly as another’s argument:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>country_nested <span class="ot">&lt;-</span> <span class="fu">arrange</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(<span class="fu">select</span>(lifeexp, country, lexp, safewater), safewater, <span class="at">.after =</span> country),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">desc</span>(lexp), country</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(country_nested)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 6 × 3</span>
+  country     safewater  lexp
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>           <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> Canada             99    79
+<span class="ansi ansi-color-250">2</span> France             97    79
+<span class="ansi ansi-color-250">3</span> Italy              95    79
+<span class="ansi ansi-color-250">4</span> Spain              99    79
+<span class="ansi ansi-color-250">5</span> Sweden             99    79
+<span class="ansi ansi-color-250">6</span> Switzerland        97    79
+</code></pre></div>
+</div>
+<p>Read this from the inside outward, just as with the nested recipe: select, move, then sort. It returns the same table as the named steps, but the order of operations is less visible.</p>
+<p>Apply the first-argument rule to a familiar selection. These calls mean the same thing:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(lifeexp, country, lexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 68 × 2</span>
+   country                 lexp
+   <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>                  <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250"> 1</span> Albania                   74
+<span class="ansi ansi-color-250"> 2</span> Armenia                   70
+<span class="ansi ansi-color-250"> 3</span> Austria                   78
+<span class="ansi ansi-color-250"> 4</span> Azerbaijan                64
+<span class="ansi ansi-color-250"> 5</span> Belarus                   68
+<span class="ansi ansi-color-250"> 6</span> Belgium                   77
+<span class="ansi ansi-color-250"> 7</span> Bosnia and Herzegovina    74
+<span class="ansi ansi-color-250"> 8</span> Bulgaria                  71
+<span class="ansi ansi-color-250"> 9</span> Croatia                   72
+<span class="ansi ansi-color-250">10</span> Czechia                   75
+<span class="ansi ansi-color-246"># ℹ 58 more rows</span>
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, lexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 68 × 2</span>
+   country                 lexp
+   <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>                  <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250"> 1</span> Albania                   74
+<span class="ansi ansi-color-250"> 2</span> Armenia                   70
+<span class="ansi ansi-color-250"> 3</span> Austria                   78
+<span class="ansi ansi-color-250"> 4</span> Azerbaijan                64
+<span class="ansi ansi-color-250"> 5</span> Belarus                   68
+<span class="ansi ansi-color-250"> 6</span> Belgium                   77
+<span class="ansi ansi-color-250"> 7</span> Bosnia and Herzegovina    74
+<span class="ansi ansi-color-250"> 8</span> Bulgaria                  71
+<span class="ansi ansi-color-250"> 9</span> Croatia                   72
+<span class="ansi ansi-color-250">10</span> Czechia                   75
+<span class="ansi ansi-color-246"># ℹ 58 more rows</span>
+</code></pre></div>
+</div>
+<p>In the second form, the pipe supplies <code>lifeexp</code>, so we do not write that argument again inside <code>select()</code>. Column names still identify the variables to keep. Use this connection to express our three steps as one pipeline:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>country_pipeline <span class="ot">&lt;-</span> lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, lexp, safewater) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(safewater, <span class="at">.after =</span> country) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(lexp), country)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(country_pipeline)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 6 × 3</span>
+  country     safewater  lexp
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>           <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> Canada             99    79
+<span class="ansi ansi-color-250">2</span> France             97    79
+<span class="ansi ansi-color-250">3</span> Italy              95    79
+<span class="ansi ansi-color-250">4</span> Spain              99    79
+<span class="ansi ansi-color-250">5</span> Sweden             99    79
+<span class="ansi ansi-color-250">6</span> Switzerland        97    79
+</code></pre></div>
+</div>
+<p>Read this as: start with <code>lifeexp</code>, keep these columns, move water coverage, and then sort the rows. It returns the same table as the named steps. <code>&lt;-</code> saves the final result; the source stays unchanged. The function calls do the work, while the pipes pass their results onward.</p>
+<section id="keep-a-needed-column-until-its-work-is-done" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="keep-a-needed-column-until-its-work-is-done"><span class="header-section-number">5.2.1</span> Keep a needed column until its work is done</h3>
+<p>Compatible table structure is only part of the requirement: the next step also needs particular columns. Suppose we want country names ordered by income but do not want income in the final table. Sort while <code>gnppc</code> is available, then drop it:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ranked_names <span class="ot">&lt;-</span> lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gnppc), country) <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, lexp)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ranked_names)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 6 × 2</span>
+  country        lexp
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>         <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> Switzerland      79
+<span class="ansi ansi-color-250">2</span> Norway           78
+<span class="ansi ansi-color-250">3</span> Denmark          76
+<span class="ansi ansi-color-250">4</span> United States    77
+<span class="ansi ansi-color-250">5</span> Sweden           79
+<span class="ansi ansi-color-250">6</span> Germany          77
+</code></pre></div>
+</div>
+<p>The result is ordered by income, even though the final display contains only names and life expectancy. Selecting columns preserves that row order. Reversing the steps below intentionally fails:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, lexp) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gnppc), country)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error"><pre class="book-console"><code><span class="ansi ansi-bold ansi-color-3">Error</span> in `arrange()`:
+<span class="ansi ansi-color-6">ℹ</span> In argument: `..1 = gnppc`.
+<span class="ansi ansi-bold">Caused by error:</span>
+<span class="ansi ansi-color-3">!</span> object 'gnppc' not found
+</code></pre></div>
+</div>
+<p>The first result is still a tibble, but it no longer contains <code>gnppc</code>. The later sorting call cannot find its key. Restore that column to the selection, or sort before dropping it, as in the successful version. Moving operations can change whether a pipeline can run even when each step expects a table.</p>
+</section>
+</section>
+<section id="sec-country-pipe-check" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="sec-country-pipe-check"><span class="header-section-number">5.3</span> Save and check results</h2>
+<p>If the result is unexpected, run only the first part and inspect it. Saving an intermediate table gives us something concrete to check:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>first_step <span class="ot">&lt;-</span> lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, lexp, safewater)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ds</span>(first_step)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "country"   "lexp"      "safewater"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(first_step)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 68</code></pre>
+</div>
+</div>
+<p>There should be three named columns and 68 countries. If those are correct, add the next operation. <code>ds()</code> returns column names as text, not another country table. The next operation must accept the object it receives.</p>
+<div id="compatible-inputs-and-outputs">
+
+</div>
+<p>Now suppose we want to put <code>lexp</code> first, but insert <code>ds()</code> before <code>relocate()</code>. The following pipeline intentionally produces an error:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ds</span>() <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(lexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error"><pre class="book-console"><code><span class="ansi ansi-bold ansi-color-3">Error</span> in `UseMethod()`:
+<span class="ansi ansi-color-3">!</span> no applicable method for 'relocate' applied to an object of class "character"
+</code></pre></div>
+</div>
+<p>The message says that no <code>relocate()</code> method applies to an object of class <code>"character"</code>: this function cannot move columns in the text returned by <code>ds()</code>. To find the problem, stop before the failing call and save the result under a name. This gives us something we can inspect separately:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>column_names <span class="ot">&lt;-</span> lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ds</span>()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>column_names</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "region"    "country"   "popgrowth" "lexp"      "gnppc"     "safewater"</code></pre>
+</div>
+</div>
+<p>The result contains the six column names as text. To check what kind of object we now have, use tidystata’s <code>var_type()</code>. It takes one object and returns a description of its type, without changing it:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var_type</span>(column_names)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+</div>
+<p>The type is <code>"character"</code>. These are text values, not a table with a <code>lexp</code> column. <code>relocate()</code> needs a table, so it cannot continue from this result. To move life expectancy first, use <code>lifeexp |&gt; relocate(lexp)</code> without inserting <code>ds()</code>.</p>
+<p>We can also pipe the names directly into the type check we just used:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ds</span>() <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">var_type</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+</div>
+<p>This returns <code>"character"</code> again. If our goal is instead to count the variables, keep <code>ds()</code> and choose a function that counts text entries. <code>length()</code> counts the elements of a vector; here that means the number of column names:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ds</span>() <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+</div>
+<p>The result is <code>6</code>, one entry per column name. A pipeline can continue after it leaves a tibble, provided the next function accepts the returned object. The pipe passes a result along; it does not convert that result into whatever the next function needs.</p>
+<p>When a pipeline fails, run it up to the step before the error, save that result, and inspect it. Check both its type and its contents against what the next function requires. The intermediate objects from the table workflow are useful for exactly this purpose.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Recognizing older pipes">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Recognizing older pipes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Older tidyverse code often uses <code>%&gt;%</code>, supplied by magrittr and available after loading tidyverse. For these first-argument calls, <code>lifeexp %&gt;% select(country, lexp)</code> gives the same result as <code>lifeexp |&gt; select(country, lexp)</code>. Their advanced rules differ, so check unfamiliar code before replacing one with the other. This book uses <code>|&gt;</code>.</p>
+</div>
+</div>
+</section>
+<section id="sec-selectvars-pull" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="sec-selectvars-pull"><span class="header-section-number">5.4</span> Optional: a table or a vector?</h2>
+<p><code>select()</code> keeps table structure. <code>pull()</code> takes a table and a column name and returns that column as a vector. Compare the same water measurements in both forms:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>water_table <span class="ot">&lt;-</span> <span class="fu">select</span>(lifeexp, safewater)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>water_vector <span class="ot">&lt;-</span> <span class="fu">pull</span>(lifeexp, safewater)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">var_type</span>(water_table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "tibble"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var_type</span>(water_vector)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "double"</code></pre>
+</div>
+</div>
+<p>The results are <code>"tibble"</code> and <code>"double"</code>. Both objects contain the same 68 measurements, with the same order and missing values. Their structures differ: <code>water_table</code> has rows and a named column; <code>water_vector</code> is a sequence of values. The <code>$</code> syntax is another way to extract one column: write the table name, <code>$</code>, and the column name. Thus <code>lifeexp$safewater</code> returns the same vector as <code>pull(lifeexp, safewater)</code>. Neither changes <code>lifeexp</code>. This distinction matters when the next function requires a table, as in <a href="#sec-pipe" class="quarto-xref"><span>Chapter 5</span></a>.</p>
+</section>
+<section id="sec-pipe-export" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="sec-pipe-export"><span class="header-section-number">5.5</span> Export the finished table</h2>
+<p>Assignment retained <code>country_pipeline</code> in the R session. To keep its values outside that session, we will write a file in the <code>r4ss</code> project folder created in <a href="intro.html#sec-first-script" class="quarto-xref"><span>Section 1.1.1</span></a>. First check where R will resolve the filename. <code>getwd()</code> takes no input and returns the current <strong>working directory</strong>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The result should be the full path to your <code>r4ss</code> folder. If it differs, use <code>setwd()</code> with the full path to your own folder in quotation marks. For example, on Windows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/Users/you/Documents/r4ss"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Replace that example path with the actual location of your folder before running it. Use forward slashes in R paths, including on Windows. On macOS or Linux, a full path will usually begin with <code>/</code>. <code>setwd()</code> changes this session’s working directory; it does not create a folder or move files. Run <code>getwd()</code> again to confirm the change. Check this whenever you start a file workflow in a new session.</p>
+<p>A <strong>relative path</strong>, such as <code>"country-ranked.csv"</code>, is resolved from the working directory. Here it names a file directly inside that folder. A full path identifies the location without relying on the working directory.</p>
+<p><code>write_csv()</code> takes a table and a quoted file path, and writes a comma-separated-values (CSV) file. It overwrites an existing file at that path; choose another name if you want to keep an earlier result. Run:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(country_pipeline, <span class="st">"country-ranked.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Writing normally produces no printed table. To check whether a file exists at the path, <code>file.exists()</code> takes that path and returns <code>TRUE</code> or <code>FALSE</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.exists</span>(<span class="st">"country-ranked.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Expect <code>TRUE</code>. If the result is <code>FALSE</code>, check the write error, spelling, and working directory. Existence alone does not establish that the contents are correct. <code>read_csv()</code> reads the file and returns a table; save that result under a new name:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>saved_countries <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"country-ranked.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The import message reports the detected column types. The names should be text and the two measurements numeric. Now inspect the returned table with familiar checks:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(saved_countries)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ds</span>(saved_countries)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(saved_countries)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Expect 68 rows, with <code>country</code>, <code>safewater</code>, and <code>lexp</code> in that order, and the same country ordering as <code>country_pipeline</code>. The preview alone shows only the first six rows; the row count checks the full result. CSV preserves values, column names, and missing entries, but not the variable labels attached to the original columns. The later file lesson in <a href="dplyr-skim.html#sec-first-export" class="quarto-xref"><span>Section 7.8</span></a> develops this distinction further.</p>
+<p>The same workflow applies to your own data: import a file into a named table, inspect it, select and order the relevant columns and rows, and export the result under a new filename. Use your file’s variable names in place of the ones shown here. Keep the import and transformation commands in your script so that the saved result can be reproduced.</p>
+</section>
+<section id="review" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="review"><span class="header-section-number">5.6</span> Review</h2>
+<ul>
+<li><code>|&gt;</code> passes a result to the next function; <code>&lt;-</code> saves a result under a name.</li>
+<li><code>select()</code>, <code>relocate()</code>, and <code>arrange()</code> can be connected through named steps, nested calls, or pipes to express the same procedure.</li>
+<li><code>ds()</code> and <code>nrow()</code> check intermediate tables; retain required columns until their operations are complete.</li>
+<li><code>var_type()</code> identifies an object’s kind and <code>length()</code> counts vector entries; each function must accept the preceding result.</li>
+<li><strong>Optional:</strong> <code>pull()</code> extracts a vector, while <code>select()</code> keeps a table.</li>
+<li><code>getwd()</code> and <code>setwd()</code> locate the file workflow; relative paths begin at the working directory.</li>
+<li><code>write_csv()</code> exports, <code>file.exists()</code> checks the path, and <code>read_csv()</code> imports for inspection.</li>
+</ul>
+<p>Next, <a href="dplyr-select.html" class="quarto-xref"><span>Chapter 6</span></a> selects rows, beginning with the same country data. The GSS survey and its one-time preparation are introduced later in <a href="dplyr-tab.html" class="quarto-xref"><span>Chapter 8</span></a>.</p>
+</section>
+<section id="sec-pipe-core-exercises" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="sec-pipe-core-exercises"><span class="header-section-number">5.7</span> Exercises</h2>
+<ol type="1">
+<li><p>Rewrite the income workflow from <a href="dplyr-sort.html" class="quarto-xref"><span>Chapter 4</span></a> as one pipeline: keep <code>country</code>, <code>gnppc</code>, and <code>lexp</code>, then order by descending income and country name. Save it as <code>income_pipeline</code>.</p></li>
+<li><p>Inspect the column names and row count after just its selection step. Diagnose two failures: inserting <code>ds()</code> before <code>arrange()</code>, and selecting only <code>country</code> and <code>lexp</code> before sorting by <code>gnppc</code>. Explain how the problems differ and correct each one.</p></li>
+<li><p>Export <code>income_pipeline</code> to <code>"income-ranked.csv"</code> in your checked project folder, check that the file exists, read it as <code>saved_income</code>, and inspect its first rows, column names, and total row count. What would you check if existence returned <code>FALSE</code>? Why does <code>TRUE</code> still require inspection of the contents?</p></li>
+<li><p><strong>Optional: A table or a vector?</strong> Run <code>select(lifeexp, lexp)</code> and <code>pull(lifeexp, lexp)</code>. Use <code>var_type()</code> on each result. Which result keeps table structure? Which is the same kind of object as <code>lifeexp$lexp</code>?</p></li>
+</ol>
+</section>
+<section id="worked-answers" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="worked-answers">Worked answers</h2>
+<p>Run the chapter package setup first.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="1. Connect the income workflow">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Connect the income workflow
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>income_pipeline <span class="ot">&lt;-</span> lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, gnppc, lexp) <span class="sc">|&gt;</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gnppc), country)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(income_pipeline)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 6 × 3</span>
+  country       gnppc  lexp
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>         <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> Switzerland   <span class="ansi ansi-underline">46</span>650    79
+<span class="ansi ansi-color-250">2</span> Norway        <span class="ansi ansi-underline">36</span>120    78
+<span class="ansi ansi-color-250">3</span> Denmark       <span class="ansi ansi-underline">33</span>440    76
+<span class="ansi ansi-color-250">4</span> United States <span class="ansi ansi-underline">32</span>040    77
+<span class="ansi ansi-color-250">5</span> Sweden        <span class="ansi ansi-underline">31</span>100    79
+<span class="ansi ansi-color-250">6</span> Germany       <span class="ansi ansi-underline">28</span>070    77
+</code></pre></div>
+</div>
+<p>All 68 countries remain. The last row has unavailable income; saving the result does not change <code>lifeexp</code>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="2. Inspect an intermediate result">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Inspect an intermediate result
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>income_columns <span class="ot">&lt;-</span> lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, gnppc, lexp)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ds</span>(income_columns)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "country" "gnppc"   "lexp"   </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(income_columns)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 68</code></pre>
+</div>
+</div>
+<p>The names are <code>country</code>, <code>gnppc</code>, and <code>lexp</code>; the row count is 68. A name listing is character data with no country records to sort, so remove <code>ds()</code> from the table pipeline and inspect names separately. A table containing only <code>country</code> and <code>lexp</code> has the right structure but lacks the <code>gnppc</code> key. Keep that key until after sorting:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>income_names <span class="ot">&lt;-</span> lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gnppc), country) <span class="sc">|&gt;</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, lexp)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(income_names)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 6 × 2</span>
+  country        lexp
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>         <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> Switzerland      79
+<span class="ansi ansi-color-250">2</span> Norway           78
+<span class="ansi ansi-color-250">3</span> Denmark          76
+<span class="ansi ansi-color-250">4</span> United States    77
+<span class="ansi ansi-color-250">5</span> Sweden           79
+<span class="ansi ansi-color-250">6</span> Germany          77
+</code></pre></div>
+</div>
+<p>This returns names and life expectancy in income order. The two failures concern different requirements: object type and available columns.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="3. Export and read back">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Export and read back
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Recreate <code>income_pipeline</code> if needed, then check your working directory. Change it using your actual project path if necessary, as taught above. These commands write a file, so choose a new filename if this one already contains work you want to retain.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>income_pipeline <span class="ot">&lt;-</span> lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, gnppc, lexp) <span class="sc">|&gt;</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gnppc), country)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(income_pipeline, <span class="st">"income-ranked.csv"</span>)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">file.exists</span>(<span class="st">"income-ranked.csv"</span>)</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>saved_income <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"income-ranked.csv"</span>)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(saved_income)</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ds</span>(saved_income)</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(saved_income)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Expect <code>TRUE</code>, the three names <code>country</code>, <code>gnppc</code>, and <code>lexp</code>, and 68 rows in income order. If the check returns <code>FALSE</code>, inspect any write error, the filename, and the working directory. A <code>TRUE</code> result establishes only existence; reading and inspecting the file checks whether it contains the intended table. Missing income remains missing and sorts after known values.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="4. A table or a vector?">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>A table or a vector?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>life_table <span class="ot">&lt;-</span> <span class="fu">select</span>(lifeexp, lexp)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>life_vector <span class="ot">&lt;-</span> <span class="fu">pull</span>(lifeexp, lexp)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">var_type</span>(life_table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "tibble"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var_type</span>(life_vector)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "double"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var_type</span>(lifeexp<span class="sc">$</span>lexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "double"</code></pre>
+</div>
+</div>
+<p>The results are <code>"tibble"</code>, <code>"double"</code>, and <code>"double"</code>. <code>select()</code> keeps a table with the named column <code>lexp</code>. <code>pull()</code> and <code>$</code> return the same numeric vector, with one entry per country. None of these operations changes <code>lifeexp</code>.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/socimh\.github\.io\/R4SS\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./dplyr-sort.html" class="pagination-link" aria-label="Sort observations">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sort observations</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./dplyr-select.html" class="pagination-link" aria-label="Select observations">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Select observations</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Minghong Shen · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

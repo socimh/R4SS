@@ -1,0 +1,2618 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="An introduction to R and the tidyverse for social-science research.">
+
+<title>21&nbsp; Nested datasets – R for Social Science</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ggplot2.html" rel="next">
+<link href="./dplyr-join.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-684a58a98314b78713c09aa595376ac7.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d86a9a5236ec3aeeb637912bee877918.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-684a58a98314b78713c09aa595376ac7.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-f762a00757381c0eb797acef47548461.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-49a5c3d3f733115b1117348003870229.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f762a00757381c0eb797acef47548461.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+.book-console .ansi-bold         { font-weight: bold;             }
+
+.book-console .ansi-italic       { font-style: italic;            }
+
+.book-console .ansi-underline    { text-decoration: underline;    }
+
+.book-console .ansi-blink        { text-decoration: blink;        }
+
+.book-console .ansi-hide         { visibility: hidden;            }
+
+.book-console .ansi-crossedout   { text-decoration: line-through; }
+
+.book-console .ansi-link:hover   { text-decoration: underline;    }
+
+.book-console .ansi-color-0      { color: #000000 }
+
+.book-console .ansi-color-1      { color: #cd0000 }
+
+.book-console .ansi-color-2      { color: #00cd00 }
+
+.book-console .ansi-color-3      { color: #cdcd00 }
+
+.book-console .ansi-color-4      { color: #0000ee }
+
+.book-console .ansi-color-5      { color: #cd00cd }
+
+.book-console .ansi-color-6      { color: #00cdcd }
+
+.book-console .ansi-color-7      { color: #e5e5e5 }
+
+.book-console .ansi-color-8      { color: #7f7f7f }
+
+.book-console .ansi-color-9      { color: #ff0000 }
+
+.book-console .ansi-color-10     { color: #00ff00 }
+
+.book-console .ansi-color-11     { color: #ffff00 }
+
+.book-console .ansi-color-12     { color: #5c5cff }
+
+.book-console .ansi-color-13     { color: #ff00ff }
+
+.book-console .ansi-color-14     { color: #00ffff }
+
+.book-console .ansi-color-15     { color: #ffffff }
+
+.book-console .ansi-bg-color-0   { background-color: #000000 }
+
+.book-console .ansi-bg-color-1   { background-color: #cd0000 }
+
+.book-console .ansi-bg-color-2   { background-color: #00cd00 }
+
+.book-console .ansi-bg-color-3   { background-color: #cdcd00 }
+
+.book-console .ansi-bg-color-4   { background-color: #0000ee }
+
+.book-console .ansi-bg-color-5   { background-color: #cd00cd }
+
+.book-console .ansi-bg-color-6   { background-color: #00cdcd }
+
+.book-console .ansi-bg-color-7   { background-color: #e5e5e5 }
+
+.book-console .ansi-bg-color-8   { background-color: #7f7f7f }
+
+.book-console .ansi-bg-color-9   { background-color: #ff0000 }
+
+.book-console .ansi-bg-color-10  { background-color: #00ff00 }
+
+.book-console .ansi-bg-color-11  { background-color: #ffff00 }
+
+.book-console .ansi-bg-color-12  { background-color: #5c5cff }
+
+.book-console .ansi-bg-color-13  { background-color: #ff00ff }
+
+.book-console .ansi-bg-color-14  { background-color: #00ffff }
+
+.book-console .ansi-bg-color-15  { background-color: #ffffff }
+
+.book-console .ansi-color-16     { color: #000000 }
+
+.book-console .ansi-color-52     { color: #330000 }
+
+.book-console .ansi-color-88     { color: #660000 }
+
+.book-console .ansi-color-124    { color: #990000 }
+
+.book-console .ansi-color-160    { color: #cc0000 }
+
+.book-console .ansi-color-196    { color: #ff0000 }
+
+.book-console .ansi-color-22     { color: #003300 }
+
+.book-console .ansi-color-58     { color: #333300 }
+
+.book-console .ansi-color-94     { color: #663300 }
+
+.book-console .ansi-color-130    { color: #993300 }
+
+.book-console .ansi-color-166    { color: #cc3300 }
+
+.book-console .ansi-color-202    { color: #ff3300 }
+
+.book-console .ansi-color-28     { color: #006600 }
+
+.book-console .ansi-color-64     { color: #336600 }
+
+.book-console .ansi-color-100    { color: #666600 }
+
+.book-console .ansi-color-136    { color: #996600 }
+
+.book-console .ansi-color-172    { color: #cc6600 }
+
+.book-console .ansi-color-208    { color: #ff6600 }
+
+.book-console .ansi-color-34     { color: #009900 }
+
+.book-console .ansi-color-70     { color: #339900 }
+
+.book-console .ansi-color-106    { color: #669900 }
+
+.book-console .ansi-color-142    { color: #999900 }
+
+.book-console .ansi-color-178    { color: #cc9900 }
+
+.book-console .ansi-color-214    { color: #ff9900 }
+
+.book-console .ansi-color-40     { color: #00cc00 }
+
+.book-console .ansi-color-76     { color: #33cc00 }
+
+.book-console .ansi-color-112    { color: #66cc00 }
+
+.book-console .ansi-color-148    { color: #99cc00 }
+
+.book-console .ansi-color-184    { color: #cccc00 }
+
+.book-console .ansi-color-220    { color: #ffcc00 }
+
+.book-console .ansi-color-46     { color: #00ff00 }
+
+.book-console .ansi-color-82     { color: #33ff00 }
+
+.book-console .ansi-color-118    { color: #66ff00 }
+
+.book-console .ansi-color-154    { color: #99ff00 }
+
+.book-console .ansi-color-190    { color: #ccff00 }
+
+.book-console .ansi-color-226    { color: #ffff00 }
+
+.book-console .ansi-color-17     { color: #000033 }
+
+.book-console .ansi-color-53     { color: #330033 }
+
+.book-console .ansi-color-89     { color: #660033 }
+
+.book-console .ansi-color-125    { color: #990033 }
+
+.book-console .ansi-color-161    { color: #cc0033 }
+
+.book-console .ansi-color-197    { color: #ff0033 }
+
+.book-console .ansi-color-23     { color: #003333 }
+
+.book-console .ansi-color-59     { color: #333333 }
+
+.book-console .ansi-color-95     { color: #663333 }
+
+.book-console .ansi-color-131    { color: #993333 }
+
+.book-console .ansi-color-167    { color: #cc3333 }
+
+.book-console .ansi-color-203    { color: #ff3333 }
+
+.book-console .ansi-color-29     { color: #006633 }
+
+.book-console .ansi-color-65     { color: #336633 }
+
+.book-console .ansi-color-101    { color: #666633 }
+
+.book-console .ansi-color-137    { color: #996633 }
+
+.book-console .ansi-color-173    { color: #cc6633 }
+
+.book-console .ansi-color-209    { color: #ff6633 }
+
+.book-console .ansi-color-35     { color: #009933 }
+
+.book-console .ansi-color-71     { color: #339933 }
+
+.book-console .ansi-color-107    { color: #669933 }
+
+.book-console .ansi-color-143    { color: #999933 }
+
+.book-console .ansi-color-179    { color: #cc9933 }
+
+.book-console .ansi-color-215    { color: #ff9933 }
+
+.book-console .ansi-color-41     { color: #00cc33 }
+
+.book-console .ansi-color-77     { color: #33cc33 }
+
+.book-console .ansi-color-113    { color: #66cc33 }
+
+.book-console .ansi-color-149    { color: #99cc33 }
+
+.book-console .ansi-color-185    { color: #cccc33 }
+
+.book-console .ansi-color-221    { color: #ffcc33 }
+
+.book-console .ansi-color-47     { color: #00ff33 }
+
+.book-console .ansi-color-83     { color: #33ff33 }
+
+.book-console .ansi-color-119    { color: #66ff33 }
+
+.book-console .ansi-color-155    { color: #99ff33 }
+
+.book-console .ansi-color-191    { color: #ccff33 }
+
+.book-console .ansi-color-227    { color: #ffff33 }
+
+.book-console .ansi-color-18     { color: #000066 }
+
+.book-console .ansi-color-54     { color: #330066 }
+
+.book-console .ansi-color-90     { color: #660066 }
+
+.book-console .ansi-color-126    { color: #990066 }
+
+.book-console .ansi-color-162    { color: #cc0066 }
+
+.book-console .ansi-color-198    { color: #ff0066 }
+
+.book-console .ansi-color-24     { color: #003366 }
+
+.book-console .ansi-color-60     { color: #333366 }
+
+.book-console .ansi-color-96     { color: #663366 }
+
+.book-console .ansi-color-132    { color: #993366 }
+
+.book-console .ansi-color-168    { color: #cc3366 }
+
+.book-console .ansi-color-204    { color: #ff3366 }
+
+.book-console .ansi-color-30     { color: #006666 }
+
+.book-console .ansi-color-66     { color: #336666 }
+
+.book-console .ansi-color-102    { color: #666666 }
+
+.book-console .ansi-color-138    { color: #996666 }
+
+.book-console .ansi-color-174    { color: #cc6666 }
+
+.book-console .ansi-color-210    { color: #ff6666 }
+
+.book-console .ansi-color-36     { color: #009966 }
+
+.book-console .ansi-color-72     { color: #339966 }
+
+.book-console .ansi-color-108    { color: #669966 }
+
+.book-console .ansi-color-144    { color: #999966 }
+
+.book-console .ansi-color-180    { color: #cc9966 }
+
+.book-console .ansi-color-216    { color: #ff9966 }
+
+.book-console .ansi-color-42     { color: #00cc66 }
+
+.book-console .ansi-color-78     { color: #33cc66 }
+
+.book-console .ansi-color-114    { color: #66cc66 }
+
+.book-console .ansi-color-150    { color: #99cc66 }
+
+.book-console .ansi-color-186    { color: #cccc66 }
+
+.book-console .ansi-color-222    { color: #ffcc66 }
+
+.book-console .ansi-color-48     { color: #00ff66 }
+
+.book-console .ansi-color-84     { color: #33ff66 }
+
+.book-console .ansi-color-120    { color: #66ff66 }
+
+.book-console .ansi-color-156    { color: #99ff66 }
+
+.book-console .ansi-color-192    { color: #ccff66 }
+
+.book-console .ansi-color-228    { color: #ffff66 }
+
+.book-console .ansi-color-19     { color: #000099 }
+
+.book-console .ansi-color-55     { color: #330099 }
+
+.book-console .ansi-color-91     { color: #660099 }
+
+.book-console .ansi-color-127    { color: #990099 }
+
+.book-console .ansi-color-163    { color: #cc0099 }
+
+.book-console .ansi-color-199    { color: #ff0099 }
+
+.book-console .ansi-color-25     { color: #003399 }
+
+.book-console .ansi-color-61     { color: #333399 }
+
+.book-console .ansi-color-97     { color: #663399 }
+
+.book-console .ansi-color-133    { color: #993399 }
+
+.book-console .ansi-color-169    { color: #cc3399 }
+
+.book-console .ansi-color-205    { color: #ff3399 }
+
+.book-console .ansi-color-31     { color: #006699 }
+
+.book-console .ansi-color-67     { color: #336699 }
+
+.book-console .ansi-color-103    { color: #666699 }
+
+.book-console .ansi-color-139    { color: #996699 }
+
+.book-console .ansi-color-175    { color: #cc6699 }
+
+.book-console .ansi-color-211    { color: #ff6699 }
+
+.book-console .ansi-color-37     { color: #009999 }
+
+.book-console .ansi-color-73     { color: #339999 }
+
+.book-console .ansi-color-109    { color: #669999 }
+
+.book-console .ansi-color-145    { color: #999999 }
+
+.book-console .ansi-color-181    { color: #cc9999 }
+
+.book-console .ansi-color-217    { color: #ff9999 }
+
+.book-console .ansi-color-43     { color: #00cc99 }
+
+.book-console .ansi-color-79     { color: #33cc99 }
+
+.book-console .ansi-color-115    { color: #66cc99 }
+
+.book-console .ansi-color-151    { color: #99cc99 }
+
+.book-console .ansi-color-187    { color: #cccc99 }
+
+.book-console .ansi-color-223    { color: #ffcc99 }
+
+.book-console .ansi-color-49     { color: #00ff99 }
+
+.book-console .ansi-color-85     { color: #33ff99 }
+
+.book-console .ansi-color-121    { color: #66ff99 }
+
+.book-console .ansi-color-157    { color: #99ff99 }
+
+.book-console .ansi-color-193    { color: #ccff99 }
+
+.book-console .ansi-color-229    { color: #ffff99 }
+
+.book-console .ansi-color-20     { color: #0000cc }
+
+.book-console .ansi-color-56     { color: #3300cc }
+
+.book-console .ansi-color-92     { color: #6600cc }
+
+.book-console .ansi-color-128    { color: #9900cc }
+
+.book-console .ansi-color-164    { color: #cc00cc }
+
+.book-console .ansi-color-200    { color: #ff00cc }
+
+.book-console .ansi-color-26     { color: #0033cc }
+
+.book-console .ansi-color-62     { color: #3333cc }
+
+.book-console .ansi-color-98     { color: #6633cc }
+
+.book-console .ansi-color-134    { color: #9933cc }
+
+.book-console .ansi-color-170    { color: #cc33cc }
+
+.book-console .ansi-color-206    { color: #ff33cc }
+
+.book-console .ansi-color-32     { color: #0066cc }
+
+.book-console .ansi-color-68     { color: #3366cc }
+
+.book-console .ansi-color-104    { color: #6666cc }
+
+.book-console .ansi-color-140    { color: #9966cc }
+
+.book-console .ansi-color-176    { color: #cc66cc }
+
+.book-console .ansi-color-212    { color: #ff66cc }
+
+.book-console .ansi-color-38     { color: #0099cc }
+
+.book-console .ansi-color-74     { color: #3399cc }
+
+.book-console .ansi-color-110    { color: #6699cc }
+
+.book-console .ansi-color-146    { color: #9999cc }
+
+.book-console .ansi-color-182    { color: #cc99cc }
+
+.book-console .ansi-color-218    { color: #ff99cc }
+
+.book-console .ansi-color-44     { color: #00cccc }
+
+.book-console .ansi-color-80     { color: #33cccc }
+
+.book-console .ansi-color-116    { color: #66cccc }
+
+.book-console .ansi-color-152    { color: #99cccc }
+
+.book-console .ansi-color-188    { color: #cccccc }
+
+.book-console .ansi-color-224    { color: #ffcccc }
+
+.book-console .ansi-color-50     { color: #00ffcc }
+
+.book-console .ansi-color-86     { color: #33ffcc }
+
+.book-console .ansi-color-122    { color: #66ffcc }
+
+.book-console .ansi-color-158    { color: #99ffcc }
+
+.book-console .ansi-color-194    { color: #ccffcc }
+
+.book-console .ansi-color-230    { color: #ffffcc }
+
+.book-console .ansi-color-21     { color: #0000ff }
+
+.book-console .ansi-color-57     { color: #3300ff }
+
+.book-console .ansi-color-93     { color: #6600ff }
+
+.book-console .ansi-color-129    { color: #9900ff }
+
+.book-console .ansi-color-165    { color: #cc00ff }
+
+.book-console .ansi-color-201    { color: #ff00ff }
+
+.book-console .ansi-color-27     { color: #0033ff }
+
+.book-console .ansi-color-63     { color: #3333ff }
+
+.book-console .ansi-color-99     { color: #6633ff }
+
+.book-console .ansi-color-135    { color: #9933ff }
+
+.book-console .ansi-color-171    { color: #cc33ff }
+
+.book-console .ansi-color-207    { color: #ff33ff }
+
+.book-console .ansi-color-33     { color: #0066ff }
+
+.book-console .ansi-color-69     { color: #3366ff }
+
+.book-console .ansi-color-105    { color: #6666ff }
+
+.book-console .ansi-color-141    { color: #9966ff }
+
+.book-console .ansi-color-177    { color: #cc66ff }
+
+.book-console .ansi-color-213    { color: #ff66ff }
+
+.book-console .ansi-color-39     { color: #0099ff }
+
+.book-console .ansi-color-75     { color: #3399ff }
+
+.book-console .ansi-color-111    { color: #6699ff }
+
+.book-console .ansi-color-147    { color: #9999ff }
+
+.book-console .ansi-color-183    { color: #cc99ff }
+
+.book-console .ansi-color-219    { color: #ff99ff }
+
+.book-console .ansi-color-45     { color: #00ccff }
+
+.book-console .ansi-color-81     { color: #33ccff }
+
+.book-console .ansi-color-117    { color: #66ccff }
+
+.book-console .ansi-color-153    { color: #99ccff }
+
+.book-console .ansi-color-189    { color: #ccccff }
+
+.book-console .ansi-color-225    { color: #ffccff }
+
+.book-console .ansi-color-51     { color: #00ffff }
+
+.book-console .ansi-color-87     { color: #33ffff }
+
+.book-console .ansi-color-123    { color: #66ffff }
+
+.book-console .ansi-color-159    { color: #99ffff }
+
+.book-console .ansi-color-195    { color: #ccffff }
+
+.book-console .ansi-color-231    { color: #ffffff }
+
+.book-console .ansi-color-232    { color: #0a0a0a }
+
+.book-console .ansi-color-233    { color: #141414 }
+
+.book-console .ansi-color-234    { color: #1f1f1f }
+
+.book-console .ansi-color-235    { color: #292929 }
+
+.book-console .ansi-color-236    { color: #333333 }
+
+.book-console .ansi-color-237    { color: #3d3d3d }
+
+.book-console .ansi-color-238    { color: #474747 }
+
+.book-console .ansi-color-239    { color: #525252 }
+
+.book-console .ansi-color-240    { color: #5c5c5c }
+
+.book-console .ansi-color-241    { color: #666666 }
+
+.book-console .ansi-color-242    { color: #707070 }
+
+.book-console .ansi-color-243    { color: #7a7a7a }
+
+.book-console .ansi-color-244    { color: #858585 }
+
+.book-console .ansi-color-245    { color: #8f8f8f }
+
+.book-console .ansi-color-246    { color: #999999 }
+
+.book-console .ansi-color-247    { color: #a3a3a3 }
+
+.book-console .ansi-color-248    { color: #adadad }
+
+.book-console .ansi-color-249    { color: #b8b8b8 }
+
+.book-console .ansi-color-250    { color: #c2c2c2 }
+
+.book-console .ansi-color-251    { color: #cccccc }
+
+.book-console .ansi-color-252    { color: #d6d6d6 }
+
+.book-console .ansi-color-253    { color: #e0e0e0 }
+
+.book-console .ansi-color-254    { color: #ebebeb }
+
+.book-console .ansi-color-255    { color: #f5f5f5 }
+
+.book-console .ansi-bg-color-16  { background-color: #000000 }
+
+.book-console .ansi-bg-color-52  { background-color: #330000 }
+
+.book-console .ansi-bg-color-88  { background-color: #660000 }
+
+.book-console .ansi-bg-color-124 { background-color: #990000 }
+
+.book-console .ansi-bg-color-160 { background-color: #cc0000 }
+
+.book-console .ansi-bg-color-196 { background-color: #ff0000 }
+
+.book-console .ansi-bg-color-22  { background-color: #003300 }
+
+.book-console .ansi-bg-color-58  { background-color: #333300 }
+
+.book-console .ansi-bg-color-94  { background-color: #663300 }
+
+.book-console .ansi-bg-color-130 { background-color: #993300 }
+
+.book-console .ansi-bg-color-166 { background-color: #cc3300 }
+
+.book-console .ansi-bg-color-202 { background-color: #ff3300 }
+
+.book-console .ansi-bg-color-28  { background-color: #006600 }
+
+.book-console .ansi-bg-color-64  { background-color: #336600 }
+
+.book-console .ansi-bg-color-100 { background-color: #666600 }
+
+.book-console .ansi-bg-color-136 { background-color: #996600 }
+
+.book-console .ansi-bg-color-172 { background-color: #cc6600 }
+
+.book-console .ansi-bg-color-208 { background-color: #ff6600 }
+
+.book-console .ansi-bg-color-34  { background-color: #009900 }
+
+.book-console .ansi-bg-color-70  { background-color: #339900 }
+
+.book-console .ansi-bg-color-106 { background-color: #669900 }
+
+.book-console .ansi-bg-color-142 { background-color: #999900 }
+
+.book-console .ansi-bg-color-178 { background-color: #cc9900 }
+
+.book-console .ansi-bg-color-214 { background-color: #ff9900 }
+
+.book-console .ansi-bg-color-40  { background-color: #00cc00 }
+
+.book-console .ansi-bg-color-76  { background-color: #33cc00 }
+
+.book-console .ansi-bg-color-112 { background-color: #66cc00 }
+
+.book-console .ansi-bg-color-148 { background-color: #99cc00 }
+
+.book-console .ansi-bg-color-184 { background-color: #cccc00 }
+
+.book-console .ansi-bg-color-220 { background-color: #ffcc00 }
+
+.book-console .ansi-bg-color-46  { background-color: #00ff00 }
+
+.book-console .ansi-bg-color-82  { background-color: #33ff00 }
+
+.book-console .ansi-bg-color-118 { background-color: #66ff00 }
+
+.book-console .ansi-bg-color-154 { background-color: #99ff00 }
+
+.book-console .ansi-bg-color-190 { background-color: #ccff00 }
+
+.book-console .ansi-bg-color-226 { background-color: #ffff00 }
+
+.book-console .ansi-bg-color-17  { background-color: #000033 }
+
+.book-console .ansi-bg-color-53  { background-color: #330033 }
+
+.book-console .ansi-bg-color-89  { background-color: #660033 }
+
+.book-console .ansi-bg-color-125 { background-color: #990033 }
+
+.book-console .ansi-bg-color-161 { background-color: #cc0033 }
+
+.book-console .ansi-bg-color-197 { background-color: #ff0033 }
+
+.book-console .ansi-bg-color-23  { background-color: #003333 }
+
+.book-console .ansi-bg-color-59  { background-color: #333333 }
+
+.book-console .ansi-bg-color-95  { background-color: #663333 }
+
+.book-console .ansi-bg-color-131 { background-color: #993333 }
+
+.book-console .ansi-bg-color-167 { background-color: #cc3333 }
+
+.book-console .ansi-bg-color-203 { background-color: #ff3333 }
+
+.book-console .ansi-bg-color-29  { background-color: #006633 }
+
+.book-console .ansi-bg-color-65  { background-color: #336633 }
+
+.book-console .ansi-bg-color-101 { background-color: #666633 }
+
+.book-console .ansi-bg-color-137 { background-color: #996633 }
+
+.book-console .ansi-bg-color-173 { background-color: #cc6633 }
+
+.book-console .ansi-bg-color-209 { background-color: #ff6633 }
+
+.book-console .ansi-bg-color-35  { background-color: #009933 }
+
+.book-console .ansi-bg-color-71  { background-color: #339933 }
+
+.book-console .ansi-bg-color-107 { background-color: #669933 }
+
+.book-console .ansi-bg-color-143 { background-color: #999933 }
+
+.book-console .ansi-bg-color-179 { background-color: #cc9933 }
+
+.book-console .ansi-bg-color-215 { background-color: #ff9933 }
+
+.book-console .ansi-bg-color-41  { background-color: #00cc33 }
+
+.book-console .ansi-bg-color-77  { background-color: #33cc33 }
+
+.book-console .ansi-bg-color-113 { background-color: #66cc33 }
+
+.book-console .ansi-bg-color-149 { background-color: #99cc33 }
+
+.book-console .ansi-bg-color-185 { background-color: #cccc33 }
+
+.book-console .ansi-bg-color-221 { background-color: #ffcc33 }
+
+.book-console .ansi-bg-color-47  { background-color: #00ff33 }
+
+.book-console .ansi-bg-color-83  { background-color: #33ff33 }
+
+.book-console .ansi-bg-color-119 { background-color: #66ff33 }
+
+.book-console .ansi-bg-color-155 { background-color: #99ff33 }
+
+.book-console .ansi-bg-color-191 { background-color: #ccff33 }
+
+.book-console .ansi-bg-color-227 { background-color: #ffff33 }
+
+.book-console .ansi-bg-color-18  { background-color: #000066 }
+
+.book-console .ansi-bg-color-54  { background-color: #330066 }
+
+.book-console .ansi-bg-color-90  { background-color: #660066 }
+
+.book-console .ansi-bg-color-126 { background-color: #990066 }
+
+.book-console .ansi-bg-color-162 { background-color: #cc0066 }
+
+.book-console .ansi-bg-color-198 { background-color: #ff0066 }
+
+.book-console .ansi-bg-color-24  { background-color: #003366 }
+
+.book-console .ansi-bg-color-60  { background-color: #333366 }
+
+.book-console .ansi-bg-color-96  { background-color: #663366 }
+
+.book-console .ansi-bg-color-132 { background-color: #993366 }
+
+.book-console .ansi-bg-color-168 { background-color: #cc3366 }
+
+.book-console .ansi-bg-color-204 { background-color: #ff3366 }
+
+.book-console .ansi-bg-color-30  { background-color: #006666 }
+
+.book-console .ansi-bg-color-66  { background-color: #336666 }
+
+.book-console .ansi-bg-color-102 { background-color: #666666 }
+
+.book-console .ansi-bg-color-138 { background-color: #996666 }
+
+.book-console .ansi-bg-color-174 { background-color: #cc6666 }
+
+.book-console .ansi-bg-color-210 { background-color: #ff6666 }
+
+.book-console .ansi-bg-color-36  { background-color: #009966 }
+
+.book-console .ansi-bg-color-72  { background-color: #339966 }
+
+.book-console .ansi-bg-color-108 { background-color: #669966 }
+
+.book-console .ansi-bg-color-144 { background-color: #999966 }
+
+.book-console .ansi-bg-color-180 { background-color: #cc9966 }
+
+.book-console .ansi-bg-color-216 { background-color: #ff9966 }
+
+.book-console .ansi-bg-color-42  { background-color: #00cc66 }
+
+.book-console .ansi-bg-color-78  { background-color: #33cc66 }
+
+.book-console .ansi-bg-color-114 { background-color: #66cc66 }
+
+.book-console .ansi-bg-color-150 { background-color: #99cc66 }
+
+.book-console .ansi-bg-color-186 { background-color: #cccc66 }
+
+.book-console .ansi-bg-color-222 { background-color: #ffcc66 }
+
+.book-console .ansi-bg-color-48  { background-color: #00ff66 }
+
+.book-console .ansi-bg-color-84  { background-color: #33ff66 }
+
+.book-console .ansi-bg-color-120 { background-color: #66ff66 }
+
+.book-console .ansi-bg-color-156 { background-color: #99ff66 }
+
+.book-console .ansi-bg-color-192 { background-color: #ccff66 }
+
+.book-console .ansi-bg-color-228 { background-color: #ffff66 }
+
+.book-console .ansi-bg-color-19  { background-color: #000099 }
+
+.book-console .ansi-bg-color-55  { background-color: #330099 }
+
+.book-console .ansi-bg-color-91  { background-color: #660099 }
+
+.book-console .ansi-bg-color-127 { background-color: #990099 }
+
+.book-console .ansi-bg-color-163 { background-color: #cc0099 }
+
+.book-console .ansi-bg-color-199 { background-color: #ff0099 }
+
+.book-console .ansi-bg-color-25  { background-color: #003399 }
+
+.book-console .ansi-bg-color-61  { background-color: #333399 }
+
+.book-console .ansi-bg-color-97  { background-color: #663399 }
+
+.book-console .ansi-bg-color-133 { background-color: #993399 }
+
+.book-console .ansi-bg-color-169 { background-color: #cc3399 }
+
+.book-console .ansi-bg-color-205 { background-color: #ff3399 }
+
+.book-console .ansi-bg-color-31  { background-color: #006699 }
+
+.book-console .ansi-bg-color-67  { background-color: #336699 }
+
+.book-console .ansi-bg-color-103 { background-color: #666699 }
+
+.book-console .ansi-bg-color-139 { background-color: #996699 }
+
+.book-console .ansi-bg-color-175 { background-color: #cc6699 }
+
+.book-console .ansi-bg-color-211 { background-color: #ff6699 }
+
+.book-console .ansi-bg-color-37  { background-color: #009999 }
+
+.book-console .ansi-bg-color-73  { background-color: #339999 }
+
+.book-console .ansi-bg-color-109 { background-color: #669999 }
+
+.book-console .ansi-bg-color-145 { background-color: #999999 }
+
+.book-console .ansi-bg-color-181 { background-color: #cc9999 }
+
+.book-console .ansi-bg-color-217 { background-color: #ff9999 }
+
+.book-console .ansi-bg-color-43  { background-color: #00cc99 }
+
+.book-console .ansi-bg-color-79  { background-color: #33cc99 }
+
+.book-console .ansi-bg-color-115 { background-color: #66cc99 }
+
+.book-console .ansi-bg-color-151 { background-color: #99cc99 }
+
+.book-console .ansi-bg-color-187 { background-color: #cccc99 }
+
+.book-console .ansi-bg-color-223 { background-color: #ffcc99 }
+
+.book-console .ansi-bg-color-49  { background-color: #00ff99 }
+
+.book-console .ansi-bg-color-85  { background-color: #33ff99 }
+
+.book-console .ansi-bg-color-121 { background-color: #66ff99 }
+
+.book-console .ansi-bg-color-157 { background-color: #99ff99 }
+
+.book-console .ansi-bg-color-193 { background-color: #ccff99 }
+
+.book-console .ansi-bg-color-229 { background-color: #ffff99 }
+
+.book-console .ansi-bg-color-20  { background-color: #0000cc }
+
+.book-console .ansi-bg-color-56  { background-color: #3300cc }
+
+.book-console .ansi-bg-color-92  { background-color: #6600cc }
+
+.book-console .ansi-bg-color-128 { background-color: #9900cc }
+
+.book-console .ansi-bg-color-164 { background-color: #cc00cc }
+
+.book-console .ansi-bg-color-200 { background-color: #ff00cc }
+
+.book-console .ansi-bg-color-26  { background-color: #0033cc }
+
+.book-console .ansi-bg-color-62  { background-color: #3333cc }
+
+.book-console .ansi-bg-color-98  { background-color: #6633cc }
+
+.book-console .ansi-bg-color-134 { background-color: #9933cc }
+
+.book-console .ansi-bg-color-170 { background-color: #cc33cc }
+
+.book-console .ansi-bg-color-206 { background-color: #ff33cc }
+
+.book-console .ansi-bg-color-32  { background-color: #0066cc }
+
+.book-console .ansi-bg-color-68  { background-color: #3366cc }
+
+.book-console .ansi-bg-color-104 { background-color: #6666cc }
+
+.book-console .ansi-bg-color-140 { background-color: #9966cc }
+
+.book-console .ansi-bg-color-176 { background-color: #cc66cc }
+
+.book-console .ansi-bg-color-212 { background-color: #ff66cc }
+
+.book-console .ansi-bg-color-38  { background-color: #0099cc }
+
+.book-console .ansi-bg-color-74  { background-color: #3399cc }
+
+.book-console .ansi-bg-color-110 { background-color: #6699cc }
+
+.book-console .ansi-bg-color-146 { background-color: #9999cc }
+
+.book-console .ansi-bg-color-182 { background-color: #cc99cc }
+
+.book-console .ansi-bg-color-218 { background-color: #ff99cc }
+
+.book-console .ansi-bg-color-44  { background-color: #00cccc }
+
+.book-console .ansi-bg-color-80  { background-color: #33cccc }
+
+.book-console .ansi-bg-color-116 { background-color: #66cccc }
+
+.book-console .ansi-bg-color-152 { background-color: #99cccc }
+
+.book-console .ansi-bg-color-188 { background-color: #cccccc }
+
+.book-console .ansi-bg-color-224 { background-color: #ffcccc }
+
+.book-console .ansi-bg-color-50  { background-color: #00ffcc }
+
+.book-console .ansi-bg-color-86  { background-color: #33ffcc }
+
+.book-console .ansi-bg-color-122 { background-color: #66ffcc }
+
+.book-console .ansi-bg-color-158 { background-color: #99ffcc }
+
+.book-console .ansi-bg-color-194 { background-color: #ccffcc }
+
+.book-console .ansi-bg-color-230 { background-color: #ffffcc }
+
+.book-console .ansi-bg-color-21  { background-color: #0000ff }
+
+.book-console .ansi-bg-color-57  { background-color: #3300ff }
+
+.book-console .ansi-bg-color-93  { background-color: #6600ff }
+
+.book-console .ansi-bg-color-129 { background-color: #9900ff }
+
+.book-console .ansi-bg-color-165 { background-color: #cc00ff }
+
+.book-console .ansi-bg-color-201 { background-color: #ff00ff }
+
+.book-console .ansi-bg-color-27  { background-color: #0033ff }
+
+.book-console .ansi-bg-color-63  { background-color: #3333ff }
+
+.book-console .ansi-bg-color-99  { background-color: #6633ff }
+
+.book-console .ansi-bg-color-135 { background-color: #9933ff }
+
+.book-console .ansi-bg-color-171 { background-color: #cc33ff }
+
+.book-console .ansi-bg-color-207 { background-color: #ff33ff }
+
+.book-console .ansi-bg-color-33  { background-color: #0066ff }
+
+.book-console .ansi-bg-color-69  { background-color: #3366ff }
+
+.book-console .ansi-bg-color-105 { background-color: #6666ff }
+
+.book-console .ansi-bg-color-141 { background-color: #9966ff }
+
+.book-console .ansi-bg-color-177 { background-color: #cc66ff }
+
+.book-console .ansi-bg-color-213 { background-color: #ff66ff }
+
+.book-console .ansi-bg-color-39  { background-color: #0099ff }
+
+.book-console .ansi-bg-color-75  { background-color: #3399ff }
+
+.book-console .ansi-bg-color-111 { background-color: #6699ff }
+
+.book-console .ansi-bg-color-147 { background-color: #9999ff }
+
+.book-console .ansi-bg-color-183 { background-color: #cc99ff }
+
+.book-console .ansi-bg-color-219 { background-color: #ff99ff }
+
+.book-console .ansi-bg-color-45  { background-color: #00ccff }
+
+.book-console .ansi-bg-color-81  { background-color: #33ccff }
+
+.book-console .ansi-bg-color-117 { background-color: #66ccff }
+
+.book-console .ansi-bg-color-153 { background-color: #99ccff }
+
+.book-console .ansi-bg-color-189 { background-color: #ccccff }
+
+.book-console .ansi-bg-color-225 { background-color: #ffccff }
+
+.book-console .ansi-bg-color-51  { background-color: #00ffff }
+
+.book-console .ansi-bg-color-87  { background-color: #33ffff }
+
+.book-console .ansi-bg-color-123 { background-color: #66ffff }
+
+.book-console .ansi-bg-color-159 { background-color: #99ffff }
+
+.book-console .ansi-bg-color-195 { background-color: #ccffff }
+
+.book-console .ansi-bg-color-231 { background-color: #ffffff }
+
+.book-console .ansi-bg-color-232 { background-color: #0a0a0a }
+
+.book-console .ansi-bg-color-233 { background-color: #141414 }
+
+.book-console .ansi-bg-color-234 { background-color: #1f1f1f }
+
+.book-console .ansi-bg-color-235 { background-color: #292929 }
+
+.book-console .ansi-bg-color-236 { background-color: #333333 }
+
+.book-console .ansi-bg-color-237 { background-color: #3d3d3d }
+
+.book-console .ansi-bg-color-238 { background-color: #474747 }
+
+.book-console .ansi-bg-color-239 { background-color: #525252 }
+
+.book-console .ansi-bg-color-240 { background-color: #5c5c5c }
+
+.book-console .ansi-bg-color-241 { background-color: #666666 }
+
+.book-console .ansi-bg-color-242 { background-color: #707070 }
+
+.book-console .ansi-bg-color-243 { background-color: #7a7a7a }
+
+.book-console .ansi-bg-color-244 { background-color: #858585 }
+
+.book-console .ansi-bg-color-245 { background-color: #8f8f8f }
+
+.book-console .ansi-bg-color-246 { background-color: #999999 }
+
+.book-console .ansi-bg-color-247 { background-color: #a3a3a3 }
+
+.book-console .ansi-bg-color-248 { background-color: #adadad }
+
+.book-console .ansi-bg-color-249 { background-color: #b8b8b8 }
+
+.book-console .ansi-bg-color-250 { background-color: #c2c2c2 }
+
+.book-console .ansi-bg-color-251 { background-color: #cccccc }
+
+.book-console .ansi-bg-color-252 { background-color: #d6d6d6 }
+
+.book-console .ansi-bg-color-253 { background-color: #e0e0e0 }
+
+.book-console .ansi-bg-color-254 { background-color: #ebebeb }
+
+.book-console .ansi-bg-color-255 { background-color: #f5f5f5 }
+
+</style>
+
+
+
+<link rel="stylesheet" href="book.css">
+<meta property="og:title" content="21&nbsp; Nested datasets – R for Social Science">
+<meta property="og:description" content="An introduction to R and the tidyverse for social-science research.">
+<meta property="og:site_name" content="R for Social Science">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data-workflow.html">Manage datasets</a></li><li class="breadcrumb-item"><a href="./nests.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Nested datasets</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R for Social Science</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/socimh/R4SS/tree/main/en/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Get started with R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects in R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manipulate tables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-grammar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Select columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-sort.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sort observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-pipe.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pipe</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-select.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Select observations</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Explore variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-skim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Inspect a dataset</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-tab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Tabulate data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-stat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summarize data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./missing-values.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Missing values</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Visualize data</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manipulate variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Create variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./group-variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Group variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./numeric-logical.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logicals and numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./categorical-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Strings and factors</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./text-dates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Dates and times</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lists.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">List columns</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manage datasets</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Import and export</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-group.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Group and reshape</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-join.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Combine datasets</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nests.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Nested datasets</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyze variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ggplot2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./statistical-tests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Statistical tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">OLS regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logit-probit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Logit and probit</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fixed-effects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Fixed effects</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Programming</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./basic-operations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Basic expressions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tibble.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gss-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">GSS data</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-nests-setup" id="toc-sec-nests-setup" class="nav-link active" data-scroll-target="#sec-nests-setup"><span class="header-section-number">21.1</span> Prepare respondent records</a></li>
+  <li><a href="#sec-nests-create" id="toc-sec-nests-create" class="nav-link" data-scroll-target="#sec-nests-create"><span class="header-section-number">21.2</span> Put tables inside a column</a></li>
+  <li><a href="#sec-nests-extract" id="toc-sec-nests-extract" class="nav-link" data-scroll-target="#sec-nests-extract"><span class="header-section-number">21.3</span> Look inside one table</a></li>
+  <li><a href="#sec-nests-map" id="toc-sec-nests-map" class="nav-link" data-scroll-target="#sec-nests-map"><span class="header-section-number">21.4</span> Repeat an operation</a></li>
+  <li><a href="#sec-nests-coverage" id="toc-sec-nests-coverage" class="nav-link" data-scroll-target="#sec-nests-coverage"><span class="header-section-number">21.5</span> Application: schooling coverage</a>
+  <ul class="collapse">
+  <li><a href="#collect-one-numeric-percentage-per-region" id="toc-collect-one-numeric-percentage-per-region" class="nav-link" data-scroll-target="#collect-one-numeric-percentage-per-region"><span class="header-section-number">21.5.1</span> Collect one numeric percentage per region</a></li>
+  <li><a href="#keep-a-complete-coverage-report" id="toc-keep-a-complete-coverage-report" class="nav-link" data-scroll-target="#keep-a-complete-coverage-report"><span class="header-section-number">21.5.2</span> Keep a complete coverage report</a></li>
+  </ul></li>
+  <li><a href="#sec-nests-roundtrip" id="toc-sec-nests-roundtrip" class="nav-link" data-scroll-target="#sec-nests-roundtrip"><span class="header-section-number">21.6</span> Return to respondent rows</a></li>
+  <li><a href="#sec-nests-review" id="toc-sec-nests-review" class="nav-link" data-scroll-target="#sec-nests-review"><span class="header-section-number">21.7</span> Review</a></li>
+  <li><a href="#sec-nests-exercises" id="toc-sec-nests-exercises" class="nav-link" data-scroll-target="#sec-nests-exercises"><span class="header-section-number">21.8</span> Exercises</a></li>
+  <li><a href="#worked-answers" id="toc-worked-answers" class="nav-link" data-scroll-target="#worked-answers">Worked answers</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data-workflow.html">Manage datasets</a></li><li class="breadcrumb-item"><a href="./nests.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Nested datasets</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-nests" class="quarto-section-identifier"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Nested datasets</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>How can we keep a separate respondent table for each region while managing those tables together? A list column can contain whole tables as well as the word vectors introduced in <a href="lists.html" class="quarto-xref"><span>Chapter 17</span></a>. <strong>Nesting</strong> places several respondent tables inside one outer table. We can inspect them, repeat a calculation on each, and return to the original respondent rows when we need them.</p>
+<p>By the end of this chapter, you will be able to:</p>
+<ul>
+<li>Nest respondent records by region and distinguish outer rows from inner rows.</li>
+<li>Extract and inspect a table stored in a list column.</li>
+<li>Apply the same row-count or coverage calculation to each inner table.</li>
+<li>Unnest the records and check that their values, identifiers, and factor levels survive.</li>
+</ul>
+<p>Selection, column creation, and list columns are prerequisites. <a href="dplyr-group.html" class="quarto-xref"><span>Chapter 19</span></a> explains calculations within groups; <a href="dplyr-join.html" class="quarto-xref"><span>Chapter 20</span></a> explains identifier checks. We teach the mapping operations needed here without requiring the optional Programming chapter.</p>
+<section id="sec-nests-setup" class="level2" data-number="21.1">
+<h2 data-number="21.1" class="anchored" data-anchor-id="sec-nests-setup"><span class="header-section-number">21.1</span> Prepare respondent records</h2>
+<p>We return to the prepared 2024 General Social Survey, or GSS. Follow the one-time preparation recipe in <a href="gss-data.html" class="quarto-xref"><span>Appendix A</span></a> and save <code>gss24.rds</code> in your project folder. The file retains respondents with missing answers. Load it with the packages used below:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidystata)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>gss24 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Our application concerns the availability of schooling information across regions. <code>educ</code> records the respondent’s completed years of schooling; <code>maeduc</code> records the mother’s schooling or the younger parent’s schooling for same-sex parents, following the source definition. Both measurements are in years. Below, parent schooling refers to this specific <code>maeduc</code> measure. We need the respondent identifier and region alongside those two measurements. Select them into a new table, leaving <code>gss24</code> unchanged, and inspect its first rows and dimensions:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>schooling <span class="ot">&lt;-</span> gss24 <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, region, educ, maeduc)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(schooling)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 6 × 4</span>
+     id region     educ maeduc
+  <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span>     1 northeast    16     14
+<span class="ansi ansi-color-250">2</span>     2 northeast    16     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-250">3</span>     3 northeast    14     12
+<span class="ansi ansi-color-250">4</span>     4 northeast    12     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-250">5</span>     5 northeast    13     11
+<span class="ansi ansi-color-250">6</span>     6 northeast    14      5
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(schooling)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3986</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(schooling)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isid</span>(schooling, id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr"><pre class="book-console"><code>Variable `id` uniquely identifies the rows.
+</code></pre></div>
+</div>
+<p>There are 3986 respondent rows and 4 columns. <code>isid()</code> confirms that <code>id</code> uniquely identifies rows and has no missing values. It returns the table invisibly without changing it; a repeated or missing identifier would instead raise an error. Keep these identifiers inside the records we will nest. A row total alone could not reveal one duplicated respondent replacing another.</p>
+<p>Before making regional containers, check their membership. <code>count()</code> counts respondent rows in each region, including a missing category if one occurs. <code>sum(is.na(region))</code> separately counts respondents whose region is unavailable:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>schooling <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(region)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 4 × 2</span>
+  region        n
+  <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>
+<span class="ansi ansi-color-250">1</span> northeast   616
+<span class="ansi ansi-color-250">2</span> midwest     923
+<span class="ansi ansi-color-250">3</span> south      <span class="ansi ansi-underline">1</span>553
+<span class="ansi ansi-color-250">4</span> west        894
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(schooling<span class="sc">$</span>region))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>The extract has 4 observed regions and 0 missing region values. The regional counts describe this unweighted sample. We have not excluded respondents with missing schooling, because those respondents are part of the coverage question.</p>
+</section>
+<section id="sec-nests-create" class="level2" data-number="21.2">
+<h2 data-number="21.2" class="anchored" data-anchor-id="sec-nests-create"><span class="header-section-number">21.2</span> Put tables inside a column</h2>
+<p><code>nest()</code> from tidyr takes a table and returns an outer table containing a list column of inner tables. <code>.by = region</code> identifies the column to keep outside: one outer row represents each observed region. The other columns move together into an inner table, stored in a list column named <code>data</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>nested_schooling <span class="ot">&lt;-</span> schooling <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> region)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>nested_schooling</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 4 × 2</span>
+  region    data                
+  <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;list&gt;</span>              
+<span class="ansi ansi-color-250">1</span> northeast <span class="ansi ansi-color-246">&lt;tibble [616 × 3]&gt;</span>  
+<span class="ansi ansi-color-250">2</span> west      <span class="ansi ansi-color-246">&lt;tibble [894 × 3]&gt;</span>  
+<span class="ansi ansi-color-250">3</span> midwest   <span class="ansi ansi-color-246">&lt;tibble [923 × 3]&gt;</span>  
+<span class="ansi ansi-color-250">4</span> south     <span class="ansi ansi-color-246">&lt;tibble [1,553 × 3]&gt;</span>
+</code></pre></div>
+</div>
+<p>The result has 4 outer rows and two columns. <code>region</code> identifies the container. Each cell in <code>data</code> holds a tibble with respondent rows and the three columns <code>id</code>, <code>educ</code>, and <code>maeduc</code>. The printed <code>&lt;tibble [...]&gt;</code> abbreviation describes a stored table’s dimensions, rather than a text value. Read the row and column counts in this output for each region.</p>
+<p>Nesting has changed the organization of the records. It has not replaced respondents with regional averages. All their IDs and schooling values remain inside the stored tables. This differs from a grouped summary, which returns calculated results and does not retain all the underlying respondent records in its output. It also differs from <code>group_by()</code>, which leaves respondent rows on the outside and attaches a grouping instruction.</p>
+<p>The region factor keeps its existing levels. We neither recode the regions nor give them a new order. Outer rows follow the groups encountered in the input; use the region labels to identify them rather than assuming that a row position has a permanent geographic meaning. An unused factor level is a possible category, but has no respondent records to supply an inner table here.</p>
+<p>If some respondents had an unknown region, <code>nest(.by = region)</code> would retain them together in an outer row with <code>NA</code> as its key. That container would represent unknown region, not a fifth geographic region. This extract has no such records. Missing <code>educ</code> or <code>maeduc</code> values remain in their respondents’ inner rows regardless of grouping.</p>
+</section>
+<section id="sec-nests-extract" class="level2" data-number="21.3">
+<h2 data-number="21.3" class="anchored" data-anchor-id="sec-nests-extract"><span class="header-section-number">21.3</span> Look inside one table</h2>
+<p>Printing the outer table shows its structure, but not the respondent values inside each cell. <code>pull(data)</code> extracts the whole <code>data</code> column as a list. Assignment gives that list a name we can inspect separately:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>region_tables <span class="ot">&lt;-</span> nested_schooling <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(data)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>region_tables</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code>[[1]]
+<span class="ansi ansi-color-246"># A tibble: 616 × 3</span>
+      id  educ maeduc
+   <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250"> 1</span>     1    16     14
+<span class="ansi ansi-color-250"> 2</span>     2    16     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-250"> 3</span>     3    14     12
+<span class="ansi ansi-color-250"> 4</span>     4    12     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-250"> 5</span>     5    13     11
+<span class="ansi ansi-color-250"> 6</span>     6    14      5
+<span class="ansi ansi-color-250"> 7</span>     7    13     12
+<span class="ansi ansi-color-250"> 8</span>     8    14     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-250"> 9</span>     9    14      0
+<span class="ansi ansi-color-250">10</span>    10    12     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-246"># ℹ 606 more rows</span>
+
+[[2]]
+<span class="ansi ansi-color-246"># A tibble: 894 × 3</span>
+      id  educ maeduc
+   <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250"> 1</span>   196    14     20
+<span class="ansi ansi-color-250"> 2</span>   197    12     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-250"> 3</span>   198    12     13
+<span class="ansi ansi-color-250"> 4</span>   199    14     16
+<span class="ansi ansi-color-250"> 5</span>   200     9      3
+<span class="ansi ansi-color-250"> 6</span>   201    12     12
+<span class="ansi ansi-color-250"> 7</span>   202    20     16
+<span class="ansi ansi-color-250"> 8</span>   203    15     13
+<span class="ansi ansi-color-250"> 9</span>   204    13      2
+<span class="ansi ansi-color-250">10</span>   205    15     12
+<span class="ansi ansi-color-246"># ℹ 884 more rows</span>
+
+[[3]]
+<span class="ansi ansi-color-246"># A tibble: 923 × 3</span>
+      id  educ maeduc
+   <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250"> 1</span>   329    12      8
+<span class="ansi ansi-color-250"> 2</span>   330    12     12
+<span class="ansi ansi-color-250"> 3</span>   331    12     12
+<span class="ansi ansi-color-250"> 4</span>   332    12     12
+<span class="ansi ansi-color-250"> 5</span>   333    12     12
+<span class="ansi ansi-color-250"> 6</span>   334    18      3
+<span class="ansi ansi-color-250"> 7</span>   335    12     12
+<span class="ansi ansi-color-250"> 8</span>   336    18      8
+<span class="ansi ansi-color-250"> 9</span>   337    15     13
+<span class="ansi ansi-color-250">10</span>   338    14     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-246"># ℹ 913 more rows</span>
+
+[[4]]
+<span class="ansi ansi-color-246"># A tibble: 1,553 × 3</span>
+      id  educ maeduc
+   <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250"> 1</span>   432    16     12
+<span class="ansi ansi-color-250"> 2</span>   433    13     12
+<span class="ansi ansi-color-250"> 3</span>   434    16     12
+<span class="ansi ansi-color-250"> 4</span>   435    14     12
+<span class="ansi ansi-color-250"> 5</span>   436    17     15
+<span class="ansi ansi-color-250"> 6</span>   437    13      5
+<span class="ansi ansi-color-250"> 7</span>   438    17     15
+<span class="ansi ansi-color-250"> 8</span>   439    16      9
+<span class="ansi ansi-color-250"> 9</span>   440    12     12
+<span class="ansi ansi-color-250">10</span>   441    16     12
+<span class="ansi ansi-color-246"># ℹ 1,543 more rows</span>
+</code></pre></div>
+</div>
+<p>The result is a list of 4 tibbles, in the same order as the outer rows. The region labels remain in <code>nested_schooling</code>; pulling only <code>data</code> does not bring that separate column along. Retain the outer table when those labels are needed.</p>
+<p>Double square brackets extract one list component itself. In <code>region_tables[[1]]</code>, <code>1</code> means the first component in the current order. It returns the stored tibble, which we can assign and preview with the familiar <code>head()</code>. The familiar <code>slice(1)</code> selects the first outer row so we can read that component’s region:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>first_region <span class="ot">&lt;-</span> region_tables[[<span class="dv">1</span>]]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(first_region)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 6 × 3</span>
+     id  educ maeduc
+  <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span>     1    16     14
+<span class="ansi ansi-color-250">2</span>     2    16     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-250">3</span>     3    14     12
+<span class="ansi ansi-color-250">4</span>     4    12     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-250">5</span>     5    13     11
+<span class="ansi ansi-color-250">6</span>     6    14      5
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(first_region)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 616</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>nested_schooling <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 1 × 1</span>
+  region   
+  <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>    
+<span class="ansi ansi-color-250">1</span> northeast
+</code></pre></div>
+</div>
+<p>The preview now shows respondent IDs and schooling values, rather than a list-column abbreviation. There are 616 respondents inside this component. The final output identifies its region using the corresponding outer row. <code>region</code> is absent from the inner table because it already labels the container; the same region applies to every respondent stored there.</p>
+<p>This extraction returns an object for inspection. It does not remove the component from <code>region_tables</code> or alter the source records. We can therefore return to <code>nested_schooling</code> to work on all regions together.</p>
+</section>
+<section id="sec-nests-map" class="level2" data-number="21.4">
+<h2 data-number="21.4" class="anchored" data-anchor-id="sec-nests-map"><span class="header-section-number">21.4</span> Repeat an operation</h2>
+<p>We want a respondent count beside each region. <code>purrr::map_int()</code> applies a function to every component of a list and collects one integer per component. Supply <code>data</code> as the list and <code>nrow</code> as the function. Write <code>nrow</code> without parentheses because <code>map_int()</code> supplies each inner table to it in turn. The <code>_int</code> suffix requires each call to return one integer, which a table’s row count does.</p>
+<p>Inside <code>mutate()</code>, the resulting vector becomes a column aligned with the original outer rows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>region_sizes <span class="ot">&lt;-</span> nested_schooling <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">respondents =</span> purrr<span class="sc">::</span><span class="fu">map_int</span>(data, nrow))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>region_sizes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 4 × 3</span>
+  region    data                 respondents
+  <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;list&gt;</span>                     <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>
+<span class="ansi ansi-color-250">1</span> northeast <span class="ansi ansi-color-246">&lt;tibble [616 × 3]&gt;</span>           616
+<span class="ansi ansi-color-250">2</span> west      <span class="ansi ansi-color-246">&lt;tibble [894 × 3]&gt;</span>           894
+<span class="ansi ansi-color-250">3</span> midwest   <span class="ansi ansi-color-246">&lt;tibble [923 × 3]&gt;</span>           923
+<span class="ansi ansi-color-250">4</span> south     <span class="ansi ansi-color-246">&lt;tibble [1,553 × 3]&gt;</span>        <span class="ansi ansi-underline">1</span>553
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(region_sizes<span class="sc">$</span>respondents)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3986</code></pre>
+</div>
+</div>
+<p>The outer table still has one row per region, but the new column counts the respondents inside each cell. Its sum is 3986, matching the original respondent total. <code>nrow(region_sizes)</code> would instead count the regional containers. Whenever a workflow contains tables within tables, say which level a row count describes.</p>
+<p>The same distinction matters for averages. The regions contain different numbers of respondents. Averaging four regional schooling means would give each region equal weight, whereas averaging observed respondent schooling gives each recorded respondent equal weight. Nesting does not choose a statistical weighting rule for us. Here we use it to organize records and check coverage, without estimating population differences.</p>
+</section>
+<section id="sec-nests-coverage" class="level2" data-number="21.5">
+<h2 data-number="21.5" class="anchored" data-anchor-id="sec-nests-coverage"><span class="header-section-number">21.5</span> Application: schooling coverage</h2>
+<p>We want the same small coverage report for every region: the number of respondents, how many have recorded schooling, and how many have recorded parent schooling. First count the rows of the already extracted <code>first_region</code> inside a familiar summary. <code>n()</code> supplies the number of rows in the current table or group. Unlike counting recorded schooling, it includes respondents with unknown schooling:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>first_region <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">respondents =</span> <span class="fu">n</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 1 × 1</span>
+  respondents
+        <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>
+<span class="ansi ansi-color-250">1</span>         616
+</code></pre></div>
+</div>
+<p>This one-row result counts all 616 respondents in that inner table. <code>n()</code> is used inside table operations such as <code>summarise()</code>; <code>nrow(first_region)</code> remains the direct way to count a named table outside those operations. Here both count the same respondents.</p>
+<p>Now give the repeated coverage calculation a name. <code>function(x)</code> defines a function with one input called <code>x</code>; braces enclose its instructions. The final expression is the returned result. Here that result is a one-row summary table:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>schooling_coverage <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    x,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">respondents =</span> <span class="fu">n</span>(),</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">educ_recorded =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(educ)),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">maeduc_recorded =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(maeduc))</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">schooling_coverage</span>(first_region)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 1 × 3</span>
+  respondents educ_recorded maeduc_recorded
+        <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>         <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>           <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>
+<span class="ansi ansi-color-250">1</span>         616           611             525
+</code></pre></div>
+</div>
+<p>The function definition stores an operation; the call supplies one actual inner table as <code>x</code>. Test that call before repeating it. The three returned columns count all respondents, recorded respondent schooling, and recorded parent schooling. Each <code>!is.na()</code> condition is true for a recorded measurement, and <code>sum()</code> counts those true values. No respondent is removed and no unknown schooling value becomes zero.</p>
+<section id="collect-one-numeric-percentage-per-region" class="level3" data-number="21.5.1">
+<h3 data-number="21.5.1" class="anchored" data-anchor-id="collect-one-numeric-percentage-per-region"><span class="header-section-number">21.5.1</span> Collect one numeric percentage per region</h3>
+<p>Sometimes we need just one number from each table. Define a second named function that returns the recorded-schooling percentage rather than a report table. <code>$educ</code> extracts the input table’s schooling column. The numerator counts recorded schooling and <code>nrow(x)</code> counts all respondents in that table:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>schooling_percent <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="dv">100</span> <span class="sc">*</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(x<span class="sc">$</span>educ)) <span class="sc">/</span> <span class="fu">nrow</span>(x)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">schooling_percent</span>(first_region)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 99.18831</code></pre>
+</div>
+</div>
+<p>This test returns one numeric percentage. Its denominator includes respondents with missing schooling. The inner tables here are nonempty observed regions, so their row counts are positive.</p>
+<p><code>purrr::map_dbl()</code> applies the named function to each list component and collects one numeric value per component in a double vector. Each call must return exactly one numeric value; a respondent-length vector or a multi-column report does not meet that contract. As with <code>map_int()</code>, omit parentheses after the function name because the mapper supplies each table:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>region_percent <span class="ot">&lt;-</span> nested_schooling <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">educ_percent =</span> purrr<span class="sc">::</span><span class="fu">map_dbl</span>(data, schooling_percent))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>region_percent <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, educ_percent)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 4 × 2</span>
+  region    educ_percent
+  <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>            <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> northeast         99.2
+<span class="ansi ansi-color-250">2</span> west              99.2
+<span class="ansi ansi-color-250">3</span> midwest           99.6
+<span class="ansi ansi-color-250">4</span> south             98.8
+</code></pre></div>
+</div>
+<p>The vector aligns with the outer rows, so each displayed region receives the percentage calculated from its own respondent table. These unweighted percentages describe coverage within this sample. They are not mean years of schooling or population estimates. <code>map_int()</code> fits integer row counts; <code>map_dbl()</code> fits numeric percentages, which need not be whole numbers.</p>
+</section>
+<section id="keep-a-complete-coverage-report" class="level3" data-number="21.5.2">
+<h3 data-number="21.5.2" class="anchored" data-anchor-id="keep-a-complete-coverage-report"><span class="header-section-number">21.5.2</span> Keep a complete coverage report</h3>
+<p>The <code>schooling_coverage()</code> result has several columns. To retain both schooling measures and their counts, collect whole report tables rather than a single percentage from each call. <code>purrr::map()</code> applies a function to each list component and returns a list of its results. As before, supply the function’s name without parentheses:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>coverage_nested <span class="ot">&lt;-</span> nested_schooling <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">coverage =</span> purrr<span class="sc">::</span><span class="fu">map</span>(data, schooling_coverage))</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>coverage_nested <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, coverage)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 4 × 2</span>
+  region    coverage        
+  <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;list&gt;</span>          
+<span class="ansi ansi-color-250">1</span> northeast <span class="ansi ansi-color-246">&lt;tibble [1 × 3]&gt;</span>
+<span class="ansi ansi-color-250">2</span> west      <span class="ansi ansi-color-246">&lt;tibble [1 × 3]&gt;</span>
+<span class="ansi ansi-color-250">3</span> midwest   <span class="ansi ansi-color-246">&lt;tibble [1 × 3]&gt;</span>
+<span class="ansi ansi-color-250">4</span> south     <span class="ansi ansi-color-246">&lt;tibble [1 × 3]&gt;</span>
+</code></pre></div>
+</div>
+<p>Each <code>coverage</code> component holds a one-row report for the corresponding <code>data</code> component. The original respondent tables remain in <code>coverage_nested$data</code>. The displayed selection shows only the region and report containers, so we can inspect their arrangement before expanding them.</p>
+<p><code>unnest()</code> turns the rows and columns of stored tables back into ordinary table rows and columns. First select <code>region</code> and <code>coverage</code>, then ask <code>unnest(coverage)</code> to expand that list column. Every report has one row, so each region will still occupy one row:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>coverage_report <span class="ot">&lt;-</span> coverage_nested <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, coverage) <span class="sc">|&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(coverage)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>coverage_report</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 4 × 4</span>
+  region    respondents educ_recorded maeduc_recorded
+  <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>           <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>         <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>           <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>
+<span class="ansi ansi-color-250">1</span> northeast         616           611             525
+<span class="ansi ansi-color-250">2</span> west              894           887             779
+<span class="ansi ansi-color-250">3</span> midwest           923           919             814
+<span class="ansi ansi-color-250">4</span> south            <span class="ansi ansi-underline">1</span>553          <span class="ansi ansi-underline">1</span>535            <span class="ansi ansi-underline">1</span>327
+</code></pre></div>
+</div>
+<p>We can now compare availability without opening each respondent table. <code>respondents</code> is the denominator for each region’s coverage; <code>educ_recorded</code> and <code>maeduc_recorded</code> count recorded values separately. A respondent can contribute to one count and not the other. These are not counts of respondents with both measurements.</p>
+<p>For a compact comparison, turn the recorded counts into percentages of all respondents in that region:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>coverage_percent <span class="ot">&lt;-</span> coverage_report <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">educ_percent =</span> <span class="dv">100</span> <span class="sc">*</span> educ_recorded <span class="sc">/</span> respondents,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">maeduc_percent =</span> <span class="dv">100</span> <span class="sc">*</span> maeduc_recorded <span class="sc">/</span> respondents</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, respondents, educ_percent, maeduc_percent)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>coverage_percent</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 4 × 4</span>
+  region    respondents educ_percent maeduc_percent
+  <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>           <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>        <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>          <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> northeast         616         99.2           85.2
+<span class="ansi ansi-color-250">2</span> west              894         99.2           87.1
+<span class="ansi ansi-color-250">3</span> midwest           923         99.6           88.2
+<span class="ansi ansi-color-250">4</span> south            <span class="ansi ansi-underline">1</span>553         98.8           85.4
+</code></pre></div>
+</div>
+<p>The percentages include respondents with missing schooling in their denominators. Across regions, recorded respondent schooling ranges from 98.8 to 99.6 percent; recorded parent schooling ranges from 85.2 to 88.2 percent. These are unweighted descriptions of this extract’s coverage. Availability can reflect questionnaire coverage and nonresponse; it does not establish that every recorded value is valid or explain why an answer is missing.</p>
+</section>
+</section>
+<section id="sec-nests-roundtrip" class="level2" data-number="21.6">
+<h2 data-number="21.6" class="anchored" data-anchor-id="sec-nests-roundtrip"><span class="header-section-number">21.6</span> Return to respondent rows</h2>
+<p>The coverage report is a summary. To recover the respondent records, return to <code>nested_schooling</code> and expand its original <code>data</code> column. The outer region is repeated alongside each respondent from its container. <code>select()</code> then restores our starting column order:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>schooling_restored <span class="ot">&lt;-</span> nested_schooling <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(data) <span class="sc">|&gt;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, region, educ, maeduc)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(schooling_restored)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 6 × 4</span>
+     id region     educ maeduc
+  <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span>     1 northeast    16     14
+<span class="ansi ansi-color-250">2</span>     2 northeast    16     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-250">3</span>     3 northeast    14     12
+<span class="ansi ansi-color-250">4</span>     4 northeast    12     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-250">5</span>     5 northeast    13     11
+<span class="ansi ansi-color-250">6</span>     6 northeast    14      5
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(schooling_restored)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3986</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(schooling_restored)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isid</span>(schooling_restored, id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr"><pre class="book-console"><code>Variable `id` uniquely identifies the rows.
+</code></pre></div>
+</div>
+<p>We again have 3986 respondents and 4 columns. The ID check confirms unique, non-missing respondent identifiers. Nesting gathers each region’s records together, so expansion need not reproduce an input in which regions were interleaved. Matching dimensions and keys still do not prove that the measurements survived.</p>
+<p>For an exact comparison, sort both tables by the unique ID. <code>identical()</code> checks values and attributes, including types and factor levels. We also inspect the region levels explicitly to connect that check to our categorical grouping key:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(schooling, id),</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(schooling_restored, id)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(<span class="fu">levels</span>(schooling<span class="sc">$</span>region), <span class="fu">levels</span>(schooling_restored<span class="sc">$</span>region))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>Both checks return <code>TRUE</code>. The first comparison includes every respondent’s ID, region, and both schooling values, including missing values. The second confirms that the same region levels remain in the same order. Sorting for comparison makes respondent order explicit; it does not repair altered values or missing respondents.</p>
+<p>Our workflow has moved between two levels: regional containers on the outside and respondents on the inside. We kept the original records while adding separate reports, then verified the return to respondent rows. Use an ordinary grouped summary when only a regional report is needed. A nested table is useful when keeping and inspecting the underlying tables is part of the task.</p>
+</section>
+<section id="sec-nests-review" class="level2" data-number="21.7">
+<h2 data-number="21.7" class="anchored" data-anchor-id="sec-nests-review"><span class="header-section-number">21.7</span> Review</h2>
+<ul>
+<li><code>nest()</code> stores respondent tables in a list column, with grouping keys on the outside.</li>
+<li><code>pull()</code> extracts a list column; double square brackets extract one stored component.</li>
+<li><code>map_int()</code> requires one integer per component; <code>map_dbl()</code> requires one numeric value per component.</li>
+<li><code>n()</code> counts every row in the current summary table or group, including rows with missing measurements.</li>
+<li><code>function()</code> defines a reusable operation; <code>map()</code> collects its results in a list.</li>
+<li><code>unnest()</code> expands stored tables; the contents determine the resulting row unit.</li>
+<li>Check dimensions, identifiers, values, and factor levels after a roundtrip, and state the respondent denominator of coverage results.</li>
+</ul>
+<p>The next chapter, <a href="ggplot2.html" class="quarto-xref"><span>Chapter 22</span></a>, returns to ordinary observation tables to build figures. Keep track of the row unit when carrying tables and summaries into statistical analysis.</p>
+</section>
+<section id="sec-nests-exercises" class="level2" data-number="21.8">
+<h2 data-number="21.8" class="anchored" data-anchor-id="sec-nests-exercises"><span class="header-section-number">21.8</span> Exercises</h2>
+<p>Each exercise starts from the package and file-loading setup above. Recreate any objects you need; none depends on another exercise’s answer.</p>
+<ol type="1">
+<li><strong>Count both levels.</strong> Select <code>id</code>, <code>region</code>, <code>educ</code>, and <code>maeduc</code>, then nest by region. Predict what <code>map_int()</code> returns before adding respondent counts. Compare the outer row count with the sum of inner row counts. What does each count represent?</li>
+<li><strong>Inspect one component.</strong> Recreate the nested table. Predict the object returned by pulling <code>data</code> and by extracting its first component, then perform both operations. Show its first respondents and identify its region from the outer table. Why is <code>region</code> absent from the component, and why should you not assume that component 1 always names the same region?</li>
+<li><strong>Report coverage and diagnose output shape.</strong> Recreate the nested table and define a numeric schooling-percentage function and <code>schooling_coverage()</code> locally. Test each on one inner table before mapping. Predict the double-vector result from <code>map_dbl()</code>, the list from <code>map()</code>, and the expanded report from <code>unnest()</code>. Retain both measures and calculate recorded parent-schooling percentages. Diagnose why mapping a function that returns a recorded-answer flag for every respondent cannot produce one numeric value per region, and repair it. State each denominator. Would nesting discard missing schooling, and what would an unknown region mean?</li>
+<li><strong>Check a roundtrip.</strong> Recreate the selected and nested tables. Predict the row unit and row count after expanding <code>data</code>, then unnest the original records and restore the selected column order. Check dimensions, unique IDs, exact equality after sorting by ID, and region levels. Explain why a correct row count is insufficient by itself.</li>
+</ol>
+</section>
+<section id="worked-answers" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="worked-answers">Worked answers</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="1. Count both levels">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Count both levels
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Load the extract independently, retain the four requested columns, and count the respondents inside each regional container:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidystata)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>gss24 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>answer1_schooling <span class="ot">&lt;-</span> gss24 <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, region, educ, maeduc)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>answer1_nested <span class="ot">&lt;-</span> answer1_schooling <span class="sc">|&gt;</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> region) <span class="sc">|&gt;</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">respondents =</span> purrr<span class="sc">::</span><span class="fu">map_int</span>(data, nrow))</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>answer1_nested</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 4 × 3</span>
+  region    data                 respondents
+  <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;list&gt;</span>                     <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>
+<span class="ansi ansi-color-250">1</span> northeast <span class="ansi ansi-color-246">&lt;tibble [616 × 3]&gt;</span>           616
+<span class="ansi ansi-color-250">2</span> west      <span class="ansi ansi-color-246">&lt;tibble [894 × 3]&gt;</span>           894
+<span class="ansi ansi-color-250">3</span> midwest   <span class="ansi ansi-color-246">&lt;tibble [923 × 3]&gt;</span>           923
+<span class="ansi ansi-color-250">4</span> south     <span class="ansi ansi-color-246">&lt;tibble [1,553 × 3]&gt;</span>        <span class="ansi ansi-underline">1</span>553
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(answer1_nested)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(answer1_nested<span class="sc">$</span>respondents)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3986</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(answer1_nested<span class="sc">$</span>respondents) <span class="sc">==</span> <span class="fu">nrow</span>(answer1_schooling)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p><code>map_int()</code> returns an integer vector with one respondent count per stored table; assignment aligns it with the regions. The outer count is 4 regional containers. The inner counts sum to 3986 respondents, matching the selected input, so the equality check returns <code>TRUE</code>. Four containers do not imply four respondents or equally sized regional samples.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="2. Inspect one component">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Inspect one component
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Rebuild the nested table before extracting its first component. Use the corresponding outer row to identify the region:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidystata)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>gss24 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>answer2_nested <span class="ot">&lt;-</span> gss24 <span class="sc">|&gt;</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, region, educ, maeduc) <span class="sc">|&gt;</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> region)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>answer2_tables <span class="ot">&lt;-</span> answer2_nested <span class="sc">|&gt;</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(data)</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>answer2_first <span class="ot">&lt;-</span> answer2_tables[[<span class="dv">1</span>]]</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(answer2_first)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 6 × 3</span>
+     id  educ maeduc
+  <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span>     1    16     14
+<span class="ansi ansi-color-250">2</span>     2    16     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-250">3</span>     3    14     12
+<span class="ansi ansi-color-250">4</span>     4    12     <span class="ansi ansi-color-1">NA</span>
+<span class="ansi ansi-color-250">5</span>     5    13     11
+<span class="ansi ansi-color-250">6</span>     6    14      5
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>answer2_nested <span class="sc">|&gt;</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 1 × 1</span>
+  region   
+  <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>    
+<span class="ansi ansi-color-250">1</span> northeast
+</code></pre></div>
+</div>
+<p>Pulling returns a list; double brackets return the tibble stored in one component. The inner rows are respondents; the outer row identifies their common region. <code>region</code> remains outside because it is the nesting key. Component 1 is a position in this particular list, whose order follows encountered groups. A differently ordered input could place another region first. Neither extraction changes the stored records.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="3. Report coverage">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Report coverage
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Define the coverage operation independently, then repeat it for the freshly nested respondent records:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidystata)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>gss24 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>answer3_coverage <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    x,</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">respondents =</span> <span class="fu">n</span>(),</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">educ_recorded =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(educ)),</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">maeduc_recorded =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(maeduc))</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>answer3_schooling <span class="ot">&lt;-</span> gss24 <span class="sc">|&gt;</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, region, educ, maeduc)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>answer3_nested <span class="ot">&lt;-</span> answer3_schooling <span class="sc">|&gt;</span></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> region)</span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>answer3_tables <span class="ot">&lt;-</span> answer3_nested <span class="sc">|&gt;</span></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(data)</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>answer3_first <span class="ot">&lt;-</span> answer3_tables[[<span class="dv">1</span>]]</span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="fu">answer3_coverage</span>(answer3_first)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 1 × 3</span>
+  respondents educ_recorded maeduc_recorded
+        <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>         <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>           <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>
+<span class="ansi ansi-color-250">1</span>         616           611             525
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>answer3_report <span class="ot">&lt;-</span> answer3_nested <span class="sc">|&gt;</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">coverage =</span> purrr<span class="sc">::</span><span class="fu">map</span>(data, answer3_coverage)) <span class="sc">|&gt;</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, coverage) <span class="sc">|&gt;</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(coverage) <span class="sc">|&gt;</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">maeduc_percent =</span> <span class="dv">100</span> <span class="sc">*</span> maeduc_recorded <span class="sc">/</span> respondents)</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>answer3_report</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 4 × 5</span>
+  region    respondents educ_recorded maeduc_recorded maeduc_percent
+  <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>           <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>         <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>           <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>          <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> northeast         616           611             525           85.2
+<span class="ansi ansi-color-250">2</span> west              894           887             779           87.1
+<span class="ansi ansi-color-250">3</span> midwest           923           919             814           88.2
+<span class="ansi ansi-color-250">4</span> south            <span class="ansi ansi-underline">1</span>553          <span class="ansi ansi-underline">1</span>535            <span class="ansi ansi-underline">1</span>327           85.4
+</code></pre></div>
+</div>
+<p>Each percentage divides the number with recorded parent schooling by all respondents in that region. Here parent schooling means the source-defined mother’s or younger parent’s schooling in <code>maeduc</code>. Missing schooling stays in the respondent records and contributes to the denominator. If region were unknown, nesting would retain those respondents in a separate <code>NA</code> container. This extract has no missing region values; no extra geographic category has been created. These coverage percentages describe the sample without survey weights.</p>
+<p>The function test returns a one-row report. Mapping it returns a list of those report tables; expanding them gives one region per row because each component has one row. Now test and collect a scalar percentage:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>answer3_percent <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="dv">100</span> <span class="sc">*</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(x<span class="sc">$</span>educ)) <span class="sc">/</span> <span class="fu">nrow</span>(x)</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="fu">answer3_percent</span>(answer3_first)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 99.18831</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>answer3_numeric <span class="ot">&lt;-</span> answer3_nested <span class="sc">|&gt;</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">educ_percent =</span> purrr<span class="sc">::</span><span class="fu">map_dbl</span>(data, answer3_percent))</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>answer3_numeric <span class="sc">|&gt;</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, educ_percent)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 4 × 2</span>
+  region    educ_percent
+  <span class="ansi ansi-italic ansi-color-246">&lt;fct&gt;</span>            <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> northeast         99.2
+<span class="ansi ansi-color-250">2</span> west              99.2
+<span class="ansi ansi-color-250">3</span> midwest           99.6
+<span class="ansi ansi-color-250">4</span> south             98.8
+</code></pre></div>
+</div>
+<p><code>map_dbl()</code> returns one double value per region, stored in <code>educ_percent</code>. This is the same recorded-respondent-schooling percentage as the report’s <code>educ_recorded / respondents</code>, multiplied by 100. It does not replace the report’s separate parent-schooling coverage.</p>
+<p>For the diagnosis, define an operation returning one logical flag for every respondent:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>answer3_flags <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">is.na</span>(x<span class="sc">$</span>educ)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">answer3_flags</span>(answer3_first))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 616</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(answer3_first)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 616</code></pre>
+</div>
+</div>
+<p>The matching lengths show why this function does not return one value per region. The following deliberate error tests that mismatch:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>purrr<span class="sc">::</span><span class="fu">map_dbl</span>(answer3_tables, answer3_flags)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error"><pre class="book-console"><code><span class="ansi ansi-bold ansi-color-3">Error</span> in `purrr::map_dbl()`:
+<span class="ansi ansi-color-6">ℹ</span> In index: 1.
+<span class="ansi ansi-bold">Caused by error:</span>
+<span class="ansi ansi-color-3">!</span> Result must be length 1, not 616.
+</code></pre></div>
+</div>
+<p>Each component result must have length one; a vector containing a flag for every respondent is too long. The repair is the tested <code>answer3_percent()</code> above: count the true flags and divide by that region’s respondent count before mapping. Use <code>map()</code> if the purpose is instead to retain the full flag vectors. Changing to <code>map()</code> alone would change the output shape without answering the one-percentage-per-region question.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="4. Check a roundtrip">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Check a roundtrip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Use only the original <code>data</code> list column for the return to respondent rows. Then compare the recovered table with its selected input:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidystata)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>gss24 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>answer4_schooling <span class="ot">&lt;-</span> gss24 <span class="sc">|&gt;</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, region, educ, maeduc)</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>answer4_nested <span class="ot">&lt;-</span> answer4_schooling <span class="sc">|&gt;</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> region)</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>answer4_restored <span class="ot">&lt;-</span> answer4_nested <span class="sc">|&gt;</span></span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(data) <span class="sc">|&gt;</span></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, region, educ, maeduc)</span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(answer4_schooling) <span class="sc">==</span> <span class="fu">nrow</span>(answer4_restored)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(answer4_schooling) <span class="sc">==</span> <span class="fu">ncol</span>(answer4_restored)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isid</span>(answer4_schooling, id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr"><pre class="book-console"><code>Variable `id` uniquely identifies the rows.
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isid</span>(answer4_restored, id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr"><pre class="book-console"><code>Variable `id` uniquely identifies the rows.
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(answer4_schooling, id),</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(answer4_restored, id)</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">levels</span>(answer4_schooling<span class="sc">$</span>region),</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">levels</span>(answer4_restored<span class="sc">$</span>region)</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>Expanding <code>data</code> returns respondent rows: their predicted total is the sum of the inner counts, not the number of regions. The equality checks return <code>TRUE</code>, and both ID checks confirm unique, non-missing identifiers. Dimensions alone could hide a duplicated respondent replacing another or a changed schooling value. The sorted exact comparison checks records and their attributes, including missing values; the final comparison explicitly checks the region levels. We restore the selected table, rather than the other columns that were never included in nesting. <code>gss24</code> remains the full original extract.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/socimh\.github\.io\/R4SS\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./dplyr-join.html" class="pagination-link" aria-label="Combine datasets">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Combine datasets</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ggplot2.html" class="pagination-link" aria-label="ggplot2">
+        <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">ggplot2</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Minghong Shen · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

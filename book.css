@@ -71,7 +71,7 @@ pre.sourceCode, pre code { font-size: 0.84rem; line-height: 1.55; }
 .figure-scroll img { min-width: 630px; }
 
 /* Short two-column comparisons fit phones without reducing the book's text size. */
-#tbl-input-formats table, #tbl-disciplinary-data table, #tbl-output-choices table {
+#tbl-boundary-checks table, #tbl-disciplinary-data table {
   min-width: 0;
   width: 100%;
   table-layout: fixed;
@@ -79,10 +79,44 @@ pre.sourceCode, pre code { font-size: 0.84rem; line-height: 1.55; }
   hyphens: auto;
   overflow-wrap: anywhere;
 }
-#tbl-input-formats th:first-child, #tbl-disciplinary-data th:first-child,
-#tbl-output-choices th:first-child { width: 40%; }
+#tbl-boundary-checks th:first-child { width: 30%; }
+#tbl-disciplinary-data th:first-child { width: 40%; }
 #tbl-disciplinary-data table { table-layout: auto; }
+
+/* Wider reference tables scroll sideways on phones; function names stay whole. */
+#tbl-input-formats table, #tbl-output-choices table {
+  min-width: 38rem;
+  width: 100%;
+  line-height: 1.4;
+}
+#tbl-input-formats td code, #tbl-output-choices td code { white-space: nowrap; overflow-wrap: normal; }
 #tbl-disciplinary-data th:first-child, #tbl-disciplinary-data td:first-child {
   overflow-wrap: normal;
   hyphens: manual;
 }
+
+/* Foundations reference tables keep operators and results readable on phones. */
+#tbl-basics-comparisons table { min-width: 30rem; }
+#tbl-basics-numeric-reference table { min-width: 42rem; }
+#tbl-basics-comparisons code, #tbl-basics-numeric-reference code {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+/* Draft chapter references keep function names whole within their scroll regions. */
+#tbl-read-write table, #tbl-mutate-task-map table {
+  min-width: 38rem;
+  width: 100%;
+  line-height: 1.4;
+}
+#tbl-read-write code, #tbl-mutate-task-map code {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+/* Keep source variable names intact in the introductory country table. */
+#tbl-tibble-countries th code { white-space: nowrap; overflow-wrap: normal; }
+
+/* Keep the introductory import calls readable inside a mobile scroll region. */
+#tbl-first-readers table { min-width: 32rem; }
+#tbl-first-readers code { white-space: nowrap; overflow-wrap: normal; }

@@ -1,0 +1,69 @@
+region,country,popgrowth,lexp,gnppc,safewater
+1,Albania,-0.6,74,870,49
+1,Armenia,-1.2,70,570,83
+1,Austria,0.1,78,27810,97
+1,Azerbaijan,0.9,64,510,49
+1,Belarus,-0.5,68,1540,82
+1,Belgium,0.2,77,26530,100
+1,Bosnia and Herzegovina,1.8,74,1230,87
+1,Bulgaria,-0.7,71,1440,90
+1,Croatia,-0.1,72,NA,85
+1,Czechia,-0.1,75,6140,95
+1,Denmark,0.4,76,33440,95
+1,Estonia,-1,69,3820,92
+1,Finland,0.3,77,25810,94
+1,France,0.4,79,25740,97
+1,Georgia,-2.5,70,870,59
+1,Germany,0,77,28070,100
+1,Greece,0.6,78,13540,99
+1,Hungary,-0.2,71,4420,83
+1,Ireland,1,76,21430,75
+1,Italy,0,79,22270,95
+1,Kazakhstan,-2.5,63,1340,63
+1,Kyrgyz Republic,1.5,67,360,46
+1,Latvia,-0.9,69,2790,93
+1,Lithuania,-0.7,71,2870,70
+1,North Macedonia,0.5,72,2010,80
+1,Moldova,-0,67,580,40
+1,Netherlands,0.6,78,27840,100
+1,Norway,0.6,78,36120,100
+1,Poland,0,73,4390,NA
+1,Portugal,0.5,76,12190,94
+1,Romania,-0.2,70,1580,82
+1,Russian Federation,-0.2,67,2130,75
+1,Slovak Republic,0.1,73,4230,92
+1,Slovenia,-0.2,75,10970,92
+1,Spain,0.4,79,15410,99
+1,Sweden,0.1,79,31100,99
+1,Switzerland,0.3,79,46650,97
+1,Tajikistan,0.6,62,170,36
+1,Turkiye,1.4,71,4150,NA
+1,Turkmenistan,1.7,64,560,69
+1,Ukraine,-0.8,68,840,66
+1,United Kingdom,0.3,77,27040,100
+1,Uzbekistan,1.6,65,610,54
+1,Serbia,-0.4,72,3250,74
+2,Canada,0.8,79,20900,99
+2,Cuba,0.3,75,2240,NA
+2,Dominican Republic,1.7,70,2420,42
+2,El Salvador,0.6,67,1730,NA
+2,Guatemala,2.6,66,1600,50
+2,Haiti,1.9,57,410,NA
+2,Honduras,2.6,62,960,42
+2,Jamaica,0.9,71,2940,NA
+2,Mexico,1.6,72,5340,40
+2,Nicaragua,1.5,64,890,NA
+2,Panama,2,73,3510,NA
+2,Puerto Rico (US),0.6,75,8690,75
+2,Trinidad and Tobago,0.3,68,4450,NA
+2,United States,1.2,77,32040,NA
+3,Argentina,1.2,73,7960,NA
+3,Bolivia,1.8,61,960,NA
+3,Brazil,1.5,69,4980,76
+3,Chile,1.3,76,5470,91
+3,Colombia,1.8,71,2600,68
+3,Ecuador,1.8,72,2150,62
+3,Paraguay,2.2,70,1800,50
+3,Peru,1.8,69,2150,45
+3,Uruguay,0.5,74,7360,NA
+3,"Venezuela, RB",2,72,3380,NA

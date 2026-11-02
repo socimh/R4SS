@@ -2,22 +2,122 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://socimh.github.io/R4SS/index.html</loc>
-    <lastmod>2026-10-25T05:25:28.038Z</lastmod>
+    <lastmod>2026-11-01T20:39:45.476Z</lastmod>
   </url>
   <url>
     <loc>https://socimh.github.io/R4SS/intro.html</loc>
-    <lastmod>2026-10-25T05:38:33.183Z</lastmod>
+    <lastmod>2026-11-02T01:25:12.965Z</lastmod>
   </url>
   <url>
-    <loc>https://socimh.github.io/R4SS/data-workflow.html</loc>
-    <lastmod>2026-10-25T18:20:45.908Z</lastmod>
+    <loc>https://socimh.github.io/R4SS/objects.html</loc>
+    <lastmod>2026-11-02T01:25:12.965Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/dplyr-grammar.html</loc>
+    <lastmod>2026-11-02T01:25:12.962Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/dplyr-sort.html</loc>
+    <lastmod>2026-11-02T01:25:12.964Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/dplyr-pipe.html</loc>
+    <lastmod>2026-11-02T01:25:12.963Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/dplyr-select.html</loc>
+    <lastmod>2026-11-02T02:57:08.689Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/dplyr-skim.html</loc>
+    <lastmod>2026-11-02T02:57:08.690Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/dplyr-tab.html</loc>
+    <lastmod>2026-11-02T02:57:08.691Z</lastmod>
   </url>
   <url>
     <loc>https://socimh.github.io/R4SS/dplyr-stat.html</loc>
-    <lastmod>2026-10-25T18:20:45.909Z</lastmod>
+    <lastmod>2026-11-02T02:57:08.691Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/missing-values.html</loc>
+    <lastmod>2026-11-02T02:57:08.693Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/visualization.html</loc>
+    <lastmod>2026-11-02T02:57:08.694Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/dplyr-mutate.html</loc>
+    <lastmod>2026-11-02T02:57:08.688Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/group-variables.html</loc>
+    <lastmod>2026-11-02T02:57:08.692Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/numeric-logical.html</loc>
+    <lastmod>2026-11-02T02:57:08.693Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/categorical-data.html</loc>
+    <lastmod>2026-11-02T02:57:08.688Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/text-dates.html</loc>
+    <lastmod>2026-11-02T05:31:20.445Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/lists.html</loc>
+    <lastmod>2026-11-02T05:31:20.445Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/data-workflow.html</loc>
+    <lastmod>2026-11-02T05:31:20.443Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/dplyr-group.html</loc>
+    <lastmod>2026-11-02T05:31:20.444Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/dplyr-join.html</loc>
+    <lastmod>2026-11-02T05:31:20.445Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/nests.html</loc>
+    <lastmod>2026-11-02T05:31:20.445Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/ggplot2.html</loc>
+    <lastmod>2026-11-02T02:57:08.692Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/statistical-tests.html</loc>
+    <lastmod>2026-11-01T19:41:30.558Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/regression.html</loc>
+    <lastmod>2026-10-31T03:06:07.825Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/logit-probit.html</loc>
+    <lastmod>2026-10-31T03:06:07.824Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/fixed-effects.html</loc>
+    <lastmod>2026-11-01T20:27:47.363Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/basic-operations.html</loc>
+    <lastmod>2026-11-01T04:30:29.892Z</lastmod>
+  </url>
+  <url>
+    <loc>https://socimh.github.io/R4SS/tibble.html</loc>
+    <lastmod>2026-11-02T01:25:12.965Z</lastmod>
   </url>
   <url>
     <loc>https://socimh.github.io/R4SS/gss-data.html</loc>
-    <lastmod>2026-10-20T01:18:21.056Z</lastmod>
+    <lastmod>2026-11-01T16:07:32.096Z</lastmod>
   </url>
 </urlset>

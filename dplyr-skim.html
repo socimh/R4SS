@@ -1,0 +1,2663 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="An introduction to R and the tidyverse for social-science research.">
+
+<title>7&nbsp; Inspect a dataset – R for Social Science</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./dplyr-tab.html" rel="next">
+<link href="./dplyr-select.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-684a58a98314b78713c09aa595376ac7.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d86a9a5236ec3aeeb637912bee877918.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-684a58a98314b78713c09aa595376ac7.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-f762a00757381c0eb797acef47548461.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-49a5c3d3f733115b1117348003870229.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f762a00757381c0eb797acef47548461.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+.book-console .ansi-bold         { font-weight: bold;             }
+
+.book-console .ansi-italic       { font-style: italic;            }
+
+.book-console .ansi-underline    { text-decoration: underline;    }
+
+.book-console .ansi-blink        { text-decoration: blink;        }
+
+.book-console .ansi-hide         { visibility: hidden;            }
+
+.book-console .ansi-crossedout   { text-decoration: line-through; }
+
+.book-console .ansi-link:hover   { text-decoration: underline;    }
+
+.book-console .ansi-color-0      { color: #000000 }
+
+.book-console .ansi-color-1      { color: #cd0000 }
+
+.book-console .ansi-color-2      { color: #00cd00 }
+
+.book-console .ansi-color-3      { color: #cdcd00 }
+
+.book-console .ansi-color-4      { color: #0000ee }
+
+.book-console .ansi-color-5      { color: #cd00cd }
+
+.book-console .ansi-color-6      { color: #00cdcd }
+
+.book-console .ansi-color-7      { color: #e5e5e5 }
+
+.book-console .ansi-color-8      { color: #7f7f7f }
+
+.book-console .ansi-color-9      { color: #ff0000 }
+
+.book-console .ansi-color-10     { color: #00ff00 }
+
+.book-console .ansi-color-11     { color: #ffff00 }
+
+.book-console .ansi-color-12     { color: #5c5cff }
+
+.book-console .ansi-color-13     { color: #ff00ff }
+
+.book-console .ansi-color-14     { color: #00ffff }
+
+.book-console .ansi-color-15     { color: #ffffff }
+
+.book-console .ansi-bg-color-0   { background-color: #000000 }
+
+.book-console .ansi-bg-color-1   { background-color: #cd0000 }
+
+.book-console .ansi-bg-color-2   { background-color: #00cd00 }
+
+.book-console .ansi-bg-color-3   { background-color: #cdcd00 }
+
+.book-console .ansi-bg-color-4   { background-color: #0000ee }
+
+.book-console .ansi-bg-color-5   { background-color: #cd00cd }
+
+.book-console .ansi-bg-color-6   { background-color: #00cdcd }
+
+.book-console .ansi-bg-color-7   { background-color: #e5e5e5 }
+
+.book-console .ansi-bg-color-8   { background-color: #7f7f7f }
+
+.book-console .ansi-bg-color-9   { background-color: #ff0000 }
+
+.book-console .ansi-bg-color-10  { background-color: #00ff00 }
+
+.book-console .ansi-bg-color-11  { background-color: #ffff00 }
+
+.book-console .ansi-bg-color-12  { background-color: #5c5cff }
+
+.book-console .ansi-bg-color-13  { background-color: #ff00ff }
+
+.book-console .ansi-bg-color-14  { background-color: #00ffff }
+
+.book-console .ansi-bg-color-15  { background-color: #ffffff }
+
+.book-console .ansi-color-16     { color: #000000 }
+
+.book-console .ansi-color-52     { color: #330000 }
+
+.book-console .ansi-color-88     { color: #660000 }
+
+.book-console .ansi-color-124    { color: #990000 }
+
+.book-console .ansi-color-160    { color: #cc0000 }
+
+.book-console .ansi-color-196    { color: #ff0000 }
+
+.book-console .ansi-color-22     { color: #003300 }
+
+.book-console .ansi-color-58     { color: #333300 }
+
+.book-console .ansi-color-94     { color: #663300 }
+
+.book-console .ansi-color-130    { color: #993300 }
+
+.book-console .ansi-color-166    { color: #cc3300 }
+
+.book-console .ansi-color-202    { color: #ff3300 }
+
+.book-console .ansi-color-28     { color: #006600 }
+
+.book-console .ansi-color-64     { color: #336600 }
+
+.book-console .ansi-color-100    { color: #666600 }
+
+.book-console .ansi-color-136    { color: #996600 }
+
+.book-console .ansi-color-172    { color: #cc6600 }
+
+.book-console .ansi-color-208    { color: #ff6600 }
+
+.book-console .ansi-color-34     { color: #009900 }
+
+.book-console .ansi-color-70     { color: #339900 }
+
+.book-console .ansi-color-106    { color: #669900 }
+
+.book-console .ansi-color-142    { color: #999900 }
+
+.book-console .ansi-color-178    { color: #cc9900 }
+
+.book-console .ansi-color-214    { color: #ff9900 }
+
+.book-console .ansi-color-40     { color: #00cc00 }
+
+.book-console .ansi-color-76     { color: #33cc00 }
+
+.book-console .ansi-color-112    { color: #66cc00 }
+
+.book-console .ansi-color-148    { color: #99cc00 }
+
+.book-console .ansi-color-184    { color: #cccc00 }
+
+.book-console .ansi-color-220    { color: #ffcc00 }
+
+.book-console .ansi-color-46     { color: #00ff00 }
+
+.book-console .ansi-color-82     { color: #33ff00 }
+
+.book-console .ansi-color-118    { color: #66ff00 }
+
+.book-console .ansi-color-154    { color: #99ff00 }
+
+.book-console .ansi-color-190    { color: #ccff00 }
+
+.book-console .ansi-color-226    { color: #ffff00 }
+
+.book-console .ansi-color-17     { color: #000033 }
+
+.book-console .ansi-color-53     { color: #330033 }
+
+.book-console .ansi-color-89     { color: #660033 }
+
+.book-console .ansi-color-125    { color: #990033 }
+
+.book-console .ansi-color-161    { color: #cc0033 }
+
+.book-console .ansi-color-197    { color: #ff0033 }
+
+.book-console .ansi-color-23     { color: #003333 }
+
+.book-console .ansi-color-59     { color: #333333 }
+
+.book-console .ansi-color-95     { color: #663333 }
+
+.book-console .ansi-color-131    { color: #993333 }
+
+.book-console .ansi-color-167    { color: #cc3333 }
+
+.book-console .ansi-color-203    { color: #ff3333 }
+
+.book-console .ansi-color-29     { color: #006633 }
+
+.book-console .ansi-color-65     { color: #336633 }
+
+.book-console .ansi-color-101    { color: #666633 }
+
+.book-console .ansi-color-137    { color: #996633 }
+
+.book-console .ansi-color-173    { color: #cc6633 }
+
+.book-console .ansi-color-209    { color: #ff6633 }
+
+.book-console .ansi-color-35     { color: #009933 }
+
+.book-console .ansi-color-71     { color: #339933 }
+
+.book-console .ansi-color-107    { color: #669933 }
+
+.book-console .ansi-color-143    { color: #999933 }
+
+.book-console .ansi-color-179    { color: #cc9933 }
+
+.book-console .ansi-color-215    { color: #ff9933 }
+
+.book-console .ansi-color-41     { color: #00cc33 }
+
+.book-console .ansi-color-77     { color: #33cc33 }
+
+.book-console .ansi-color-113    { color: #66cc33 }
+
+.book-console .ansi-color-149    { color: #99cc33 }
+
+.book-console .ansi-color-185    { color: #cccc33 }
+
+.book-console .ansi-color-221    { color: #ffcc33 }
+
+.book-console .ansi-color-47     { color: #00ff33 }
+
+.book-console .ansi-color-83     { color: #33ff33 }
+
+.book-console .ansi-color-119    { color: #66ff33 }
+
+.book-console .ansi-color-155    { color: #99ff33 }
+
+.book-console .ansi-color-191    { color: #ccff33 }
+
+.book-console .ansi-color-227    { color: #ffff33 }
+
+.book-console .ansi-color-18     { color: #000066 }
+
+.book-console .ansi-color-54     { color: #330066 }
+
+.book-console .ansi-color-90     { color: #660066 }
+
+.book-console .ansi-color-126    { color: #990066 }
+
+.book-console .ansi-color-162    { color: #cc0066 }
+
+.book-console .ansi-color-198    { color: #ff0066 }
+
+.book-console .ansi-color-24     { color: #003366 }
+
+.book-console .ansi-color-60     { color: #333366 }
+
+.book-console .ansi-color-96     { color: #663366 }
+
+.book-console .ansi-color-132    { color: #993366 }
+
+.book-console .ansi-color-168    { color: #cc3366 }
+
+.book-console .ansi-color-204    { color: #ff3366 }
+
+.book-console .ansi-color-30     { color: #006666 }
+
+.book-console .ansi-color-66     { color: #336666 }
+
+.book-console .ansi-color-102    { color: #666666 }
+
+.book-console .ansi-color-138    { color: #996666 }
+
+.book-console .ansi-color-174    { color: #cc6666 }
+
+.book-console .ansi-color-210    { color: #ff6666 }
+
+.book-console .ansi-color-36     { color: #009966 }
+
+.book-console .ansi-color-72     { color: #339966 }
+
+.book-console .ansi-color-108    { color: #669966 }
+
+.book-console .ansi-color-144    { color: #999966 }
+
+.book-console .ansi-color-180    { color: #cc9966 }
+
+.book-console .ansi-color-216    { color: #ff9966 }
+
+.book-console .ansi-color-42     { color: #00cc66 }
+
+.book-console .ansi-color-78     { color: #33cc66 }
+
+.book-console .ansi-color-114    { color: #66cc66 }
+
+.book-console .ansi-color-150    { color: #99cc66 }
+
+.book-console .ansi-color-186    { color: #cccc66 }
+
+.book-console .ansi-color-222    { color: #ffcc66 }
+
+.book-console .ansi-color-48     { color: #00ff66 }
+
+.book-console .ansi-color-84     { color: #33ff66 }
+
+.book-console .ansi-color-120    { color: #66ff66 }
+
+.book-console .ansi-color-156    { color: #99ff66 }
+
+.book-console .ansi-color-192    { color: #ccff66 }
+
+.book-console .ansi-color-228    { color: #ffff66 }
+
+.book-console .ansi-color-19     { color: #000099 }
+
+.book-console .ansi-color-55     { color: #330099 }
+
+.book-console .ansi-color-91     { color: #660099 }
+
+.book-console .ansi-color-127    { color: #990099 }
+
+.book-console .ansi-color-163    { color: #cc0099 }
+
+.book-console .ansi-color-199    { color: #ff0099 }
+
+.book-console .ansi-color-25     { color: #003399 }
+
+.book-console .ansi-color-61     { color: #333399 }
+
+.book-console .ansi-color-97     { color: #663399 }
+
+.book-console .ansi-color-133    { color: #993399 }
+
+.book-console .ansi-color-169    { color: #cc3399 }
+
+.book-console .ansi-color-205    { color: #ff3399 }
+
+.book-console .ansi-color-31     { color: #006699 }
+
+.book-console .ansi-color-67     { color: #336699 }
+
+.book-console .ansi-color-103    { color: #666699 }
+
+.book-console .ansi-color-139    { color: #996699 }
+
+.book-console .ansi-color-175    { color: #cc6699 }
+
+.book-console .ansi-color-211    { color: #ff6699 }
+
+.book-console .ansi-color-37     { color: #009999 }
+
+.book-console .ansi-color-73     { color: #339999 }
+
+.book-console .ansi-color-109    { color: #669999 }
+
+.book-console .ansi-color-145    { color: #999999 }
+
+.book-console .ansi-color-181    { color: #cc9999 }
+
+.book-console .ansi-color-217    { color: #ff9999 }
+
+.book-console .ansi-color-43     { color: #00cc99 }
+
+.book-console .ansi-color-79     { color: #33cc99 }
+
+.book-console .ansi-color-115    { color: #66cc99 }
+
+.book-console .ansi-color-151    { color: #99cc99 }
+
+.book-console .ansi-color-187    { color: #cccc99 }
+
+.book-console .ansi-color-223    { color: #ffcc99 }
+
+.book-console .ansi-color-49     { color: #00ff99 }
+
+.book-console .ansi-color-85     { color: #33ff99 }
+
+.book-console .ansi-color-121    { color: #66ff99 }
+
+.book-console .ansi-color-157    { color: #99ff99 }
+
+.book-console .ansi-color-193    { color: #ccff99 }
+
+.book-console .ansi-color-229    { color: #ffff99 }
+
+.book-console .ansi-color-20     { color: #0000cc }
+
+.book-console .ansi-color-56     { color: #3300cc }
+
+.book-console .ansi-color-92     { color: #6600cc }
+
+.book-console .ansi-color-128    { color: #9900cc }
+
+.book-console .ansi-color-164    { color: #cc00cc }
+
+.book-console .ansi-color-200    { color: #ff00cc }
+
+.book-console .ansi-color-26     { color: #0033cc }
+
+.book-console .ansi-color-62     { color: #3333cc }
+
+.book-console .ansi-color-98     { color: #6633cc }
+
+.book-console .ansi-color-134    { color: #9933cc }
+
+.book-console .ansi-color-170    { color: #cc33cc }
+
+.book-console .ansi-color-206    { color: #ff33cc }
+
+.book-console .ansi-color-32     { color: #0066cc }
+
+.book-console .ansi-color-68     { color: #3366cc }
+
+.book-console .ansi-color-104    { color: #6666cc }
+
+.book-console .ansi-color-140    { color: #9966cc }
+
+.book-console .ansi-color-176    { color: #cc66cc }
+
+.book-console .ansi-color-212    { color: #ff66cc }
+
+.book-console .ansi-color-38     { color: #0099cc }
+
+.book-console .ansi-color-74     { color: #3399cc }
+
+.book-console .ansi-color-110    { color: #6699cc }
+
+.book-console .ansi-color-146    { color: #9999cc }
+
+.book-console .ansi-color-182    { color: #cc99cc }
+
+.book-console .ansi-color-218    { color: #ff99cc }
+
+.book-console .ansi-color-44     { color: #00cccc }
+
+.book-console .ansi-color-80     { color: #33cccc }
+
+.book-console .ansi-color-116    { color: #66cccc }
+
+.book-console .ansi-color-152    { color: #99cccc }
+
+.book-console .ansi-color-188    { color: #cccccc }
+
+.book-console .ansi-color-224    { color: #ffcccc }
+
+.book-console .ansi-color-50     { color: #00ffcc }
+
+.book-console .ansi-color-86     { color: #33ffcc }
+
+.book-console .ansi-color-122    { color: #66ffcc }
+
+.book-console .ansi-color-158    { color: #99ffcc }
+
+.book-console .ansi-color-194    { color: #ccffcc }
+
+.book-console .ansi-color-230    { color: #ffffcc }
+
+.book-console .ansi-color-21     { color: #0000ff }
+
+.book-console .ansi-color-57     { color: #3300ff }
+
+.book-console .ansi-color-93     { color: #6600ff }
+
+.book-console .ansi-color-129    { color: #9900ff }
+
+.book-console .ansi-color-165    { color: #cc00ff }
+
+.book-console .ansi-color-201    { color: #ff00ff }
+
+.book-console .ansi-color-27     { color: #0033ff }
+
+.book-console .ansi-color-63     { color: #3333ff }
+
+.book-console .ansi-color-99     { color: #6633ff }
+
+.book-console .ansi-color-135    { color: #9933ff }
+
+.book-console .ansi-color-171    { color: #cc33ff }
+
+.book-console .ansi-color-207    { color: #ff33ff }
+
+.book-console .ansi-color-33     { color: #0066ff }
+
+.book-console .ansi-color-69     { color: #3366ff }
+
+.book-console .ansi-color-105    { color: #6666ff }
+
+.book-console .ansi-color-141    { color: #9966ff }
+
+.book-console .ansi-color-177    { color: #cc66ff }
+
+.book-console .ansi-color-213    { color: #ff66ff }
+
+.book-console .ansi-color-39     { color: #0099ff }
+
+.book-console .ansi-color-75     { color: #3399ff }
+
+.book-console .ansi-color-111    { color: #6699ff }
+
+.book-console .ansi-color-147    { color: #9999ff }
+
+.book-console .ansi-color-183    { color: #cc99ff }
+
+.book-console .ansi-color-219    { color: #ff99ff }
+
+.book-console .ansi-color-45     { color: #00ccff }
+
+.book-console .ansi-color-81     { color: #33ccff }
+
+.book-console .ansi-color-117    { color: #66ccff }
+
+.book-console .ansi-color-153    { color: #99ccff }
+
+.book-console .ansi-color-189    { color: #ccccff }
+
+.book-console .ansi-color-225    { color: #ffccff }
+
+.book-console .ansi-color-51     { color: #00ffff }
+
+.book-console .ansi-color-87     { color: #33ffff }
+
+.book-console .ansi-color-123    { color: #66ffff }
+
+.book-console .ansi-color-159    { color: #99ffff }
+
+.book-console .ansi-color-195    { color: #ccffff }
+
+.book-console .ansi-color-231    { color: #ffffff }
+
+.book-console .ansi-color-232    { color: #0a0a0a }
+
+.book-console .ansi-color-233    { color: #141414 }
+
+.book-console .ansi-color-234    { color: #1f1f1f }
+
+.book-console .ansi-color-235    { color: #292929 }
+
+.book-console .ansi-color-236    { color: #333333 }
+
+.book-console .ansi-color-237    { color: #3d3d3d }
+
+.book-console .ansi-color-238    { color: #474747 }
+
+.book-console .ansi-color-239    { color: #525252 }
+
+.book-console .ansi-color-240    { color: #5c5c5c }
+
+.book-console .ansi-color-241    { color: #666666 }
+
+.book-console .ansi-color-242    { color: #707070 }
+
+.book-console .ansi-color-243    { color: #7a7a7a }
+
+.book-console .ansi-color-244    { color: #858585 }
+
+.book-console .ansi-color-245    { color: #8f8f8f }
+
+.book-console .ansi-color-246    { color: #999999 }
+
+.book-console .ansi-color-247    { color: #a3a3a3 }
+
+.book-console .ansi-color-248    { color: #adadad }
+
+.book-console .ansi-color-249    { color: #b8b8b8 }
+
+.book-console .ansi-color-250    { color: #c2c2c2 }
+
+.book-console .ansi-color-251    { color: #cccccc }
+
+.book-console .ansi-color-252    { color: #d6d6d6 }
+
+.book-console .ansi-color-253    { color: #e0e0e0 }
+
+.book-console .ansi-color-254    { color: #ebebeb }
+
+.book-console .ansi-color-255    { color: #f5f5f5 }
+
+.book-console .ansi-bg-color-16  { background-color: #000000 }
+
+.book-console .ansi-bg-color-52  { background-color: #330000 }
+
+.book-console .ansi-bg-color-88  { background-color: #660000 }
+
+.book-console .ansi-bg-color-124 { background-color: #990000 }
+
+.book-console .ansi-bg-color-160 { background-color: #cc0000 }
+
+.book-console .ansi-bg-color-196 { background-color: #ff0000 }
+
+.book-console .ansi-bg-color-22  { background-color: #003300 }
+
+.book-console .ansi-bg-color-58  { background-color: #333300 }
+
+.book-console .ansi-bg-color-94  { background-color: #663300 }
+
+.book-console .ansi-bg-color-130 { background-color: #993300 }
+
+.book-console .ansi-bg-color-166 { background-color: #cc3300 }
+
+.book-console .ansi-bg-color-202 { background-color: #ff3300 }
+
+.book-console .ansi-bg-color-28  { background-color: #006600 }
+
+.book-console .ansi-bg-color-64  { background-color: #336600 }
+
+.book-console .ansi-bg-color-100 { background-color: #666600 }
+
+.book-console .ansi-bg-color-136 { background-color: #996600 }
+
+.book-console .ansi-bg-color-172 { background-color: #cc6600 }
+
+.book-console .ansi-bg-color-208 { background-color: #ff6600 }
+
+.book-console .ansi-bg-color-34  { background-color: #009900 }
+
+.book-console .ansi-bg-color-70  { background-color: #339900 }
+
+.book-console .ansi-bg-color-106 { background-color: #669900 }
+
+.book-console .ansi-bg-color-142 { background-color: #999900 }
+
+.book-console .ansi-bg-color-178 { background-color: #cc9900 }
+
+.book-console .ansi-bg-color-214 { background-color: #ff9900 }
+
+.book-console .ansi-bg-color-40  { background-color: #00cc00 }
+
+.book-console .ansi-bg-color-76  { background-color: #33cc00 }
+
+.book-console .ansi-bg-color-112 { background-color: #66cc00 }
+
+.book-console .ansi-bg-color-148 { background-color: #99cc00 }
+
+.book-console .ansi-bg-color-184 { background-color: #cccc00 }
+
+.book-console .ansi-bg-color-220 { background-color: #ffcc00 }
+
+.book-console .ansi-bg-color-46  { background-color: #00ff00 }
+
+.book-console .ansi-bg-color-82  { background-color: #33ff00 }
+
+.book-console .ansi-bg-color-118 { background-color: #66ff00 }
+
+.book-console .ansi-bg-color-154 { background-color: #99ff00 }
+
+.book-console .ansi-bg-color-190 { background-color: #ccff00 }
+
+.book-console .ansi-bg-color-226 { background-color: #ffff00 }
+
+.book-console .ansi-bg-color-17  { background-color: #000033 }
+
+.book-console .ansi-bg-color-53  { background-color: #330033 }
+
+.book-console .ansi-bg-color-89  { background-color: #660033 }
+
+.book-console .ansi-bg-color-125 { background-color: #990033 }
+
+.book-console .ansi-bg-color-161 { background-color: #cc0033 }
+
+.book-console .ansi-bg-color-197 { background-color: #ff0033 }
+
+.book-console .ansi-bg-color-23  { background-color: #003333 }
+
+.book-console .ansi-bg-color-59  { background-color: #333333 }
+
+.book-console .ansi-bg-color-95  { background-color: #663333 }
+
+.book-console .ansi-bg-color-131 { background-color: #993333 }
+
+.book-console .ansi-bg-color-167 { background-color: #cc3333 }
+
+.book-console .ansi-bg-color-203 { background-color: #ff3333 }
+
+.book-console .ansi-bg-color-29  { background-color: #006633 }
+
+.book-console .ansi-bg-color-65  { background-color: #336633 }
+
+.book-console .ansi-bg-color-101 { background-color: #666633 }
+
+.book-console .ansi-bg-color-137 { background-color: #996633 }
+
+.book-console .ansi-bg-color-173 { background-color: #cc6633 }
+
+.book-console .ansi-bg-color-209 { background-color: #ff6633 }
+
+.book-console .ansi-bg-color-35  { background-color: #009933 }
+
+.book-console .ansi-bg-color-71  { background-color: #339933 }
+
+.book-console .ansi-bg-color-107 { background-color: #669933 }
+
+.book-console .ansi-bg-color-143 { background-color: #999933 }
+
+.book-console .ansi-bg-color-179 { background-color: #cc9933 }
+
+.book-console .ansi-bg-color-215 { background-color: #ff9933 }
+
+.book-console .ansi-bg-color-41  { background-color: #00cc33 }
+
+.book-console .ansi-bg-color-77  { background-color: #33cc33 }
+
+.book-console .ansi-bg-color-113 { background-color: #66cc33 }
+
+.book-console .ansi-bg-color-149 { background-color: #99cc33 }
+
+.book-console .ansi-bg-color-185 { background-color: #cccc33 }
+
+.book-console .ansi-bg-color-221 { background-color: #ffcc33 }
+
+.book-console .ansi-bg-color-47  { background-color: #00ff33 }
+
+.book-console .ansi-bg-color-83  { background-color: #33ff33 }
+
+.book-console .ansi-bg-color-119 { background-color: #66ff33 }
+
+.book-console .ansi-bg-color-155 { background-color: #99ff33 }
+
+.book-console .ansi-bg-color-191 { background-color: #ccff33 }
+
+.book-console .ansi-bg-color-227 { background-color: #ffff33 }
+
+.book-console .ansi-bg-color-18  { background-color: #000066 }
+
+.book-console .ansi-bg-color-54  { background-color: #330066 }
+
+.book-console .ansi-bg-color-90  { background-color: #660066 }
+
+.book-console .ansi-bg-color-126 { background-color: #990066 }
+
+.book-console .ansi-bg-color-162 { background-color: #cc0066 }
+
+.book-console .ansi-bg-color-198 { background-color: #ff0066 }
+
+.book-console .ansi-bg-color-24  { background-color: #003366 }
+
+.book-console .ansi-bg-color-60  { background-color: #333366 }
+
+.book-console .ansi-bg-color-96  { background-color: #663366 }
+
+.book-console .ansi-bg-color-132 { background-color: #993366 }
+
+.book-console .ansi-bg-color-168 { background-color: #cc3366 }
+
+.book-console .ansi-bg-color-204 { background-color: #ff3366 }
+
+.book-console .ansi-bg-color-30  { background-color: #006666 }
+
+.book-console .ansi-bg-color-66  { background-color: #336666 }
+
+.book-console .ansi-bg-color-102 { background-color: #666666 }
+
+.book-console .ansi-bg-color-138 { background-color: #996666 }
+
+.book-console .ansi-bg-color-174 { background-color: #cc6666 }
+
+.book-console .ansi-bg-color-210 { background-color: #ff6666 }
+
+.book-console .ansi-bg-color-36  { background-color: #009966 }
+
+.book-console .ansi-bg-color-72  { background-color: #339966 }
+
+.book-console .ansi-bg-color-108 { background-color: #669966 }
+
+.book-console .ansi-bg-color-144 { background-color: #999966 }
+
+.book-console .ansi-bg-color-180 { background-color: #cc9966 }
+
+.book-console .ansi-bg-color-216 { background-color: #ff9966 }
+
+.book-console .ansi-bg-color-42  { background-color: #00cc66 }
+
+.book-console .ansi-bg-color-78  { background-color: #33cc66 }
+
+.book-console .ansi-bg-color-114 { background-color: #66cc66 }
+
+.book-console .ansi-bg-color-150 { background-color: #99cc66 }
+
+.book-console .ansi-bg-color-186 { background-color: #cccc66 }
+
+.book-console .ansi-bg-color-222 { background-color: #ffcc66 }
+
+.book-console .ansi-bg-color-48  { background-color: #00ff66 }
+
+.book-console .ansi-bg-color-84  { background-color: #33ff66 }
+
+.book-console .ansi-bg-color-120 { background-color: #66ff66 }
+
+.book-console .ansi-bg-color-156 { background-color: #99ff66 }
+
+.book-console .ansi-bg-color-192 { background-color: #ccff66 }
+
+.book-console .ansi-bg-color-228 { background-color: #ffff66 }
+
+.book-console .ansi-bg-color-19  { background-color: #000099 }
+
+.book-console .ansi-bg-color-55  { background-color: #330099 }
+
+.book-console .ansi-bg-color-91  { background-color: #660099 }
+
+.book-console .ansi-bg-color-127 { background-color: #990099 }
+
+.book-console .ansi-bg-color-163 { background-color: #cc0099 }
+
+.book-console .ansi-bg-color-199 { background-color: #ff0099 }
+
+.book-console .ansi-bg-color-25  { background-color: #003399 }
+
+.book-console .ansi-bg-color-61  { background-color: #333399 }
+
+.book-console .ansi-bg-color-97  { background-color: #663399 }
+
+.book-console .ansi-bg-color-133 { background-color: #993399 }
+
+.book-console .ansi-bg-color-169 { background-color: #cc3399 }
+
+.book-console .ansi-bg-color-205 { background-color: #ff3399 }
+
+.book-console .ansi-bg-color-31  { background-color: #006699 }
+
+.book-console .ansi-bg-color-67  { background-color: #336699 }
+
+.book-console .ansi-bg-color-103 { background-color: #666699 }
+
+.book-console .ansi-bg-color-139 { background-color: #996699 }
+
+.book-console .ansi-bg-color-175 { background-color: #cc6699 }
+
+.book-console .ansi-bg-color-211 { background-color: #ff6699 }
+
+.book-console .ansi-bg-color-37  { background-color: #009999 }
+
+.book-console .ansi-bg-color-73  { background-color: #339999 }
+
+.book-console .ansi-bg-color-109 { background-color: #669999 }
+
+.book-console .ansi-bg-color-145 { background-color: #999999 }
+
+.book-console .ansi-bg-color-181 { background-color: #cc9999 }
+
+.book-console .ansi-bg-color-217 { background-color: #ff9999 }
+
+.book-console .ansi-bg-color-43  { background-color: #00cc99 }
+
+.book-console .ansi-bg-color-79  { background-color: #33cc99 }
+
+.book-console .ansi-bg-color-115 { background-color: #66cc99 }
+
+.book-console .ansi-bg-color-151 { background-color: #99cc99 }
+
+.book-console .ansi-bg-color-187 { background-color: #cccc99 }
+
+.book-console .ansi-bg-color-223 { background-color: #ffcc99 }
+
+.book-console .ansi-bg-color-49  { background-color: #00ff99 }
+
+.book-console .ansi-bg-color-85  { background-color: #33ff99 }
+
+.book-console .ansi-bg-color-121 { background-color: #66ff99 }
+
+.book-console .ansi-bg-color-157 { background-color: #99ff99 }
+
+.book-console .ansi-bg-color-193 { background-color: #ccff99 }
+
+.book-console .ansi-bg-color-229 { background-color: #ffff99 }
+
+.book-console .ansi-bg-color-20  { background-color: #0000cc }
+
+.book-console .ansi-bg-color-56  { background-color: #3300cc }
+
+.book-console .ansi-bg-color-92  { background-color: #6600cc }
+
+.book-console .ansi-bg-color-128 { background-color: #9900cc }
+
+.book-console .ansi-bg-color-164 { background-color: #cc00cc }
+
+.book-console .ansi-bg-color-200 { background-color: #ff00cc }
+
+.book-console .ansi-bg-color-26  { background-color: #0033cc }
+
+.book-console .ansi-bg-color-62  { background-color: #3333cc }
+
+.book-console .ansi-bg-color-98  { background-color: #6633cc }
+
+.book-console .ansi-bg-color-134 { background-color: #9933cc }
+
+.book-console .ansi-bg-color-170 { background-color: #cc33cc }
+
+.book-console .ansi-bg-color-206 { background-color: #ff33cc }
+
+.book-console .ansi-bg-color-32  { background-color: #0066cc }
+
+.book-console .ansi-bg-color-68  { background-color: #3366cc }
+
+.book-console .ansi-bg-color-104 { background-color: #6666cc }
+
+.book-console .ansi-bg-color-140 { background-color: #9966cc }
+
+.book-console .ansi-bg-color-176 { background-color: #cc66cc }
+
+.book-console .ansi-bg-color-212 { background-color: #ff66cc }
+
+.book-console .ansi-bg-color-38  { background-color: #0099cc }
+
+.book-console .ansi-bg-color-74  { background-color: #3399cc }
+
+.book-console .ansi-bg-color-110 { background-color: #6699cc }
+
+.book-console .ansi-bg-color-146 { background-color: #9999cc }
+
+.book-console .ansi-bg-color-182 { background-color: #cc99cc }
+
+.book-console .ansi-bg-color-218 { background-color: #ff99cc }
+
+.book-console .ansi-bg-color-44  { background-color: #00cccc }
+
+.book-console .ansi-bg-color-80  { background-color: #33cccc }
+
+.book-console .ansi-bg-color-116 { background-color: #66cccc }
+
+.book-console .ansi-bg-color-152 { background-color: #99cccc }
+
+.book-console .ansi-bg-color-188 { background-color: #cccccc }
+
+.book-console .ansi-bg-color-224 { background-color: #ffcccc }
+
+.book-console .ansi-bg-color-50  { background-color: #00ffcc }
+
+.book-console .ansi-bg-color-86  { background-color: #33ffcc }
+
+.book-console .ansi-bg-color-122 { background-color: #66ffcc }
+
+.book-console .ansi-bg-color-158 { background-color: #99ffcc }
+
+.book-console .ansi-bg-color-194 { background-color: #ccffcc }
+
+.book-console .ansi-bg-color-230 { background-color: #ffffcc }
+
+.book-console .ansi-bg-color-21  { background-color: #0000ff }
+
+.book-console .ansi-bg-color-57  { background-color: #3300ff }
+
+.book-console .ansi-bg-color-93  { background-color: #6600ff }
+
+.book-console .ansi-bg-color-129 { background-color: #9900ff }
+
+.book-console .ansi-bg-color-165 { background-color: #cc00ff }
+
+.book-console .ansi-bg-color-201 { background-color: #ff00ff }
+
+.book-console .ansi-bg-color-27  { background-color: #0033ff }
+
+.book-console .ansi-bg-color-63  { background-color: #3333ff }
+
+.book-console .ansi-bg-color-99  { background-color: #6633ff }
+
+.book-console .ansi-bg-color-135 { background-color: #9933ff }
+
+.book-console .ansi-bg-color-171 { background-color: #cc33ff }
+
+.book-console .ansi-bg-color-207 { background-color: #ff33ff }
+
+.book-console .ansi-bg-color-33  { background-color: #0066ff }
+
+.book-console .ansi-bg-color-69  { background-color: #3366ff }
+
+.book-console .ansi-bg-color-105 { background-color: #6666ff }
+
+.book-console .ansi-bg-color-141 { background-color: #9966ff }
+
+.book-console .ansi-bg-color-177 { background-color: #cc66ff }
+
+.book-console .ansi-bg-color-213 { background-color: #ff66ff }
+
+.book-console .ansi-bg-color-39  { background-color: #0099ff }
+
+.book-console .ansi-bg-color-75  { background-color: #3399ff }
+
+.book-console .ansi-bg-color-111 { background-color: #6699ff }
+
+.book-console .ansi-bg-color-147 { background-color: #9999ff }
+
+.book-console .ansi-bg-color-183 { background-color: #cc99ff }
+
+.book-console .ansi-bg-color-219 { background-color: #ff99ff }
+
+.book-console .ansi-bg-color-45  { background-color: #00ccff }
+
+.book-console .ansi-bg-color-81  { background-color: #33ccff }
+
+.book-console .ansi-bg-color-117 { background-color: #66ccff }
+
+.book-console .ansi-bg-color-153 { background-color: #99ccff }
+
+.book-console .ansi-bg-color-189 { background-color: #ccccff }
+
+.book-console .ansi-bg-color-225 { background-color: #ffccff }
+
+.book-console .ansi-bg-color-51  { background-color: #00ffff }
+
+.book-console .ansi-bg-color-87  { background-color: #33ffff }
+
+.book-console .ansi-bg-color-123 { background-color: #66ffff }
+
+.book-console .ansi-bg-color-159 { background-color: #99ffff }
+
+.book-console .ansi-bg-color-195 { background-color: #ccffff }
+
+.book-console .ansi-bg-color-231 { background-color: #ffffff }
+
+.book-console .ansi-bg-color-232 { background-color: #0a0a0a }
+
+.book-console .ansi-bg-color-233 { background-color: #141414 }
+
+.book-console .ansi-bg-color-234 { background-color: #1f1f1f }
+
+.book-console .ansi-bg-color-235 { background-color: #292929 }
+
+.book-console .ansi-bg-color-236 { background-color: #333333 }
+
+.book-console .ansi-bg-color-237 { background-color: #3d3d3d }
+
+.book-console .ansi-bg-color-238 { background-color: #474747 }
+
+.book-console .ansi-bg-color-239 { background-color: #525252 }
+
+.book-console .ansi-bg-color-240 { background-color: #5c5c5c }
+
+.book-console .ansi-bg-color-241 { background-color: #666666 }
+
+.book-console .ansi-bg-color-242 { background-color: #707070 }
+
+.book-console .ansi-bg-color-243 { background-color: #7a7a7a }
+
+.book-console .ansi-bg-color-244 { background-color: #858585 }
+
+.book-console .ansi-bg-color-245 { background-color: #8f8f8f }
+
+.book-console .ansi-bg-color-246 { background-color: #999999 }
+
+.book-console .ansi-bg-color-247 { background-color: #a3a3a3 }
+
+.book-console .ansi-bg-color-248 { background-color: #adadad }
+
+.book-console .ansi-bg-color-249 { background-color: #b8b8b8 }
+
+.book-console .ansi-bg-color-250 { background-color: #c2c2c2 }
+
+.book-console .ansi-bg-color-251 { background-color: #cccccc }
+
+.book-console .ansi-bg-color-252 { background-color: #d6d6d6 }
+
+.book-console .ansi-bg-color-253 { background-color: #e0e0e0 }
+
+.book-console .ansi-bg-color-254 { background-color: #ebebeb }
+
+.book-console .ansi-bg-color-255 { background-color: #f5f5f5 }
+
+</style>
+
+
+
+<link rel="stylesheet" href="book.css">
+<meta property="og:title" content="7&nbsp; Inspect a dataset – R for Social Science">
+<meta property="og:description" content="An introduction to R and the tidyverse for social-science research.">
+<meta property="og:image" content="https://socimh.github.io/R4SS/fig/viewer-all.svg">
+<meta property="og:site_name" content="R for Social Science">
+<meta property="og:image:alt" content="Editor-neutral table illustration showing the first nine countries, all six variables, column type cues and the total of 68 countries. Croatia has missing income.">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dplyr-skim.html">Explore variables</a></li><li class="breadcrumb-item"><a href="./dplyr-skim.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Inspect a dataset</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R for Social Science</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/socimh/R4SS/tree/main/en/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Get started with R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./objects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Objects in R</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manipulate tables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-grammar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Select columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-sort.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sort observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-pipe.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pipe</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-select.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Select observations</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Explore variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-skim.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Inspect a dataset</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-tab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Tabulate data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-stat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summarize data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./missing-values.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Missing values</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Visualize data</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manipulate variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-mutate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Create variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./group-variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Group variables</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./numeric-logical.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Logicals and numbers</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./categorical-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Strings and factors</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./text-dates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Dates and times</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lists.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">List columns</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Manage datasets</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Import and export</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-group.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Group and reshape</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr-join.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Combine datasets</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Nested datasets</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyze variables</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ggplot2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">ggplot2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./statistical-tests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Statistical tests</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">OLS regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logit-probit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Logit and probit</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fixed-effects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Fixed effects</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Programming</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./basic-operations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Basic expressions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tibble.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gss-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">GSS data</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#sec-open-country-data" id="toc-sec-open-country-data" class="nav-link active" data-scroll-target="#sec-open-country-data"><span class="header-section-number">7.1</span> Preview the table</a></li>
+  <li><a href="#sec-explore-viewer" id="toc-sec-explore-viewer" class="nav-link" data-scroll-target="#sec-explore-viewer"><span class="header-section-number">7.2</span> Browse the table</a></li>
+  <li><a href="#sec-explore-summaries" id="toc-sec-explore-summaries" class="nav-link" data-scroll-target="#sec-explore-summaries"><span class="header-section-number">7.3</span> From records to summaries</a></li>
+  <li><a href="#sec-find-country-variables" id="toc-sec-find-country-variables" class="nav-link" data-scroll-target="#sec-find-country-variables"><span class="header-section-number">7.4</span> Inspect names and labels</a></li>
+  <li><a href="#sec-country-codebook" id="toc-sec-country-codebook" class="nav-link" data-scroll-target="#sec-country-codebook"><span class="header-section-number">7.5</span> Inspect values and missingness</a></li>
+  <li><a href="#sec-explore-viewer-details" id="toc-sec-explore-viewer-details" class="nav-link" data-scroll-target="#sec-explore-viewer-details"><span class="header-section-number">7.6</span> Inspect and sort a view</a></li>
+  <li><a href="#sec-first-import" id="toc-sec-first-import" class="nav-link" data-scroll-target="#sec-first-import"><span class="header-section-number">7.7</span> Download and open a data file</a></li>
+  <li><a href="#sec-first-export" id="toc-sec-first-export" class="nav-link" data-scroll-target="#sec-first-export"><span class="header-section-number">7.8</span> Save a table to a file</a></li>
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review"><span class="header-section-number">7.9</span> Review</a></li>
+  <li><a href="#sec-explore-core-exercises" id="toc-sec-explore-core-exercises" class="nav-link" data-scroll-target="#sec-explore-core-exercises"><span class="header-section-number">7.10</span> Exercises</a></li>
+  <li><a href="#worked-answers" id="toc-worked-answers" class="nav-link" data-scroll-target="#worked-answers">Worked answers</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dplyr-skim.html">Explore variables</a></li><li class="breadcrumb-item"><a href="./dplyr-skim.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Inspect a dataset</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-exploring-data" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Inspect a dataset</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Which countries are in our data, and what can their measurements tell us? We have selected columns and rows from the country table. Now we return to it for a closer look at individual records, variable descriptions, and missing measurements, using the same data supplied by tidystata.</p>
+<p>By the end of this chapter, you will be able to preview and browse a table, read a first numerical summary, find variable names and descriptions, check available measurements, and download, import, and save a data file. Begin with the package-loading commands from <a href="intro.html#sec-first-code" class="quarto-xref"><span>Section 1.2</span></a>; for the file examples, reopen the project folder from <a href="intro.html#sec-first-script" class="quarto-xref"><span>Section 1.1.1</span></a>.</p>
+<p><a href="objects.html" class="quarto-xref"><span>Chapter 2</span></a> introduced tibbles and their printed previews. Here we inspect what the country table contains and what its measurements mean.</p>
+<section id="sec-open-country-data" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="sec-open-country-data"><span class="header-section-number">7.1</span> Preview the table</h2>
+<p>Load the packages in your current session. We will use <code>lifeexp</code>, a dataset included with tidystata. No download, file import, or survey preparation is needed.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidystata)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>library()</code> makes a package available in this session. Run these package-loading lines again after restarting R.</p>
+<div id="sec-explore-previews">
+
+</div>
+<p>Start with the printing method from <a href="objects.html" class="quarto-xref"><span>Chapter 2</span></a>. A short preview lets us check column names and see a few actual records. It does not tell us the distribution of values across the full dataset.</p>
+<p>Typing the table name prints it in the console without opening a viewer or assigning a new object:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>lifeexp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 68 × 6</span>
+       region country                popgrowth  lexp gnppc safewater
+   <span class="ansi ansi-italic ansi-color-246">&lt;hvn_lbll&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>                      <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250"> 1</span>          1 Albania                     -<span class="ansi ansi-color-1">0.6</span>    74   870        49
+<span class="ansi ansi-color-250"> 2</span>          1 Armenia                     -<span class="ansi ansi-color-1">1.2</span>    70   570        83
+<span class="ansi ansi-color-250"> 3</span>          1 Austria                      0.1    78 <span class="ansi ansi-underline">27</span>810        97
+<span class="ansi ansi-color-250"> 4</span>          1 Azerbaijan                   0.9    64   510        49
+<span class="ansi ansi-color-250"> 5</span>          1 Belarus                     -<span class="ansi ansi-color-1">0.5</span>    68  <span class="ansi ansi-underline">1</span>540        82
+<span class="ansi ansi-color-250"> 6</span>          1 Belgium                      0.2    77 <span class="ansi ansi-underline">26</span>530       100
+<span class="ansi ansi-color-250"> 7</span>          1 Bosnia and Herzegovina       1.8    74  <span class="ansi ansi-underline">1</span>230        87
+<span class="ansi ansi-color-250"> 8</span>          1 Bulgaria                    -<span class="ansi ansi-color-1">0.7</span>    71  <span class="ansi ansi-underline">1</span>440        90
+<span class="ansi ansi-color-250"> 9</span>          1 Croatia                     -<span class="ansi ansi-color-1">0.1</span>    72    <span class="ansi ansi-color-1">NA</span>        85
+<span class="ansi ansi-color-250">10</span>          1 Czechia                     -<span class="ansi ansi-color-1">0.1</span>    75  <span class="ansi ansi-underline">6</span>140        95
+<span class="ansi ansi-color-246"># ℹ 58 more rows</span>
+</code></pre></div>
+</div>
+<p>A tibble prints only the rows and columns that fit, but its header reports the full dimensions: 68 rows and six columns here. The far-left numbers give row positions. The omitted records remain stored in <code>lifeexp</code>.</p>
+<div id="sec-read-country-table">
+<div id="sec-explore-print">
+
+</div>
+</div>
+<p><code>nrow()</code> counts rows and <code>ncol()</code> counts columns in the complete table:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(lifeexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 68</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(lifeexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+</div>
+<p>The counts are still 68 rows and six columns, even though the console displays only a preview. Type cues such as <code>&lt;chr&gt;</code> for text and <code>&lt;dbl&gt;</code> for numbers help read the display. There is no need to memorize a catalogue of R types before working with these columns.</p>
+<p>A narrow console may also omit columns from a tibble printout. The footer lists columns that did not fit; they remain stored in the table. The viewer introduced next lets us inspect these columns and the rows beyond the preview. Printed values may also be shortened or rounded to fit the display. A preview does not select a smaller dataset or make its countries representative of the whole table.</p>
+</section>
+<section id="sec-explore-viewer" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="sec-explore-viewer"><span class="header-section-number">7.2</span> Browse the table</h2>
+<p>The printed preview gives us a first look. To examine individual values throughout the full dataset, we can open a data viewer. If you have used a spreadsheet, this offers a familiar way to inspect a table. You can scroll down through rows and across columns to examine individual cells. The viewer lets you inspect the data without editing the stored values.</p>
+<p>Tidystata’s <code>browse()</code> opens a table in the data viewer supplied by your editor. Supply the table name inside the parentheses. The command opens the complete dataset without changing it or assigning a new object. Run it in your editor:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">browse</span>(lifeexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><a href="#fig-explore-viewer" class="quarto-xref">Figure&nbsp;<span>7.1</span></a> illustrates the table view opened by <code>browse(lifeexp)</code>. The window and controls may differ between editors. Nine rows are shown in this schematic view; the full table still contains 68 countries and six variables. The far-left number is the row position, while <code>country</code> identifies the observation. Missing measurements appear as <code>NA</code>, meaning unavailable rather than zero, and <code>region</code> retains its attached value labels. Scroll to inspect countries beyond those visible at the top; all 68 remain available.</p>
+<div id="fig-explore-viewer" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Editor-neutral table illustration showing the first nine countries, all six variables, column type cues and the total of 68 countries. Croatia has missing income.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-explore-viewer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="fig/viewer-all.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Editor-neutral table illustration showing the first nine countries, all six variables, column type cues and the total of 68 countries. Croatia has missing income." width="862">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-explore-viewer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.1: Illustration of the table view opened by <code>browse(lifeexp)</code>.
+</figcaption>
+</figure>
+</div>
+<p>As <a href="objects.html" class="quarto-xref"><span>Chapter 2</span></a> explained, a tibble keeps columns together in a table. Here, each row keeps the values belonging to one country together. The table contains 68 countries and six variables. The <code>country</code> column identifies the countries.</p>
+<p>The data contain historical World Bank indicators. <code>lexp</code> is life expectancy at birth in years; <code>popgrowth</code> is annual population growth in percent; <code>gnppc</code> is GNI per capita in current US dollars, Atlas method. These refer to 1998. <code>safewater</code> is the percentage using safely managed drinking water services in 2000. The dataset does not cover every country in the world. The <a href="examples/lifeexp.md">dataset notes</a> document its source and units.</p>
+<p>To read the rows and columns more closely, <a href="#tbl-tibble-countries" class="quarto-xref">Table&nbsp;<span>7.1</span></a> presents a smaller view of the same data. It shows the first five countries in <code>lifeexp</code> and three of its variables. The headings give each variable’s meaning and the short name that R uses. For now, focus on how the information fits together.</p>
+<div class="table-responsive" role="region" aria-label="First five countries: names, life expectancy, and safe-water access" tabindex="0">
+<div class="cell">
+<div id="tbl-tibble-countries" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-tibble-countries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7.1: A preview of lifeexp. The complete dataset contains 68 countries and six variables.
+</figcaption>
+<div aria-describedby="tbl-tibble-countries-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 38%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Country (<code>country</code>)</th>
+<th style="text-align: right;">Life expectancy in years (<code>lexp</code>)</th>
+<th style="text-align: right;">Safe water, percent (<code>safewater</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Albania</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: right;">49</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Armenia</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">83</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Austria</td>
+<td style="text-align: right;">78</td>
+<td style="text-align: right;">97</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Azerbaijan</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">49</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Belarus</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: right;">82</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Read the first row from left to right. Albania has a recorded life expectancy of 74 years and safe-water access of 49 percent. These values belong together because they describe the same country. Now read down the life-expectancy column: each number measures the same attribute for a different country.</p>
+<p>This gives us three useful terms:</p>
+<ul>
+<li>An <strong>observation</strong> is the unit described by a row. Here, one observation is one country.</li>
+<li>A <strong>variable</strong> is an attribute recorded in a column, such as country name or life expectancy.</li>
+<li>A <strong>value</strong> is one entry in the table, such as Albania’s life expectancy of 74 years.</li>
+</ul>
+<p>When each observation has its own row, each variable has its own column, and each cell contains one value, we call the arrangement <strong>tidy data</strong>. <a href="#tbl-tibble-countries" class="quarto-xref">Table&nbsp;<span>7.1</span></a> follows that arrangement: reading across keeps one country’s information together; reading down lets us compare the same variable across countries.</p>
+<p>A column is a sequence of values, called a <strong>vector</strong>. A country-name column contains text; a life-expectancy column contains numbers. Columns in the same table have the same number of entries, so their positions keep each country’s measurements together. We can use these tables without first learning every other structure R supports.</p>
+<p>A tibble is a storage format; tidy data describe the arrangement of information. Converting an object to a tibble does not by itself make its organization appropriate for a research question.</p>
+</section>
+<section id="sec-explore-summaries" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="sec-explore-summaries"><span class="header-section-number">7.3</span> From records to summaries</h2>
+<p>Browsing helps us inspect individual observations. We can find a country and read its measurements across a row. But with thousands of rows, we could scroll to row 1,000 and still struggle to describe a column as a whole. <strong>Summary statistics</strong> give compact numerical descriptions of recorded values, such as their average and their minimum and maximum.</p>
+<section id="sec-basics-statistics" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="sec-basics-statistics"><span class="header-section-number">7.3.1</span> Follow a mean and a standard deviation</h3>
+<p>Before reading a summary table, we can follow its two central calculations on short abstract inputs. <code>c()</code> combines values in their written order. These numbers are a syntax demonstration, with no claim about respondents or countries:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>mean()</code> takes a numeric vector and returns its <strong>arithmetic mean</strong>: add the values and divide by their number. It returns one value without changing the input:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+</div>
+<p>The result is 6: the five values add to 30, and 30 divided by 5 is 6. An average can describe the center without being an observed value.</p>
+<p>The <strong>standard deviation</strong>, calculated by <code>sd()</code>, describes spread around that mean. It takes a numeric vector and returns one value in the input’s units:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.162278</code></pre>
+</div>
+</div>
+<p>The result is about 3.16. Standard deviation uses squared distances from the mean, divides their sum by the number of values minus one, and takes the square root. It is neither the largest minus the smallest value nor a guarantee that every value lies within one standard deviation of the mean.</p>
+<p>Compare the same five values with a second, more concentrated vector:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.162278</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.581139</code></pre>
+</div>
+</div>
+<p>Both means are 6, but the values in <code>y</code> lie closer to that center. Its standard deviation is about 1.58, compared with 3.16 for <code>x</code>. The mean and standard deviation answer different questions about the same values.</p>
+</section>
+<section id="missing-inputs-to-a-calculation" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="missing-inputs-to-a-calculation"><span class="header-section-number">7.3.2</span> Missing inputs to a calculation</h3>
+<p>An unavailable input changes what can be calculated. Store a short vector containing a missing value, then calculate its mean:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>with_missing <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="cn">NA</span>, <span class="dv">8</span>, <span class="dv">10</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(with_missing)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<p>The result is <code>NA</code>: by default, an unknown input makes the mean unknown. The named argument <code>na.rm = TRUE</code> asks <code>mean()</code> to exclude missing inputs from this calculation:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(with_missing, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+</div>
+<p>The four recorded values add to 24, so their mean is 6. This is the mean of the available values; it does not establish what the omitted value would have been. The saved vector still contains five entries, including <code>NA</code>.</p>
+<p><code>sd()</code> also returns <code>NA</code> by default when an input is missing. Give it the same exclusion instruction separately:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(with_missing)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(with_missing, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.651484</code></pre>
+</div>
+</div>
+<p>The second result describes spread among the four recorded values. Exclusion belongs to this call: setting <code>na.rm</code> for <code>mean()</code> does not set it for <code>sd()</code> or for later calls. Neither operation fills in missing data or deletes rows from a table.</p>
+</section>
+<section id="apply-the-calculations-to-countries" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="apply-the-calculations-to-countries"><span class="header-section-number">7.3.3</span> Apply the calculations to countries</h3>
+<p>Recall <code>$</code> from <a href="dplyr-select.html#sec-selectrows-missing" class="quarto-xref"><span>Section 6.4</span></a>: the table name on the left and column name on the right extract that column. What is average life expectancy across these countries, in years?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(lifeexp<span class="sc">$</span>lexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 71.66176</code></pre>
+</div>
+</div>
+<p>All 68 countries have a recorded life expectancy, so all contribute equally to the average of about 71.7 years. A country with a larger population has no extra influence in this calculation. It is a country average, not a population-weighted average across people.</p>
+<p>Water coverage has missing measurements. Compare the default mean with the explicit available-measurement calculation, then count the countries that contribute:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(lifeexp<span class="sc">$</span>safewater)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(lifeexp<span class="sc">$</span>safewater, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 77.16667</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(safewater)) <span class="sc">|&gt;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 54</code></pre>
+</div>
+</div>
+<p>The first mean is <code>NA</code>; the second is about 77.2 percent across the 54 countries with measurements. The filtered table is used only for the count; <code>lifeexp</code> retains all 68 countries and its missing values. The average alone does not tell us why 14 water measurements are unavailable.</p>
+</section>
+<section id="read-a-summary-table" class="level3" data-number="7.3.4">
+<h3 data-number="7.3.4" class="anchored" data-anchor-id="read-a-summary-table"><span class="header-section-number">7.3.4</span> Read a summary table</h3>
+<p>For a first look, <code>summ()</code> from tidystata takes a table followed by the numeric columns to summarize. Here we request life expectancy and safe-water access, writing the column names without quotation marks:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summ</span>(lifeexp, lexp, safewater)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 2 × 8</span>
+  name      type      n unique   min  mean    sd   max
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> lexp      dbl      68     20    57  71.7  5.16    79
+<span class="ansi ansi-color-250">2</span> safewater dbl      54     32    36  77.2 20.6    100
+</code></pre></div>
+</div>
+<p>Each output row describes one variable, rather than one country. <code>name</code> identifies the variable and <code>type</code> describes its storage type (<code>dbl</code> means numeric here). <code>n</code> counts non-missing values; <code>unique</code> counts distinct non-missing values. <code>min</code> and <code>max</code> are the smallest and largest values, <code>mean</code> is the arithmetic mean, and <code>sd</code> is the standard deviation just demonstrated. Both retain the measurement’s units. Unlike the default <code>mean()</code> and <code>sd()</code> calls, <code>summ()</code> excludes missing values automatically and reports the contributing count in <code>n</code>.</p>
+<p>Life expectancy averages about 71.7 years across the 68 countries, with recorded values from 57 to 79 years. Its standard deviation is about 5.2 years. Safe-water coverage averages about 77.2 percent among the 54 countries with measurements; its standard deviation is about 20.6 percentage points. Fourteen countries lack that measurement. These describe the countries with recorded values in this dataset, not every country in the world.</p>
+<p>The calculations use all non-missing values in each requested column, not just the rows visible in the viewer. The result is a new summary table; <code>lifeexp</code> is unchanged. We return to the choice and interpretation of statistics in <a href="dplyr-stat.html" class="quarto-xref"><span>Chapter 9</span></a>.</p>
+</section>
+</section>
+<section id="sec-find-country-variables" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="sec-find-country-variables"><span class="header-section-number">7.4</span> Inspect names and labels</h2>
+<div id="sec-explore-variables">
+
+</div>
+<p>Recall <code>ds()</code> from <a href="dplyr-grammar.html#sec-columns-list-names" class="quarto-xref"><span>Section 3.2</span></a>. It lists the exact column names that we can use in code:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ds</span>(lifeexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "region"    "country"   "popgrowth" "lexp"      "gnppc"     "safewater"</code></pre>
+</div>
+</div>
+<p>The names are useful for writing commands, but abbreviations can be hard to interpret. Tidystata’s <code>variables()</code> takes the table and returns a list of its column names with variable labels where available. Each row of this result describes one variable:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">variables</span>(lifeexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 6 × 2</span>
+  name      label                   
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>                   
+<span class="ansi ansi-color-250">1</span> region    Region                  
+<span class="ansi ansi-color-250">2</span> country   Country                 
+<span class="ansi ansi-color-250">3</span> popgrowth Avg. annual % growth    
+<span class="ansi ansi-color-250">4</span> lexp      Life expectancy at birth
+<span class="ansi ansi-color-250">5</span> gnppc     GNP per capita          
+<span class="ansi ansi-color-250">6</span> safewater Safe water              
+</code></pre></div>
+</div>
+<p>The <code>name</code> column contains the names used in code; <code>label</code> contains their descriptions. For example, <code>lexp</code> is paired with “Life expectancy at birth”. Neither entry is an individual country’s value. <code>variables()</code> leaves all country records unchanged. Labels help us identify a measure; the dataset notes supply its source and units.</p>
+<p>Variable labels describe columns. <strong>Value labels</strong> attach meanings to recorded codes, such as region names attached to numeric codes. The <code>&lt;hvn_lbll&gt;</code> cue marks this metadata in <code>region</code>; numeric storage does not make its categories quantities to average.</p>
+</section>
+<section id="sec-country-codebook" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="sec-country-codebook"><span class="header-section-number">7.5</span> Inspect values and missingness</h2>
+<div id="sec-explore-codebook">
+
+</div>
+<p><code>codebook()</code> reports names, labels, types, observed counts (<code>n</code>), and counts of distinct observed values (<code>unique</code>). Additional column names limit its report:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">codebook</span>(lifeexp, lexp, safewater)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 2 × 5</span>
+  variable  label                    type       n unique
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>                    <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>
+<span class="ansi ansi-color-250">1</span> lexp      Life expectancy at birth double    68     20
+<span class="ansi ansi-color-250">2</span> safewater Safe water               double    54     32
+</code></pre></div>
+</div>
+<p>Life expectancy has 68 observed values and 20 distinct observed values; water coverage has 54. The remaining 14 water measurements are missing. An observed count tells us how much information is recorded, not whether the measurements are correct or why others are unavailable. The <code>region</code> codes describe categories, not quantities to average. Always connect the printed values to their definitions.</p>
+</section>
+<section id="sec-explore-viewer-details" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="sec-explore-viewer-details"><span class="header-section-number">7.6</span> Inspect and sort a view</h2>
+<p>We can focus the view on a few variables. Bare column names after the table specify columns in the supplied order. Here <code>country</code> identifies the country, <code>lexp</code> gives life expectancy in years, and <code>safewater</code> gives the water percentage:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">browse</span>(lifeexp, country, lexp, safewater)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><a href="#fig-explore-viewer-columns" class="quarto-xref">Figure&nbsp;<span>7.2</span></a> displays three columns from the same 68-country table. The illustration shows the same nine rows as the full-table view. Choosing columns does not choose observations. Both calls leave <code>lifeexp</code> unchanged. This recalls the column selection learned in <a href="dplyr-grammar.html" class="quarto-xref"><span>Chapter 3</span></a>.</p>
+<div id="fig-explore-viewer-columns" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="The same nine countries with country, lexp and safewater. The total remains 68 countries, with three variables displayed.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-explore-viewer-columns-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="fig/viewer-columns.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The same nine countries with country, lexp and safewater. The total remains 68 countries, with three variables displayed." width="514">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-explore-viewer-columns-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.2: Illustration of <code>browse(lifeexp, country, lexp, safewater)</code>: the same observations with three selected variables.
+</figcaption>
+</figure>
+</div>
+<p>Return to the full-table view from <code>browse(lifeexp)</code>. Use your viewer’s sorting control to order <code>lexp</code> from highest to lowest. The control’s name and location depend on your editor. <a href="#fig-explore-viewer-sort" class="quarto-xref">Figure&nbsp;<span>7.3</span></a> shows the descending sort; the downward arrow beside <code>lexp</code> marks its direction. Across the complete dataset, life expectancy runs from 79 down to 57 years. All six variables move together with their countries; sorting does not attach one country’s water measurement to another country.</p>
+<div id="fig-explore-viewer-sort" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="All six variables with countries ordered by descending life expectancy. A downward arrow and the text lexp: descending mark the sorting key. Original row positions are retained at left; all 68 countries remain.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-explore-viewer-sort-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="fig/viewer-sorted.svg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="All six variables with countries ordered by descending life expectancy. A downward arrow and the text lexp: descending mark the sorting key. Original row positions are retained at left; all 68 countries remain." width="862">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-explore-viewer-sort-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.3: The view opened by <code>browse(lifeexp)</code>, after sorting by descending life expectancy in the viewer.
+</figcaption>
+</figure>
+</div>
+<p>Sorting within the viewer changes its display, not the stored order of <code>lifeexp</code>. <a href="dplyr-sort.html" class="quarto-xref"><span>Chapter 4</span></a> shows how to create and retain a reordered table in code.</p>
+</section>
+<section id="sec-first-import" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="sec-first-import"><span class="header-section-number">7.7</span> Download and open a data file</h2>
+<p>Your own survey will usually arrive as a file, rather than a dataset supplied by an R package. <strong>Downloading</strong> saves a file on your computer. <strong>Importing</strong> reads that file into an object in the current R session. We will use a second life-expectancy dataset to practice both steps.</p>
+<p><a href="https://ourworldindata.org/grapher/life-expectancy">Our World in Data’s life-expectancy page</a> presents estimates in years, compiled from historical sources and the United Nations World Population Prospects. Read the source description before downloading: these are period life-expectancy estimates, which summarize mortality conditions in a particular year, rather than the eventual lifespans of people born that year.</p>
+<section id="download-the-csv" class="level3" data-number="7.7.1">
+<h3 data-number="7.7.1" class="anchored" data-anchor-id="download-the-csv"><span class="header-section-number">7.7.1</span> Download the CSV</h3>
+<p>A CSV is a plain-text table: the first line usually contains column names, and commas separate the fields. For this lesson:</p>
+<ol type="1">
+<li>Open your <code>r4ss</code> project folder from <a href="intro.html#sec-first-script" class="quarto-xref"><span>Section 1.1.1</span></a>. Inside it, create a folder named <code>examples</code> using your file manager.</li>
+<li>Open the <a href="https://ourworldindata.org/grapher/life-expectancy.csv">CSV download</a>. Your browser may download it or display its text; if it displays text, use Save As to save the file. Keep the <code>.csv</code> extension.</li>
+<li>Move the downloaded file into <code>examples</code> and name it <code>life-expectancy.csv</code>. Downloading to your browser’s Downloads folder does not put the file in your project.</li>
+</ol>
+<p>The online data can change. To reproduce this edition exactly, use <a href="examples/life-expectancy.csv">the book’s saved CSV</a>, downloaded on 29 October 2026, and save it in the same location. Both links supply data from Our World in Data; the book copy preserves the downloaded file without changing its values. <a href="examples/life-expectancy.md">Source notes</a> record the attribution and the saved version.</p>
+<p>Check the working directory and file location before importing. <code>getwd()</code> reports the folder from which R resolves relative paths. <code>file.exists()</code> takes a path in quotation marks and returns <code>TRUE</code> when it finds that file. First inspect your location, then check the input:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Use that location to interpret the relative path:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.exists</span>(<span class="st">"examples/life-expectancy.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The first result should be your <code>r4ss</code> folder; the second should be <code>TRUE</code>. If it is <code>FALSE</code>, check the folder and exact filename, including a possible extra <code>.txt</code> extension or a suffix such as <code>(1)</code>. In an R path, use forward slashes even on Windows. The path starts in the working directory, enters <code>examples</code>, and identifies the file.</p>
+</section>
+<section id="read-and-inspect-the-table" class="level3" data-number="7.7.2">
+<h3 data-number="7.7.2" class="anchored" data-anchor-id="read-and-inspect-the-table"><span class="header-section-number">7.7.2</span> Read and inspect the table</h3>
+<p><code>read_csv()</code>, loaded with tidyverse, reads a comma-separated file and returns a tibble. Its first argument is the path in quotation marks. Assignment stores that tibble as <code>life_expectancy</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>life_expectancy <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"examples/life-expectancy.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr"><pre class="book-console"><code><span class="ansi ansi-bold">Rows: </span><span class="ansi ansi-color-4">21565</span> <span class="ansi ansi-bold">Columns: </span><span class="ansi ansi-color-4">4</span>
+<span class="ansi ansi-color-6">──</span> <span class="ansi ansi-bold">Column specification</span> <span class="ansi ansi-color-6">────────────────────────────────────────────────────────</span>
+<span class="ansi ansi-bold">Delimiter:</span> ","
+<span class="ansi ansi-color-1">chr</span> (2): Entity, Code
+<span class="ansi ansi-color-2">dbl</span> (2): Year, Life expectancy
+
+<span class="ansi ansi-color-6">ℹ</span> Use `spec()` to retrieve the full column specification for this data.
+<span class="ansi ansi-color-6">ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>life_expectancy</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 21,565 × 4</span>
+   Entity      Code   Year `Life expectancy`
+   <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>       <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>             <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250"> 1</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>950              28.2
+<span class="ansi ansi-color-250"> 2</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>951              28.6
+<span class="ansi ansi-color-250"> 3</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>952              29.0
+<span class="ansi ansi-color-250"> 4</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>953              29.5
+<span class="ansi ansi-color-250"> 5</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>954              29.7
+<span class="ansi ansi-color-250"> 6</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>955              30.4
+<span class="ansi ansi-color-250"> 7</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>956              30.8
+<span class="ansi ansi-color-250"> 8</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>957              31.3
+<span class="ansi ansi-color-250"> 9</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>958              31.8
+<span class="ansi ansi-color-250">10</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>959              32.3
+<span class="ansi ansi-color-246"># ℹ 21,555 more rows</span>
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(life_expectancy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 21565</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(life_expectancy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>The import message reports the dimensions and inferred column types; it is not an error. In the saved file, the table has 21565 rows and 4 columns. <code>Entity</code> identifies a country, territory, or aggregate region; <code>Code</code> contains a geographic code where supplied; <code>Year</code> identifies the year; and <code>Life expectancy</code> is measured in years. A row represents one place in one year. The first displayed rows describe Afghanistan in successive years; they are not different countries in every row.</p>
+<p>Reuse the inspection tools from this chapter:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ds</span>(life_expectancy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Entity"          "Code"            "Year"            "Life expectancy"</code></pre>
+</div>
+</div>
+<p>Check that place names and codes were read as text, and years and life expectancy as numbers. Blank codes can appear as <code>NA</code>; this does not by itself mean that the life-expectancy measurement is missing. If R reports parsing problems, investigate them before analysis. The file-reading checks in <a href="data-workflow.html#sec-read-write" class="quarto-xref"><span>Section 18.3</span></a> show how to inspect parsing problems, identify the affected entries, and check their intended types before continuing. A successful import establishes that R could read the file, not that every value is appropriate for your question.</p>
+<p><code>life_expectancy</code> is separate from the package’s <code>lifeexp</code>: it has different sources, years, and rows. Importing it does not replace <code>lifeexp</code>, and the country examples in this chapter continue to use <code>lifeexp</code>. The next chapter introduces GSS for a continuous sequence of survey lessons. You can inspect your own imported table in the same way, using its actual column names and documentation.</p>
+<p>For your own data, choose a reader that matches the file format. <a href="data-workflow.html" class="quarto-xref"><span>Chapter 18</span></a> develops Stata, SPSS, and other formats, including the treatment of labels and missing-value codes.</p>
+</section>
+<section id="sec-preview-clustered" class="level3" data-number="7.7.3">
+<h3 data-number="7.7.3" class="anchored" data-anchor-id="sec-preview-clustered"><span class="header-section-number">7.7.3</span> Preview clustered rows</h3>
+<p>Does the beginning of this file show the range of places it contains? Nearby rows describe successive years for the same place. A short run of rows can therefore show many years but few places.</p>
+<p><code>read_csv()</code> returns a tibble with an additional import-specific class. The printing helpers need an ordinary tibble. Use <code>as_tibble()</code>, introduced in <a href="objects.html#sec-object-printing" class="quarto-xref"><span>Section 2.2</span></a>, to create <code>life_table</code> with the same rows, columns, order, and values. The original import remains available as <code>life_expectancy</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>life_table <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(life_expectancy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Compare the two printing helpers from <a href="dplyr-sort.html#sec-country-sort-missing" class="quarto-xref"><span>Section 4.4</span></a> on this table:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print_headtail</span>(life_table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 21,565 × 4</span>
+      Entity      Code   Year `Life expectancy`
+      <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>       <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>             <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+    1 Afghanistan AFG    <span class="ansi ansi-underline">1</span>950              28.2
+    2 Afghanistan AFG    <span class="ansi ansi-underline">1</span>951              28.6
+    3 Afghanistan AFG    <span class="ansi ansi-underline">1</span>952              29.0
+    4 Afghanistan AFG    <span class="ansi ansi-underline">1</span>953              29.5
+    5 Afghanistan AFG    <span class="ansi ansi-underline">1</span>954              29.7
+    <span class="ansi ansi-color-246">⋮</span>      <span class="ansi ansi-color-246">⋮</span>       <span class="ansi ansi-color-246">⋮</span>        <span class="ansi ansi-color-246">⋮</span>                <span class="ansi ansi-color-246">⋮</span> 
+21561 Zimbabwe    ZWE    <span class="ansi ansi-underline">2</span>019              61.1
+21562 Zimbabwe    ZWE    <span class="ansi ansi-underline">2</span>020              61.5
+21563 Zimbabwe    ZWE    <span class="ansi ansi-underline">2</span>021              60.1
+21564 Zimbabwe    ZWE    <span class="ansi ansi-underline">2</span>022              62.4
+21565 Zimbabwe    ZWE    <span class="ansi ansi-underline">2</span>023              62.8
+<span class="ansi ansi-color-246"># ... 21,555 rows omitted in the middle; use print(x, n = Inf) to show all</span>
+<span class="ansi ansi-color-246"># rows.</span>
+</code></pre></div>
+</div>
+<p>In the book’s saved CSV, the first five rows describe Afghanistan and the last five describe Zimbabwe. This view is useful for checking the file’s boundaries, but it shows only two entities because each place occupies a block of adjacent rows.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print_interval</span>(life_table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 21,565 × 4</span>
+      Entity                 Code   Year `Life expectancy`
+      <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>                  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>             <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+    1 Afghanistan            AFG    <span class="ansi ansi-underline">1</span>950              28.2
+ 2397 Bosnia and Herzegovina BIH    <span class="ansi ansi-underline">2</span>011              77.0
+ 4793 Djibouti               DJI    <span class="ansi ansi-underline">1</span>959              43.1
+ 7189 Greenland              GRL    <span class="ansi ansi-underline">1</span>964              60.7
+ 9585 Kazakhstan             KAZ    <span class="ansi ansi-underline">1</span>963              58.6
+11981 Malta                  MLT    <span class="ansi ansi-underline">2</span>007              79.7
+14377 North Macedonia        MKD    <span class="ansi ansi-underline">2</span>015              75.6
+16773 San Marino             SMR    <span class="ansi ansi-underline">2</span>004              81.6
+19169 Thailand               THA    <span class="ansi ansi-underline">1</span>962              51.4
+21565 Zimbabwe               ZWE    <span class="ansi ansi-underline">2</span>023              62.8
+<span class="ansi ansi-color-246"># ... 21,555 rows omitted between displayed positions; use print(x, n = Inf) to</span>
+<span class="ansi ansi-color-246"># show all rows.</span>
+</code></pre></div>
+</div>
+<p>The interval preview reaches 10 different entities across the file. Its row numbers show the positions inspected. With the same ten-row display budget, it gives broader coverage of this table than the head/tail view. This is especially useful when records are ordered in blocks by country, school, or another group.</p>
+<p>The spacing is by row position, not by entity or year. Larger blocks can occupy more displayed positions, so interval previews do not guarantee equal coverage of groups. They are deterministic inspection views, not random samples; a repeating pattern in the row order can also be missed. Use the full data for summaries and analysis.</p>
+<p>Both helpers return all 21565 rows unchanged. The display does not shorten the stored table or alter the place-year observations.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Optional: Keep a preview style">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Optional: Keep a preview style
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>If you repeatedly inspect the same table, tidystata’s <code>preview()</code> can store a preferred console display on a returned object. Its first argument is the table. The named argument <code>style = "interval"</code> requests evenly spaced positions; omitting it gives a head/tail display. Assignment keeps the result under a new name:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>life_preview <span class="ot">&lt;-</span> <span class="fu">preview</span>(life_table, <span class="at">style =</span> <span class="st">"interval"</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>life_preview</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 21,565 × 4</span>
+      Entity                 Code   Year `Life expectancy`
+      <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>                  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>             <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+    1 Afghanistan            AFG    <span class="ansi ansi-underline">1</span>950              28.2
+ 2397 Bosnia and Herzegovina BIH    <span class="ansi ansi-underline">2</span>011              77.0
+ 4793 Djibouti               DJI    <span class="ansi ansi-underline">1</span>959              43.1
+ 7189 Greenland              GRL    <span class="ansi ansi-underline">1</span>964              60.7
+ 9585 Kazakhstan             KAZ    <span class="ansi ansi-underline">1</span>963              58.6
+11981 Malta                  MLT    <span class="ansi ansi-underline">2</span>007              79.7
+14377 North Macedonia        MKD    <span class="ansi ansi-underline">2</span>015              75.6
+16773 San Marino             SMR    <span class="ansi ansi-underline">2</span>004              81.6
+19169 Thailand               THA    <span class="ansi ansi-underline">1</span>962              51.4
+21565 Zimbabwe               ZWE    <span class="ansi ansi-underline">2</span>023              62.8
+<span class="ansi ansi-color-246"># ... 21,555 rows omitted between displayed positions; use print(x, n = Inf) to</span>
+<span class="ansi ansi-color-246"># show all rows.</span>
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(life_preview)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 21565</code></pre>
+</div>
+</div>
+<p>Typing <code>life_preview</code> now uses the interval style, while its row count remains 21565. All columns and stored values are retained. The original <code>life_table</code> keeps its ordinary printing, and the viewer is unaffected by these console preferences.</p>
+<p>Use <code>unpreview()</code> to return an object with ordinary printing restored. Save and print that result:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>life_plain <span class="ot">&lt;-</span> <span class="fu">unpreview</span>(life_preview)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>life_plain</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 21,565 × 4</span>
+   Entity      Code   Year `Life expectancy`
+   <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>       <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>             <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250"> 1</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>950              28.2
+<span class="ansi ansi-color-250"> 2</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>951              28.6
+<span class="ansi ansi-color-250"> 3</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>952              29.0
+<span class="ansi ansi-color-250"> 4</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>953              29.5
+<span class="ansi ansi-color-250"> 5</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>954              29.7
+<span class="ansi ansi-color-250"> 6</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>955              30.4
+<span class="ansi ansi-color-250"> 7</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>956              30.8
+<span class="ansi ansi-color-250"> 8</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>957              31.3
+<span class="ansi ansi-color-250"> 9</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>958              31.8
+<span class="ansi ansi-color-250">10</span> Afghanistan AFG    <span class="ansi ansi-underline">1</span>959              32.3
+<span class="ansi ansi-color-246"># ℹ 21,555 more rows</span>
+</code></pre></div>
+</div>
+<p>Removing the preference changes the display while retaining the complete data. For a single inspection, use <code>print_headtail()</code> or <code>print_interval()</code> directly.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-first-export" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="sec-first-export"><span class="header-section-number">7.8</span> Save a table to a file</h2>
+<p>The imported table exists in the running R session. Saving your script keeps the instructions, while <strong>exporting</strong> saves the table’s values to a file. <code>write_csv()</code> takes the table first and an output path second. Run this command in your project folder to save a separate copy:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(life_expectancy, <span class="st">"examples/life-expectancy-copy.csv"</span>)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">file.exists</span>(<span class="st">"examples/life-expectancy-copy.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The write command normally prints no table; the check should return <code>TRUE</code>. The new file is inside <code>examples</code>. <code>write_csv()</code> replaces an existing file with the same name, so choose a new name when you want to keep an earlier version. This command leaves the original download and the object <code>life_expectancy</code> unchanged.</p>
+<p>Open the saved copy to check that it is readable:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>saved_life <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"examples/life-expectancy-copy.csv"</span>)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>saved_life</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(saved_life)</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(saved_life)</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ds</span>(saved_life)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Its first rows and row count should agree with the imported table. Also check its column names with <code>ds(saved_life)</code> and compare <code>ncol(saved_life)</code> with <code>ncol(life_expectancy)</code>. A <code>TRUE</code> file-existence check only establishes that a file is present: a different row count, missing column, or unexpected type after readback is a reason to check which object was written and which path was read. Recheck the working directory before overwriting or re-exporting anything. CSV preserves a plain table of values, but it does not preserve R’s full type information or the variable and value labels that statistical files can contain. Keep the original download and its documentation. <a href="data-workflow.html#sec-export" class="quarto-xref"><span>Section 18.4</span></a> explains other export choices.</p>
+</section>
+<section id="review" class="level2" data-number="7.9">
+<h2 data-number="7.9" class="anchored" data-anchor-id="review"><span class="header-section-number">7.9</span> Review</h2>
+<ul>
+<li>A tibble prints a preview naturally; <code>nrow()</code> and <code>ncol()</code> report its full dimensions.</li>
+<li><code>print_headtail()</code> checks boundaries; <code>print_interval()</code> reaches across ordered or clustered rows. Both retain the full table.</li>
+<li>Optional: <code>preview()</code> stores a console display preference; <code>unpreview()</code> restores ordinary printing.</li>
+<li><code>browse()</code> opens a table in the viewer without changing the stored data.</li>
+<li><code>ds()</code> lists column names, and <code>variables()</code> connects them to available labels. <code>codebook()</code> checks types and recorded coverage.</li>
+<li><code>mean()</code> describes center and <code>sd()</code> describes spread in the measurement’s units; each call needs its own missing-input decision.</li>
+<li><code>summ()</code> describes numeric columns using available measurements and reports their contributing counts.</li>
+<li><code>getwd()</code> and <code>file.exists()</code> check location; <code>read_csv()</code> imports and <code>write_csv()</code> exports. Inspect the readback and preserve the original.</li>
+</ul>
+<p>Next, <a href="dplyr-tab.html" class="quarto-xref"><span>Chapter 8</span></a> uses frequency tables to describe which categories are common and how missing answers affect a percentage. Numerical summaries and graphs follow in the same exploration part.</p>
+</section>
+<section id="sec-explore-core-exercises" class="level2" data-number="7.10">
+<h2 data-number="7.10" class="anchored" data-anchor-id="sec-explore-core-exercises"><span class="header-section-number">7.10</span> Exercises</h2>
+<ol type="1">
+<li>Display <code>lifeexp</code> in the console, browse it in the viewer, and summarize <code>lexp</code> and <code>safewater</code> with <code>summ()</code>. Which display helps you inspect one country, and which describes a whole column? Check whether the full row count has changed. Predict why <code>mean(lifeexp$safewater)</code> returns <code>NA</code>, correct the calculation, and report its contributing country count and units. Does the correction change the source table?</li>
+<li>List the column names, then use their variable labels to identify population growth. Inspect the observed count for <code>gnppc</code> with the codebook. Does every country have this measurement?</li>
+<li>Import the saved life-expectancy CSV as <code>downloaded_life</code>. Compare head/tail and interval previews, and report what one row represents. Why do the previews show different sets of places? Check that the full row count is unchanged. Save a separate file named <code>life-expectancy-practice.csv</code> inside <code>examples</code>, then read it back and check the dimensions and column names. If the file exists but has a different row count, what would you check before exporting again? Does saving this copy change the original download?</li>
+</ol>
+</section>
+<section id="worked-answers" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="worked-answers">Worked answers</h2>
+<p>Run the package setup at the start of this chapter first.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="1. Preview, browse, and summarize">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Preview, browse, and summarize
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>lifeexp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 68 × 6</span>
+       region country                popgrowth  lexp gnppc safewater
+   <span class="ansi ansi-italic ansi-color-246">&lt;hvn_lbll&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>                      <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250"> 1</span>          1 Albania                     -<span class="ansi ansi-color-1">0.6</span>    74   870        49
+<span class="ansi ansi-color-250"> 2</span>          1 Armenia                     -<span class="ansi ansi-color-1">1.2</span>    70   570        83
+<span class="ansi ansi-color-250"> 3</span>          1 Austria                      0.1    78 <span class="ansi ansi-underline">27</span>810        97
+<span class="ansi ansi-color-250"> 4</span>          1 Azerbaijan                   0.9    64   510        49
+<span class="ansi ansi-color-250"> 5</span>          1 Belarus                     -<span class="ansi ansi-color-1">0.5</span>    68  <span class="ansi ansi-underline">1</span>540        82
+<span class="ansi ansi-color-250"> 6</span>          1 Belgium                      0.2    77 <span class="ansi ansi-underline">26</span>530       100
+<span class="ansi ansi-color-250"> 7</span>          1 Bosnia and Herzegovina       1.8    74  <span class="ansi ansi-underline">1</span>230        87
+<span class="ansi ansi-color-250"> 8</span>          1 Bulgaria                    -<span class="ansi ansi-color-1">0.7</span>    71  <span class="ansi ansi-underline">1</span>440        90
+<span class="ansi ansi-color-250"> 9</span>          1 Croatia                     -<span class="ansi ansi-color-1">0.1</span>    72    <span class="ansi ansi-color-1">NA</span>        85
+<span class="ansi ansi-color-250">10</span>          1 Czechia                     -<span class="ansi ansi-color-1">0.1</span>    75  <span class="ansi ansi-underline">6</span>140        95
+<span class="ansi ansi-color-246"># ℹ 58 more rows</span>
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summ</span>(lifeexp, lexp, safewater)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 2 × 8</span>
+  name      type      n unique   min  mean    sd   max
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span> <span class="ansi ansi-italic ansi-color-246">&lt;dbl&gt;</span>
+<span class="ansi ansi-color-250">1</span> lexp      dbl      68     20    57  71.7  5.16    79
+<span class="ansi ansi-color-250">2</span> safewater dbl      54     32    36  77.2 20.6    100
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(lifeexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 68</code></pre>
+</div>
+</div>
+<p>Run <code>browse(lifeexp)</code> in your editor to inspect an individual country’s row. Typing <code>lifeexp</code> gives a preview of the table; <code>summ()</code> describes each requested column using its non-missing values across the full table. The summary has two rows, one per variable, but there are still 68 countries in <code>lifeexp</code>. None of these calls replaces the source table.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(lifeexp<span class="sc">$</span>safewater)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(lifeexp<span class="sc">$</span>safewater, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 77.16667</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>lifeexp <span class="sc">|&gt;</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(safewater)) <span class="sc">|&gt;</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 54</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(lifeexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 68</code></pre>
+</div>
+</div>
+<p>The default mean is unknown because 14 inputs are missing. The corrected mean describes water coverage, in percent, across the 54 countries with measurements. There are still 68 countries in the original table; excluding inputs from one calculation does not replace unknown measurements.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="2. Find and inspect">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Find and inspect
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ds</span>(lifeexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "region"    "country"   "popgrowth" "lexp"      "gnppc"     "safewater"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">variables</span>(lifeexp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 6 × 2</span>
+  name      label                   
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>     <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>                   
+<span class="ansi ansi-color-250">1</span> region    Region                  
+<span class="ansi ansi-color-250">2</span> country   Country                 
+<span class="ansi ansi-color-250">3</span> popgrowth Avg. annual % growth    
+<span class="ansi ansi-color-250">4</span> lexp      Life expectancy at birth
+<span class="ansi ansi-color-250">5</span> gnppc     GNP per capita          
+<span class="ansi ansi-color-250">6</span> safewater Safe water              
+</code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">codebook</span>(lifeexp, gnppc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout"><pre class="book-console"><code><span class="ansi ansi-color-246"># A tibble: 1 × 5</span>
+  variable label          type       n unique
+  <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>    <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>          <span class="ansi ansi-italic ansi-color-246">&lt;chr&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>  <span class="ansi ansi-italic ansi-color-246">&lt;int&gt;</span>
+<span class="ansi ansi-color-250">1</span> gnppc    GNP per capita double    67     64
+</code></pre></div>
+</div>
+<p>The label “Avg. annual % growth” identifies <code>popgrowth</code> as population growth; the dataset notes explain its units. The income column has 67 observed values, so one country lacks this measurement. This result alone does not explain why it is missing.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="3. Open and save a downloaded table">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Open and save a downloaded table
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Place the downloaded file in <code>examples</code> as instructed in <a href="#sec-first-import" class="quarto-xref"><span>Section 7.7</span></a>, then run:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>downloaded_life <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"examples/life-expectancy.csv"</span>)</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>downloaded_life</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>downloaded_table <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(downloaded_life)</span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print_headtail</span>(downloaded_table)</span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print_interval</span>(downloaded_table)</span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(downloaded_life)</span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(downloaded_life, <span class="st">"examples/life-expectancy-practice.csv"</span>)</span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a><span class="fu">file.exists</span>(<span class="st">"examples/life-expectancy-practice.csv"</span>)</span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>practice_readback <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"examples/life-expectancy-practice.csv"</span>)</span>
+<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(practice_readback)</span>
+<span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(practice_readback)</span>
+<span id="cb78-12"><a href="#cb78-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ds</span>(practice_readback)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The first displayed rows describe Afghanistan in successive years. A row identifies a place and year, not a different country in every row. The head/tail preview shows Afghanistan and Zimbabwe; the interval preview reaches places throughout the file because it spreads its positions across the intervening blocks. Neither preview changes the full count of 21565 rows or guarantees balanced coverage of entities. The file check returns <code>TRUE</code>, and the readback has the same dimensions and names. If the count differs, check the working directory, input and output filenames, and whether a subset was exported. The new filename preserves the original download; exporting does not alter <code>downloaded_life</code> either.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/socimh\.github\.io\/R4SS\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./dplyr-select.html" class="pagination-link" aria-label="Select observations">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Select observations</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./dplyr-tab.html" class="pagination-link" aria-label="Tabulate data">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Tabulate data</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Minghong Shen · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
